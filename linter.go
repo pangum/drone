@@ -1,11 +1,12 @@
 package main
 
 import (
+	`bytes`
+	`fmt`
 	`os`
 	`os/exec`
 	`path/filepath`
 
-	`github.com/storezhang/gox/field`
 	`github.com/storezhang/simaqian`
 )
 
@@ -14,9 +15,12 @@ func linter(conf *config, logger simaqian.Logger) (err error) {
 		`run`,
 		`--timeout`,
 		`10m`,
+		`--verbose`,
+		`--color`,
+		`always`,
 	}
 	for _, linter := range conf.Linters {
-		commands = append(commands, `-E`, linter)
+		commands = append(commands, `--enable`, linter)
 	}
 
 	// 执行命令
@@ -26,16 +30,15 @@ func linter(conf *config, logger simaqian.Logger) (err error) {
 	}
 	cmd.Env = os.Environ()
 	cmd.Env = append(cmd.Env, conf.Envs...)
+
+	var stdout bytes.Buffer
+	var stderr bytes.Buffer
+	cmd.Stdout = &stdout
+	cmd.Stderr = &stderr
 	if err = cmd.Run(); nil != err {
-		output, _ := cmd.CombinedOutput()
-		logger.Warn(
-			`代码检查失败`,
-			field.String(`output`, string(output)),
-			field.Strings(`command`, commands...),
-			field.Error(err),
-		)
+		fmt.Println(stderr.String())
 	} else {
-		logger.Info(`代码检查成功`, conf.Fields().Connect(field.Strings(`command`, commands...))...)
+		fmt.Println(stdout.String())
 	}
 
 	return

@@ -1,12 +1,13 @@
 package main
 
 import (
+	`bytes`
+	`fmt`
 	`os`
 	`os/exec`
 	`path/filepath`
 
 	`github.com/storezhang/gox`
-	`github.com/storezhang/gox/field`
 	`github.com/storezhang/simaqian`
 )
 
@@ -27,16 +28,15 @@ func tidy(conf *config, logger simaqian.Logger) (err error) {
 	}
 	cmd.Env = os.Environ()
 	cmd.Env = append(cmd.Env, conf.Envs...)
+
+	var stdout bytes.Buffer
+	var stderr bytes.Buffer
+	cmd.Stdout = &stdout
+	cmd.Stderr = &stderr
 	if err = cmd.Run(); nil != err {
-		output, _ := cmd.CombinedOutput()
-		logger.Warn(
-			`清理依赖出错`,
-			field.String(`output`, string(output)),
-			field.Strings(`command`, commands...),
-			field.Error(err),
-		)
+		fmt.Println(stderr.String())
 	} else {
-		logger.Info(`清理依赖成功`, conf.Fields().Connect(field.Strings(`command`, commands...))...)
+		fmt.Println(stdout.String())
 	}
 
 	return
