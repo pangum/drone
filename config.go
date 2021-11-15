@@ -16,14 +16,14 @@ type config struct {
 	// 输出文件
 	Output string `default:"${DRONE_STAGE_NAME}"`
 	// 环境变量
-	Envs []string `default:"[\"CGO_ENABLED=0\",\"GOOS=linux\"]"`
+	Envs []string `default:"['CGO_ENABLED=0','GOOS=linux']"`
 	// 是否启用默认配置
 	Defaults bool `default:"true"`
 
 	// 是否启用Lint插件
 	Lint bool `default:"true"`
 	// 启用的Linter
-	Linters []string `default:"[\"goerr113\",\"nlreturn\",\"bodyclose\",\"rowserrcheck\",\"gosec\",\"unconvert\",\"misspell\",\"lll\"]"`
+	Linters []string `default:"['goerr113','nlreturn','bodyclose','rowserrcheck','gosec','unconvert','misspell','lll']"`
 
 	// 应用名称
 	Name string `default:"$DRONE_STAGE_NAME"`
