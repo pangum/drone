@@ -1,6 +1,6 @@
 kind: pipeline
 type: docker
-name: 盘古文档
+name: 盘古Drone插件
 
 
 clone:
@@ -14,7 +14,8 @@ trigger:
 
 
 environment:
-  GOPROXY: https://goproxy.cn
+  GOPROXY: https://goproxy.io,direct
+  GOSUMDB: off
 
 
 steps:
@@ -22,24 +23,49 @@ steps:
     image: plugins/git
     pull: if-not-exists
 
-  - name: 生成文档
-    image: node
+  - name: 清理依赖
+    image: golang
     pull: if-not-exists
+    volumes:
+      - name: deps
+        path: /go
     commands:
-      - cd doc
-      - yarn install
-      - yarn docs:build
+      - go mod tidy
 
-  - name: 部署到腾讯云
-    image: storezhang/cos
+  - name: 代码检查
+    image: golangci/golangci-lint
+    pull: if-not-exists
+    volumes:
+      - name: deps
+        path: /go
+    commands:
+      - golangci-lint run --timeout 10m -E goerr113 -E nlreturn -E bodyclose -E rowserrcheck -E gosec -E unconvert -E misspell -E lll
+
+  - name: 编译
+    image: golang
+    pull: if-not-exists
+    volumes:
+      - name: deps
+        path: /go
+    commands:
+      - CGO_ENABLED=0 GOOS=linux go build -o pangu
+
+  - name: 打包Docker并推送
+    image: plugins/docker
+    when:
+      branch:
+        - develop
+        - master
     settings:
-      secret_id:
-        from_secret: cos_secret_id
-      secret_key:
-        from_secret: cos_secret_key
-      base_url: https://pangu-1253228583.cos.ap-chengdu.myqcloud.com
-      folder: doc/dist
-
+      repo: storezhang/pangu
+      tags:
+        - latest
+      purge: true
+      compress: true
+      mirror: https://docker.mirrors.ustc.edu.cn
+      username: storezhang
+      password:
+        from_secret: token_docker
 
 volumes:
   - name: deps
