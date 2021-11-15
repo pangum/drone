@@ -48,9 +48,7 @@ func build(conf *config, logger simaqian.Logger) (err error) {
 		return
 	}
 	cmd.Env = os.Environ()
-	for _, env := range conf.Envs {
-		cmd.Env = append(cmd.Env, env)
-	}
+	cmd.Env = append(cmd.Env, conf.Envs...)
 	if err = cmd.Run(); nil != err {
 		output, _ := cmd.CombinedOutput()
 		logger.Warn(
