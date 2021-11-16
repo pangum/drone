@@ -1,13 +1,13 @@
 package main
 
 import (
-	`bytes`
 	`fmt`
 	`os`
 	`os/exec`
 	`path/filepath`
 	`strings`
 
+	`github.com/storezhang/gox/field`
 	`github.com/storezhang/simaqian`
 )
 
@@ -49,15 +49,10 @@ func build(conf *config, logger simaqian.Logger) (err error) {
 	}
 	cmd.Env = os.Environ()
 	cmd.Env = append(cmd.Env, conf.Envs...)
-
-	var stdout bytes.Buffer
-	var stderr bytes.Buffer
-	cmd.Stdout = &stdout
-	cmd.Stderr = &stderr
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
 	if err = cmd.Run(); nil != err {
-		fmt.Println(stderr.String())
-	} else {
-		fmt.Println(stdout.String())
+		logger.Error(`代码编译出错`, conf.Fields().Connect(field.Error(err))...)
 	}
 
 	return
