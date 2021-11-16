@@ -31,6 +31,9 @@ func eval(config string) (final string) {
 	if final, exist = os.LookupEnv(fmt.Sprintf(`PLUGIN_%s`, config)); exist {
 		return
 	}
+	if final, exist = os.LookupEnv(config); exist {
+		return
+	}
 	final = config
 
 	return
