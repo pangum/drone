@@ -28,7 +28,6 @@ LABEL Description="盘古Drone插件，集成Lint和以及打包工具"
 
 # 复制文件
 COPY --from=builder /usr/local/go/bin/go /usr/local/go/bin/go
-COPY --from=builder /usr/local/go/lib /usr/local/go/lib
 COPY --from=builder /usr/local/go/pkg /usr/local/go/pkg
 COPY --from=builder /usr/local/go/src /usr/local/go/src
 
