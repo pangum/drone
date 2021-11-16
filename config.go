@@ -5,9 +5,9 @@ import (
 	`strings`
 	`time`
 
-	`github.com/storezhang/god`
 	`github.com/storezhang/gox`
 	`github.com/storezhang/gox/field`
+	`github.com/storezhang/mengpo`
 )
 
 type config struct {
@@ -62,7 +62,7 @@ func (c *config) load() (err error) {
 	c.Timestamp = env(`TIMESTAMP`)
 	c.Revision = env(`REVISION`)
 	c.Branch = env(`BRANCH`)
-	if err = god.Set(c); nil != err {
+	if err = mengpo.Set(c); nil != err {
 		return
 	}
 
