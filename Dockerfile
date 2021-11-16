@@ -14,7 +14,6 @@ RUN ln -s /lib/libc.musl-x86_64.so.1 /lib64/ld-linux-x86-64.so.2
 # 安装标签处理程序
 RUN apk add gcc musl-dev
 RUN go install github.com/golangci/golangci-lint/cmd/golangci-lint@v${LINT_VERSION}
-RUN ls -al /usr/local/go/pkg/tool/linux_amd64
 
 
 
