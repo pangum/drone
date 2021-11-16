@@ -16,7 +16,9 @@ func build(conf *config, logger simaqian.Logger) (err error) {
 		`build`,
 		`-o`,
 		conf.Output,
-		`-x`,
+	}
+	if conf.Verbose {
+		commands = append(commands, `-x`)
 	}
 
 	// 写入版本信息

@@ -14,9 +14,11 @@ func linter(conf *config, logger simaqian.Logger) (err error) {
 		`run`,
 		`--timeout`,
 		`10m`,
-		`--verbose`,
 		`--color`,
 		`always`,
+	}
+	if conf.Verbose {
+		commands = append(commands, `--verbose`)
 	}
 	for _, linter := range conf.Linters {
 		commands = append(commands, `--enable`, linter)
