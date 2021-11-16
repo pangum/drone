@@ -19,6 +19,8 @@ type config struct {
 	Envs []string `default:"['CGO_ENABLED=0','GOOS=linux']"`
 	// 是否启用默认配置
 	Defaults bool `default:"true"`
+	// 是否显示调试信息
+	Verbose bool `default:"false"`
 
 	// 是否启用Lint插件
 	Lint bool `default:"true"`
@@ -45,6 +47,12 @@ func (c *config) load() (err error) {
 	defaults := env(`DEFAULTS`)
 	if `` != defaults {
 		if c.Defaults, err = strconv.ParseBool(defaults); nil != err {
+			return
+		}
+	}
+	verbose := env(`VERBOSE`)
+	if `` != verbose {
+		if c.Verbose, err = strconv.ParseBool(verbose); nil != err {
 			return
 		}
 	}
