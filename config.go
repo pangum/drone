@@ -1,14 +1,34 @@
 package main
 
 import (
+	`encoding/json`
+	`os`
 	`strconv`
-	`strings`
 	`time`
 
 	`github.com/storezhang/gox`
 	`github.com/storezhang/gox/field`
 	`github.com/storezhang/mengpo`
 )
+
+var configJson = `{
+	"input": "${PLUGIN_INPUT=$INPUT}",
+	"output": "${PLUGIN_OUTPUT=$OUTPUT}",
+	"envs": [${PLUGIN_ENVS=$ENVS}],
+	"defaults": ${PLUGIN_DEFAULTS=$DEFAULTS},
+	"verbose": ${PLUGIN_VERBOSE=$VERBOSE},
+
+	"lint": ${PLUGIN_LINT=$LINT},
+	"linters": [${PLUGIN_LINTERS=$LINTERS}],
+
+	"name": "${PLUGIN_NAME=$NAME}",
+	"version": "${PLUGIN_VERSION=$VERSION}",
+	"build": "${PLUGIN_BUILD=$BUILD}",
+	"timestamp": "${PLUGIN_TIMESTAMP=$TIMESTAMP}",
+	"revision": "${PLUGIN_REVISION=$REVISION}",
+	"branch": "${PLUGIN_BRANCH=$BRANCH}"
+}
+`
 
 type config struct {
 	// 输入文件
@@ -42,52 +62,22 @@ type config struct {
 }
 
 func (c *config) load() (err error) {
-	c.Input = env(`INPUT`)
-	c.Output = env(`OUTPUT`)
-	defaults := env(`DEFAULTS`)
-	if `` != defaults {
-		if c.Defaults, err = strconv.ParseBool(defaults); nil != err {
-			return
-		}
+	// 处理环境变量
+	if err = parseEnvs(`ENVS`, `LINTERS`); nil != err {
+		return
 	}
-	verbose := env(`VERBOSE`)
-	if `` != verbose {
-		if c.Verbose, err = strconv.ParseBool(verbose); nil != err {
-			return
-		}
+	configJson = os.ExpandEnv(configJson)
+	if err = json.Unmarshal([]byte(configJson), c); nil != err {
+		return
 	}
-
-	lint := env(`LINT`)
-	if `` != lint {
-		if c.Lint, err = strconv.ParseBool(lint); nil != err {
-			return
-		}
-	}
-
-	c.Name = env(`NAME`)
-	c.Version = env(`VERSION`)
-	c.Build = env(`BUILD`)
-	c.Timestamp = env(`TIMESTAMP`)
-	c.Revision = env(`REVISION`)
-	c.Branch = env(`BRANCH`)
 	if err = mengpo.Set(c); nil != err {
 		return
 	}
 
 	// 启用默认值
-	if !c.Defaults {
-		c.Envs = []string{}
+	if c.Defaults {
+		c.Envs = append(c.Envs, ``)
 		c.Linters = []string{}
-	}
-	for _, env := range strings.Split(env(`ENVS`), `,`) {
-		if `` != env {
-			c.Envs = append(c.Envs, env)
-		}
-	}
-	for _, linter := range strings.Split(env(`LINTERS`), `,`) {
-		if `` != linter {
-			c.Linters = append(c.Linters, linter)
-		}
 	}
 
 	// 将时间变换成易读形式
