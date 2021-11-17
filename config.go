@@ -63,7 +63,7 @@ func (c *config) Fields() gox.Fields {
 }
 
 func (c *config) load() (err error) {
-	// 处理环境变量
+	// 处理环境变量为字符串的时候和默认值格式不兼容
 	if err = parseEnvs(`ENVS`, `LINTERS`); nil != err {
 		return
 	}
