@@ -12,9 +12,9 @@ import (
 
 type config struct {
 	// 输入文件
-	Input string `default:"${PLUGIN_INPUT=${INPUT}}"`
+	Input string `default:"${PLUGIN_INPUT=${INPUT=.}}"`
 	// 输出文件
-	Output string `default:"${PLUGIN_OUTPUT=${OUTPUT}}"`
+	Output string `default:"${PLUGIN_OUTPUT=${OUTPUT=.}}"`
 	// 环境变量
 	Envs []string `default:"${PLUGIN_ENVS=${ENVS}}"`
 	// 是否启用默认配置
