@@ -9,7 +9,7 @@
 ```yaml
 steps:
   - name: 编译
-    image: storezhang/pangu
+    image: ccr.ccs.tencentyun.com/storezhang/pangu
     pull: always
     settings:
       output: server
