@@ -58,6 +58,7 @@ steps:
         - develop
         - master
     settings:
+      registry: ccr.ccs.tencentyun.com
       repo: ccr.ccs.tencentyun.com/storezhang/pangu
       tags:
         - latest
