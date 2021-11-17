@@ -29,9 +29,16 @@ func parseValues(env string) (err error) {
 	values := strings.Split(os.Getenv(env), `,`)
 	converts := make([]string, 0, len(values))
 	for _, value := range values {
+		if `` == value {
+			continue
+		}
 		converts = append(converts, fmt.Sprintf(`"%s"`, value))
 	}
-	if err = os.Setenv(env, strings.Join(converts, `,`)); nil != err {
+
+	if 0 == len(converts) {
+		return
+	}
+	if err = os.Setenv(env, fmt.Sprintf(`[%s]`, strings.Join(converts, `,`))); nil != err {
 		return
 	}
 

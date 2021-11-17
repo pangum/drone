@@ -1,91 +1,50 @@
 package main
 
 import (
-	`encoding/json`
-	`os`
 	`strconv`
 	`time`
 
+	`github.com/drone/envsubst`
 	`github.com/storezhang/gox`
 	`github.com/storezhang/gox/field`
 	`github.com/storezhang/mengpo`
 )
 
-var configJson = `{
-	"input": "${PLUGIN_INPUT=$INPUT}",
-	"output": "${PLUGIN_OUTPUT=$OUTPUT}",
-	"envs": [${PLUGIN_ENVS=$ENVS}],
-	"defaults": ${PLUGIN_DEFAULTS=$DEFAULTS},
-	"verbose": ${PLUGIN_VERBOSE=$VERBOSE},
-
-	"lint": ${PLUGIN_LINT=$LINT},
-	"linters": [${PLUGIN_LINTERS=$LINTERS}],
-
-	"name": "${PLUGIN_NAME=$NAME}",
-	"version": "${PLUGIN_VERSION=$VERSION}",
-	"build": "${PLUGIN_BUILD=$BUILD}",
-	"timestamp": "${PLUGIN_TIMESTAMP=$TIMESTAMP}",
-	"revision": "${PLUGIN_REVISION=$REVISION}",
-	"branch": "${PLUGIN_BRANCH=$BRANCH}"
-}
-`
-
 type config struct {
 	// 输入文件
-	Input string `default:"."`
+	Input string `default:"${PLUGIN_INPUT=${INPUT}}"`
 	// 输出文件
-	Output string `default:"${DRONE_STAGE_NAME}"`
+	Output string `default:"${PLUGIN_OUTPUT=${OUTPUT}}"`
 	// 环境变量
-	Envs []string `default:"['CGO_ENABLED=0','GOOS=linux']"`
+	Envs []string `default:"${PLUGIN_ENVS=${ENVS}}"`
 	// 是否启用默认配置
-	Defaults bool `default:"true"`
+	Defaults bool `default:"${PLUGIN_DEFAULTS=${DEFAULTS=true}}"`
 	// 是否显示调试信息
-	Verbose bool `default:"false"`
+	Verbose bool `default:"${PLUGIN_VERBOSE=${VERBOSE=false}}"`
 
 	// 是否启用Lint插件
-	Lint bool `default:"true"`
+	Lint bool `default:"${PLUGIN_LINT=${LINT=true}}"`
 	// 启用的Linter
-	Linters []string `default:"['goerr113','nlreturn','bodyclose','rowserrcheck','gosec','unconvert','misspell','lll']"`
+	Linters []string `default:"${PLUGIN_LINTERS=${LINTERS}}"`
 
 	// 应用名称
-	Name string `default:"$DRONE_STAGE_NAME"`
+	Name string `default:"${PLUGIN_NAME=${NAME=${DRONE_STAGE_NAME}}}"`
 	// 应用版本
-	Version string `default:"${DRONE_TAG=${DRONE_COMMIT_BRANCH:latest}"`
+	Version string `default:"${PLUGIN_VERSION=${VERSION=${DRONE_TAG=${DRONE_COMMIT_BRANCH}}}}"`
 	// 编译版本
-	Build string `default:"${DRONE_BUILD_NUMBER}"`
+	Build string `default:"${PLUGIN_BUILD=${BUILD=${DRONE_BUILD_NUMBER}}}"`
 	// 编译时间
-	Timestamp string `default:"${DRONE_BUILD_STARTED}"`
+	Timestamp string `default:"${PLUGIN_TIMESTAMP=${TIMESTAMP=${DRONE_BUILD_STARTED}}}"`
 	// 分支版本
-	Revision string `default:"${DRONE_COMMIT_SHA}"`
+	Revision string `default:"${PLUGIN_REVISION=${REVISION=${DRONE_COMMIT_SHA}}}"`
 	// 分支
-	Branch string `default:"${DRONE_COMMIT_BRANCH}"`
-}
+	Branch string `default:"${PLUGIN_BRANCH=${BRANCH=${DRONE_COMMIT_BRANCH}}}"`
 
-func (c *config) load() (err error) {
-	// 处理环境变量
-	if err = parseEnvs(`ENVS`, `LINTERS`); nil != err {
-		return
-	}
-	configJson = os.ExpandEnv(configJson)
-	if err = json.Unmarshal([]byte(configJson), c); nil != err {
-		return
-	}
-	if err = mengpo.Set(c); nil != err {
-		return
-	}
-
-	// 启用默认值
-	if c.Defaults {
-		c.Envs = append(c.Envs, ``)
-		c.Linters = []string{}
-	}
-
-	// 将时间变换成易读形式
-	if timestamp, parseErr := strconv.ParseInt(c.Timestamp, 10, 64); nil == parseErr {
-		c.Timestamp = time.Unix(timestamp, 0).String()
-	}
-
-	return
+	// 默认环境变量
+	DefaultEnvs []string `default:"['CGO_ENABLED=0','GOOS=linux']"`
+	// 默认启用的Linter列表
+	// nolint:lll
+	DefaultLinters []string `default:"['goerr113','nlreturn','bodyclose','rowserrcheck','gosec','unconvert','misspell','lll']"`
 }
 
 func (c *config) Fields() gox.Fields {
@@ -101,4 +60,37 @@ func (c *config) Fields() gox.Fields {
 		field.String(`revision`, c.Revision),
 		field.String(`branch`, c.Branch),
 	}
+}
+
+func (c *config) load() (err error) {
+	// 处理环境变量
+	if err = parseEnvs(`ENVS`, `LINTERS`); nil != err {
+		return
+	}
+	if err = mengpo.Set(c, mengpo.Before(c.env)); nil != err {
+		return
+	}
+
+	// 启用默认值
+	if c.Defaults {
+		c.Envs = append(c.Envs, c.DefaultEnvs...)
+		c.Linters = append(c.Linters, c.DefaultLinters...)
+	}
+
+	// 将时间变换成易读形式
+	if timestamp, parseErr := strconv.ParseInt(c.Timestamp, 10, 64); nil == parseErr {
+		c.Timestamp = time.Unix(timestamp, 0).String()
+	}
+
+	return
+}
+
+func (c *config) env(original string) (to string) {
+	if env, err := envsubst.EvalEnv(original); nil != err {
+		to = original
+	} else {
+		to = env
+	}
+
+	return
 }
