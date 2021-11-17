@@ -59,7 +59,7 @@ steps:
         - master
     settings:
       registry: ccr.ccs.tencentyun.com
-      repo: ccr.ccs.tencentyun.com/storezhang/pangu
+      repo: storezhang/pangu
       tags:
         - latest
       purge: false
