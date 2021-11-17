@@ -61,7 +61,6 @@ steps:
       repo: storezhang/drone
       tags:
         - latest
-      purge: true
       compress: true
       squash: true
       mirror: https://docker.mirrors.ustc.edu.cn
