@@ -4,7 +4,6 @@ import (
 	`strconv`
 	`time`
 
-	`github.com/drone/envsubst`
 	`github.com/storezhang/gox`
 	`github.com/storezhang/gox/field`
 	`github.com/storezhang/mengpo`
@@ -67,7 +66,7 @@ func (c *config) load() (err error) {
 	if err = parseEnvs(`ENVS`, `LINTERS`); nil != err {
 		return
 	}
-	if err = mengpo.Set(c, mengpo.Before(c.env)); nil != err {
+	if err = mengpo.Set(c); nil != err {
 		return
 	}
 
@@ -80,16 +79,6 @@ func (c *config) load() (err error) {
 	// 将时间变换成易读形式
 	if timestamp, parseErr := strconv.ParseInt(c.Timestamp, 10, 64); nil == parseErr {
 		c.Timestamp = time.Unix(timestamp, 0).String()
-	}
-
-	return
-}
-
-func (c *config) env(original string) (to string) {
-	if env, err := envsubst.EvalEnv(original); nil != err {
-		to = original
-	} else {
-		to = env
 	}
 
 	return
