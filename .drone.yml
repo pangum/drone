@@ -58,17 +58,16 @@ steps:
         - develop
         - master
     settings:
-      registry: ccr.ccs.tencentyun.com
-      repo: ccr.ccs.tencentyun.com/pangum/drone
+      repo: storezhang/drone
       tags:
         - latest
       purge: true
       compress: true
       squash: true
       mirror: https://docker.mirrors.ustc.edu.cn
-      username: 160290688
+      username: storezhang
       password:
-        from_secret: password_tcr
+        from_secret: token_docker
 
 volumes:
   - name: deps
