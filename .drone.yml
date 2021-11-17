@@ -59,12 +59,13 @@ steps:
         - master
     settings:
       registry: ccr.ccs.tencentyun.com
-      repo: storezhang/pangu
+      repo: ccr.ccs.tencentyun.com/storezhang/pangu
       tags:
         - latest
       purge: false
       compress: true
       squash: true
+      pull_image: false
       mirror: https://docker.mirrors.ustc.edu.cn
       username: 160290688
       password:
