@@ -62,10 +62,9 @@ steps:
       repo: ccr.ccs.tencentyun.com/pangum/drone
       tags:
         - latest
-      purge: false
+      purge: true
       compress: true
       squash: true
-      pull_image: false
       mirror: https://docker.mirrors.ustc.edu.cn
       username: 160290688
       password:
