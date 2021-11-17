@@ -59,7 +59,7 @@ steps:
         - master
     settings:
       registry: ccr.ccs.tencentyun.com
-      repo: ccr.ccs.tencentyun.com/storezhang/pangu
+      repo: ccr.ccs.tencentyun.com/pangum/drone
       tags:
         - latest
       purge: false
