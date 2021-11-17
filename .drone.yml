@@ -64,7 +64,7 @@ steps:
       purge: false
       compress: true
       squash: true
-      username: storezhang
+      username: 160290688
       password:
         from_secret: password_tcr
 
