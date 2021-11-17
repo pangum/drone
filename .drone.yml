@@ -52,6 +52,7 @@ steps:
 
   - name: 打包Docker并推送
     image: plugins/docker
+    pull: if-not-exists
     when:
       branch:
         - develop
@@ -64,6 +65,7 @@ steps:
       purge: false
       compress: true
       squash: true
+      mirror: https://docker.mirrors.ustc.edu.cn
       username: 160290688
       password:
         from_secret: password_tcr
