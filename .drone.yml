@@ -62,7 +62,6 @@ steps:
         - latest
       purge: true
       compress: true
-      bip: true
       squash: true
       mirror: https://docker.mirrors.ustc.edu.cn
       username: storezhang
