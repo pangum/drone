@@ -31,8 +31,10 @@ func linter(conf *config, logger simaqian.Logger) (err error) {
 	}
 	cmd.Env = os.Environ()
 	cmd.Env = append(cmd.Env, conf.Envs...)
-	cmd.Stdout = os.Stdout
-	cmd.Stderr = os.Stderr
+	if conf.Verbose {
+		cmd.Stdout = os.Stdout
+		cmd.Stderr = os.Stderr
+	}
 	if err = cmd.Run(); nil != err {
 		logger.Error(`代码检查出错`, conf.Fields().Connect(field.Error(err))...)
 	}
