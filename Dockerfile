@@ -22,7 +22,7 @@ FROM storezhang/alpine
 
 
 MAINTAINER storezhang "storezhang@gmail.com"
-LABEL architecture="AMD64/x86_64" version="latest" build="2021-11-15"
+LABEL architecture="AMD64/x86_64" version="latest" build="2022-01-02"
 LABEL Description="盘古Drone插件，集成Lint和以及打包工具"
 
 
