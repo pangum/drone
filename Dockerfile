@@ -1,7 +1,7 @@
 FROM golang:alpine AS builder
 
 
-ENV GOPROXY https://goproxy.cn
+ENV GOPROXY https://goproxy.cn,https://mirrors.aliyun.com/goproxy,https://goproxy.io,direct
 # 标签修改程序版本
 ENV LINT_VERSION 1.43.0
 
