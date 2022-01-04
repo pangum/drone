@@ -37,7 +37,7 @@ steps:
         - latest
       compress: true
       squash: true
-      mirror: https://4lch7u25.mirror.aliyuncs.com
+      mirror: https://mirror.ccs.tencentyun.com
       username: storezhang
       password:
         from_secret: token_docker
