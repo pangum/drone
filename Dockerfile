@@ -54,4 +54,4 @@ ENTRYPOINT /bin/pangu
 
 # 配置环境变量
 ENV PATH ${PATH}:/usr/local/go/bin
-ENV GOPROXY https://goproxy.io,direct
+ENV GOPROXY https://goproxy.cn,https://mirrors.aliyun.com/goproxy,direct
