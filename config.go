@@ -1,13 +1,12 @@
 package main
 
 import (
-	`strconv`
-	`time`
+	"strconv"
+	"time"
 
-	`github.com/drone/envsubst`
-	`github.com/storezhang/gox`
-	`github.com/storezhang/gox/field`
-	`github.com/storezhang/mengpo`
+	"github.com/storezhang/gox"
+	"github.com/storezhang/gox/field"
+	"github.com/storezhang/mengpo"
 )
 
 type config struct {
@@ -67,7 +66,7 @@ func (c *config) load() (err error) {
 	if err = parseEnvs(`ENVS`, `LINTERS`); nil != err {
 		return
 	}
-	if err = mengpo.Set(c, mengpo.Before(c.parseEnv)); nil != err {
+	if err = mengpo.Set(c); nil != err {
 		return
 	}
 
@@ -81,18 +80,6 @@ func (c *config) load() (err error) {
 	if timestamp, parseErr := strconv.ParseInt(c.Timestamp, 10, 64); nil == parseErr {
 		c.Timestamp = time.Unix(timestamp, 0).String()
 	}
-
-	return
-}
-
-// 需要做两次环境变量
-// 第一次是加载默认值里面配置的环境变量
-// 第二次是加载默认值配置里面再包含的环境变量
-func (c *config) parseEnv(from string) (to string, err error) {
-	if to, err = envsubst.EvalEnv(from); nil != err {
-		return
-	}
-	to, err = envsubst.EvalEnv(to)
 
 	return
 }
