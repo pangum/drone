@@ -15,8 +15,8 @@ trigger:
 
 steps:
   - name: 拉代码
-    image: storezhang/git
-    pull: always
+    image: dronestock/git
+    pull: if-not-exists
 
   - name: 编译
     image: storezhang/pangu
@@ -32,12 +32,12 @@ steps:
         - develop
         - master
     settings:
-      repo: storezhang/drone
+      repo: dronestock/pangu
       tags:
         - latest
       compress: true
       squash: true
       mirror: https://mirror.ccs.tencentyun.com
-      username: storezhang
+      username: dronestock
       password:
-        from_secret: token_docker
+        from_secret: token_docker_dronestock
