@@ -19,7 +19,7 @@ steps:
     pull: if-not-exists
 
   - name: 编译
-    image: storezhang/pangu
+    image: dronestock/pangu
     pull: if-not-exists
     settings:
       output: pangu
