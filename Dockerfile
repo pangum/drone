@@ -4,16 +4,18 @@ FROM daocloud.io/library/golang:alpine AS lint
 ENV GOPROXY https://goproxy.cn,https://mirrors.aliyun.com/goproxy,https://goproxy.io,direct
 # 标签修改程序版本
 ENV LINT_VERSION 1.43.0
-
+# 工作目录
+WORKDIR /opt
 
 RUN sed -i "s/dl-cdn\.alpinelinux\.org/mirrors.ustc.edu.cn/" /etc/apk/repositories
 RUN apk update
-RUN mkdir /lib64
-RUN ln -s /lib/libc.musl-x86_64.so.1 /lib64/ld-linux-x86-64.so.2
+RUN apk add wget
+RUN wget https://ghproxy.com/https://github.com/golangci/golangci-lint/releases/download/v${LINT_VERSION}/golangci-lint-1.43.0-linux-amd64.tar.gz --output-document golangci-lint-1.43.0-linux-amd64.tar.gz
+RUN tar -zxvf golangci-lint-1.43.0-linux-amd64.tar.gz
+RUN mv golangci-lint-1.43.0-linux-amd64 /opt/golangci
+RUN chmod +x /opt/golangci/golangci-lint
 
-# 安装标签处理程序
-RUN apk add gcc musl-dev
-RUN go install github.com/golangci/golangci-lint/cmd/golangci-lint@v${LINT_VERSION}
+
 
 
 
@@ -33,7 +35,7 @@ COPY --from=lint /usr/local/go/bin/go /usr/local/go/bin/go
 COPY --from=lint /usr/local/go/pkg /usr/local/go/pkg
 COPY --from=lint /usr/local/go/src /usr/local/go/src
 
-COPY --from=lint /go/bin/golangci-lint /usr/bin/golangci-lint
+COPY --from=lint /opt/golangci/golangci-lint /usr/bin/golangci-lint
 COPY drone /bin
 
 
@@ -43,7 +45,7 @@ RUN set -ex \
     \
     \
     # 增加执行权限
-    && chmod +x /bin/pangu \
+    && chmod +x /bin/drone \
     \
     \
     \
