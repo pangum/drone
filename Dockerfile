@@ -1,4 +1,4 @@
-FROM ccr.ccs.tencentyun.com/library/golang:alpine AS lint
+FROM daocloud.io/library/golang:alpine AS lint
 
 
 ENV GOPROXY https://goproxy.cn,https://mirrors.aliyun.com/goproxy,https://goproxy.io,direct
