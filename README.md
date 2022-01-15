@@ -10,6 +10,7 @@
 steps:
   - name: 编译
     image: ccr.ccs.tencentyun.com/pangum/pangu
+    # image: dronestock/pangu
     pull: always
     settings:
       output: server
