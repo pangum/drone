@@ -24,7 +24,7 @@ steps:
     image: dronestock/pangu
     pull: if-not-exists
     settings:
-      output: pangu
+      output: drone
 
   - name: 推送Docker镜像到腾讯云
     image: ccr.ccs.tencentyun.com/dronestock/docker

@@ -34,7 +34,7 @@ COPY --from=lint /usr/local/go/pkg /usr/local/go/pkg
 COPY --from=lint /usr/local/go/src /usr/local/go/src
 
 COPY --from=lint /go/bin/golangci-lint /usr/bin/golangci-lint
-COPY pangu /bin
+COPY drone /bin
 
 
 # 增加执行权限
@@ -51,7 +51,7 @@ RUN set -ex \
 
 
 # 执行命令
-ENTRYPOINT /bin/pangu
+ENTRYPOINT /bin/drone
 
 
 # 配置环境变量
