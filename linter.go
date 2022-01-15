@@ -20,8 +20,8 @@ func linter(conf *config, logger simaqian.Logger) (err error) {
 	if conf.Verbose {
 		commands = append(commands, `--verbose`)
 	}
-	for _, linter := range conf.Linters {
-		commands = append(commands, `--enable`, linter)
+	for _, _linter := range conf.Linters {
+		commands = append(commands, `--enable`, _linter)
 	}
 
 	// 执行命令
