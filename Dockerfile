@@ -25,7 +25,7 @@ LABEL author="storezhang<华寅>"
 LABEL email="storezhang@gmail.com"
 LABEL qq="160290688"
 LABEL wechat="storezhang"
-LABEL Description="盘古Drone插件，集成Lint和以及打包工具"
+LABEL description="盘古Drone插件，集成Lint和以及打包工具"
 
 
 # 复制文件
