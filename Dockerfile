@@ -1,4 +1,4 @@
-FROM golang:alpine AS builder
+FROM ccr.ccs.tencentyun.com/library/golang:alpine AS lint
 
 
 ENV GOPROXY https://goproxy.cn,https://mirrors.aliyun.com/goproxy,https://goproxy.io,direct
@@ -18,20 +18,22 @@ RUN go install github.com/golangci/golangci-lint/cmd/golangci-lint@v${LINT_VERSI
 
 
 # 打包真正的镜像
-FROM storezhang/alpine
+FROM ccr.ccs.tencentyun.com/storezhang/alpine
 
 
-MAINTAINER storezhang "storezhang@gmail.com"
-LABEL architecture="AMD64/x86_64" version="latest" build="2022-01-02"
+LABEL author="storezhang<华寅>"
+LABEL email="storezhang@gmail.com"
+LABEL qq="160290688"
+LABEL wechat="storezhang"
 LABEL Description="盘古Drone插件，集成Lint和以及打包工具"
 
 
 # 复制文件
-COPY --from=builder /usr/local/go/bin/go /usr/local/go/bin/go
-COPY --from=builder /usr/local/go/pkg /usr/local/go/pkg
-COPY --from=builder /usr/local/go/src /usr/local/go/src
+COPY --from=lint /usr/local/go/bin/go /usr/local/go/bin/go
+COPY --from=lint /usr/local/go/pkg /usr/local/go/pkg
+COPY --from=lint /usr/local/go/src /usr/local/go/src
 
-COPY --from=builder /go/bin/golangci-lint /usr/bin/golangci-lint
+COPY --from=lint /go/bin/golangci-lint /usr/bin/golangci-lint
 COPY pangu /bin
 
 
