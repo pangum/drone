@@ -41,7 +41,7 @@ func upx(conf *config, logger simaqian.Logger) (err error) {
 	if !conf.Debug {
 		options = append(options, gex.Quiet())
 	}
-	if _, err = gex.Run(conf.goExe, options...); nil != err {
+	if _, err = gex.Run(conf.upxExe, options...); nil != err {
 		logger.Error(`压缩程序出错`, fields.Connect(field.Error(err))...)
 	} else {
 		logger.Info(`压缩程序成功`, fields...)
