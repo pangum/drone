@@ -27,7 +27,6 @@ func upx(conf *config, logger simaqian.Logger) (err error) {
 		args = append(args, fmt.Sprintf(`-%s`, conf.UpxLevel))
 	}
 
-	args = append(args, `-o`, conf.Output)
 	args = append(args, conf.Output)
 
 	// 记录日志
