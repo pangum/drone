@@ -3,7 +3,9 @@ module github.com/pangum/drone
 go 1.17
 
 require (
-	github.com/storezhang/gox v1.8.1
+	github.com/storezhang/gex v0.0.4
+	github.com/storezhang/gfx v0.0.2
+	github.com/storezhang/gox v1.8.3
 	github.com/storezhang/mengpo v0.1.0
 	github.com/storezhang/simaqian v0.0.6
 )

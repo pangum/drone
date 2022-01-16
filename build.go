@@ -1,62 +1,43 @@
 package main
 
 import (
-	`fmt`
-	`os`
-	`os/exec`
-	`path/filepath`
 	`strings`
 
+	`github.com/storezhang/gex`
+	`github.com/storezhang/gox`
 	`github.com/storezhang/gox/field`
 	`github.com/storezhang/simaqian`
 )
 
 func build(conf *config, logger simaqian.Logger) (err error) {
-	commands := []string{
+	args := []string{
 		`build`,
 		`-o`,
 		conf.Output,
 	}
 	if conf.Verbose {
-		commands = append(commands, `-x`)
+		args = append(args, `-x`)
 	}
 
-	// 写入版本信息
-	var ldflags strings.Builder
-	ldflags.WriteString(`-s`)
-	if `` != conf.Name {
-		ldflags.WriteString(fmt.Sprintf(` -X 'github.com/pangum/pangu.Name=%s'`, conf.Name))
+	// 写入编译标签
+	args = append(args, `-ldflags`, strings.Join(conf.flags(), ` `))
+
+	// 记录日志
+	fields := gox.Fields{
+		field.String(`exe`, conf.goExe),
+		field.String(`output`, conf.Output),
 	}
-	if `` != conf.Version {
-		ldflags.WriteString(fmt.Sprintf(` -X 'github.com/pangum/pangu.Version=%s'`, conf.Version))
-	}
-	if `` != conf.Build {
-		ldflags.WriteString(fmt.Sprintf(` -X 'github.com/pangum/pangu.Build=%s'`, conf.Build))
-	}
-	if `` != conf.Timestamp {
-		ldflags.WriteString(fmt.Sprintf(` -X 'github.com/pangum/pangu.Timestamp=%s'`, conf.Timestamp))
-	}
-	if `` != conf.Revision {
-		ldflags.WriteString(fmt.Sprintf(` -X 'github.com/pangum/pangu.Revision=%s'`, conf.Revision))
-	}
-	if `` != conf.Branch {
-		ldflags.WriteString(fmt.Sprintf(` -X 'github.com/pangum/pangu.Branch=%s'`, conf.Branch))
-	}
-	commands = append(commands, `-ldflags`, ldflags.String())
+	logger.Info(`开始编译代码`, fields...)
 
 	// 执行命令
-	cmd := exec.Command(`go`, commands...)
-	if cmd.Dir, err = filepath.Abs(conf.Input); nil != err {
-		return
+	options := gex.NewOptions(gex.Args(args...))
+	if !conf.Debug {
+		options = append(options, gex.Quiet())
 	}
-	cmd.Env = os.Environ()
-	cmd.Env = append(cmd.Env, conf.Envs...)
-	if conf.Verbose {
-		cmd.Stdout = os.Stdout
-		cmd.Stderr = os.Stderr
-	}
-	if err = cmd.Run(); nil != err {
-		logger.Error(`代码编译出错`, conf.Fields().Connect(field.Error(err))...)
+	if _, err = gex.Run(conf.goExe, options...); nil != err {
+		logger.Error(`代码编译出错`, fields.Connect(field.Error(err))...)
+	} else {
+		logger.Info(`开始编译成功`, fields...)
 	}
 
 	return

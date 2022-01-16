@@ -30,10 +30,16 @@ func main() {
 	}
 	// 代码检查
 	if conf.Lint {
-		if err = linter(conf, logger); nil != err {
+		if err = lint(conf, logger); nil != err {
 			return
 		}
 	}
 	// 编译
-	err = build(conf, logger)
+	if err = build(conf, logger); nil != err {
+		return
+	}
+	// 压缩
+	if err = upx(conf, logger); nil != err {
+		return
+	}
 }

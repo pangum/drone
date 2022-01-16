@@ -44,6 +44,12 @@ RUN set -ex \
     \
     \
     \
+    # 安装应用程序压缩工具 \
+    && apk update \
+    && apk --no-cache add upx \
+    \
+    \
+    \
     # 增加执行权限
     && chmod +x /bin/drone \
     \

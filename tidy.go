@@ -1,38 +1,37 @@
 package main
 
 import (
-	`os`
-	`os/exec`
 	`path/filepath`
 
+	`github.com/storezhang/gex`
+	`github.com/storezhang/gfx`
 	`github.com/storezhang/gox`
 	`github.com/storezhang/gox/field`
 	`github.com/storezhang/simaqian`
 )
 
 func tidy(conf *config, logger simaqian.Logger) (err error) {
-	if exist := gox.IsFileExist(filepath.Join(conf.Input, `go.mod`)); !exist {
+	mod := filepath.Join(conf.Input, `go.mod`)
+	if exist := gfx.Exist(mod); !exist {
 		return
 	}
 
-	commands := []string{
-		`mod`,
-		`tidy`,
+	// 记录日志
+	fields := gox.Fields{
+		field.String(`go.mod`, mod),
+		field.String(`input`, conf.Input),
 	}
+	logger.Info(`开户清理依赖`, fields...)
 
 	// 执行命令
-	cmd := exec.Command(`go`, commands...)
-	if cmd.Dir, err = filepath.Abs(conf.Input); nil != err {
-		return
+	options := gex.NewOptions(gex.Args(`mod`, `tidy`))
+	if !conf.Debug {
+		options = append(options, gex.Quiet())
 	}
-	cmd.Env = os.Environ()
-	cmd.Env = append(cmd.Env, conf.Envs...)
-	if conf.Verbose {
-		cmd.Stdout = os.Stdout
-		cmd.Stderr = os.Stderr
-	}
-	if err = cmd.Run(); nil != err {
-		logger.Error(`清理依赖出错`, conf.Fields().Connect(field.Error(err))...)
+	if _, err = gex.Run(conf.goExe, options...); nil != err {
+		logger.Error(`清理依赖出错`, fields.Connect(field.Error(err))...)
+	} else {
+		logger.Info(`清理依赖成功`, fields...)
 	}
 
 	return
