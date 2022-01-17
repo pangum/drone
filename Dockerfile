@@ -1,7 +1,6 @@
-FROM daocloud.io/library/golang:alpine AS lint
+FROM golang:alpine AS lint
 
 
-ENV GOPROXY https://goproxy.cn,https://mirrors.aliyun.com/goproxy,https://goproxy.io,direct
 # 标签修改程序版本
 ENV LINT_VERSION 1.43.0
 # 工作目录
@@ -34,7 +33,6 @@ LABEL description="盘古Drone插件，集成Lint和以及打包工具"
 COPY --from=lint /usr/local/go/bin/go /usr/local/go/bin/go
 COPY --from=lint /usr/local/go/pkg /usr/local/go/pkg
 COPY --from=lint /usr/local/go/src /usr/local/go/src
-
 COPY --from=lint /opt/golangci/golangci-lint /usr/bin/golangci-lint
 COPY drone /bin
 
