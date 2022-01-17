@@ -24,8 +24,8 @@ steps:
         from_secret: ssh_key_github
 
   - name: 编译
-    image: ccr.ccs.tencentyun.com/pangum/drone
-    pull: always
+    image: dronestock/pangu
+    pull: if-not-exists
     settings:
       verbose: true
       debug: true

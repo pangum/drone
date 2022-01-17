@@ -34,7 +34,7 @@ LABEL description="盘古Drone插件，集成Lint和以及打包工具"
 COPY --from=lint /usr/local/go/bin/go /usr/local/go/bin/go
 COPY --from=lint /usr/local/go/pkg /usr/local/go/pkg
 COPY --from=lint /usr/local/go/src /usr/local/go/src
-COPY --from=lint /opt/golangci/golangci-lint /usr/bin/golangci-lint
+COPY --from=lint /go/bin/golangci-lint /usr/bin/golangci-lint
 COPY drone /bin
 
 
