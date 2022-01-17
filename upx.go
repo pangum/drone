@@ -37,7 +37,7 @@ func upx(conf *config, logger simaqian.Logger) (err error) {
 	logger.Info(`开始压缩程序`, fields...)
 
 	// 执行命令
-	options := gex.NewOptions(gex.Args(args...))
+	options := gex.NewOptions(gex.Args(args...), gex.Dir(conf.Input))
 	if !conf.Debug {
 		options = append(options, gex.Quiet())
 	}

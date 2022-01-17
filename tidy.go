@@ -24,7 +24,7 @@ func tidy(conf *config, logger simaqian.Logger) (err error) {
 	logger.Info(`开户清理依赖`, fields...)
 
 	// 执行命令
-	options := gex.NewOptions(gex.Args(`mod`, `tidy`))
+	options := gex.NewOptions(gex.Args(`mod`, `tidy`), gex.Dir(conf.Input))
 	if !conf.Debug {
 		options = append(options, gex.Quiet())
 	}
