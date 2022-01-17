@@ -37,8 +37,7 @@ steps:
     failure: ignore
     privileged: true
     settings:
-      repository: dronestock/pangu
-      username:
-        from_secret: username_docker
+      repository: pangum/drone
+      username: pangum
       password:
-        from_secret: token_docker
+        from_secret: token_docker_pangum
