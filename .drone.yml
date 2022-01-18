@@ -20,7 +20,7 @@ steps:
     settings:
       verbose: true
       debug: true
-      ssk_key:
+      ssh_key:
         from_secret: ssh_key_github
 
   - name: 编译

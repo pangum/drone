@@ -43,8 +43,11 @@ RUN set -ex \
     \
     \
     \
-    # 安装应用程序压缩工具 \
     && apk update \
+    # 安装依赖包
+    && apk --no-cache add gcc musl-dev \
+    \
+    # 安装应用程序压缩工具
     && apk --no-cache add upx \
     \
     \

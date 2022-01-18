@@ -12,9 +12,9 @@ import (
 
 func upx(conf *config, logger simaqian.Logger) (err error) {
 	args := []string{
-		`-l`,
 		`--mono`,
 		`--color`,
+		`-f`,
 	}
 	if conf.Verbose {
 		args = append(args, `-v`)
@@ -33,6 +33,7 @@ func upx(conf *config, logger simaqian.Logger) (err error) {
 	fields := gox.Fields{
 		field.String(`exe`, conf.upxExe),
 		field.String(`output`, conf.Output),
+		field.Strings(`args`, args...),
 	}
 	logger.Info(`开始压缩程序`, fields...)
 
