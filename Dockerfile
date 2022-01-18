@@ -20,7 +20,7 @@ RUN go install github.com/golangci/golangci-lint/cmd/golangci-lint@v${LINT_VERSI
 
 
 # 打包真正的镜像
-FROM ccr.ccs.tencentyun.com/storezhang/alpine
+FROM storezhang/alpine
 
 
 LABEL author="storezhang<华寅>"
