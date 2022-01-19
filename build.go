@@ -9,32 +9,32 @@ import (
 	`github.com/storezhang/simaqian`
 )
 
-func build(conf *config, logger simaqian.Logger) (err error) {
+func (p *plugin) build(logger simaqian.Logger) (undo bool, err error) {
 	args := []string{
 		`build`,
 		`-o`,
-		conf.Output,
+		p.config.Output,
 	}
-	if conf.Verbose {
+	if p.config.Verbose {
 		args = append(args, `-x`)
 	}
 
 	// 写入编译标签
-	args = append(args, `-ldflags`, strings.Join(conf.flags(), ` `))
+	args = append(args, `-ldflags`, strings.Join(p.config.flags(), ` `))
 
 	// 记录日志
 	fields := gox.Fields{
-		field.String(`exe`, conf.goExe),
-		field.String(`output`, conf.Output),
+		field.String(`exe`, p.goExe),
+		field.String(`output`, p.config.Output),
 	}
 	logger.Info(`开始编译代码`, fields...)
 
 	// 执行命令
-	options := gex.NewOptions(gex.Args(args...), gex.Dir(conf.Input))
-	if !conf.Debug {
+	options := gex.NewOptions(gex.Args(args...), gex.Dir(p.config.Input))
+	if !p.config.Debug {
 		options = append(options, gex.Quiet())
 	}
-	if _, err = gex.Run(conf.goExe, options...); nil != err {
+	if _, err = gex.Run(p.goExe, options...); nil != err {
 		logger.Error(`代码编译出错`, fields.Connect(field.Error(err))...)
 	} else {
 		logger.Info(`开始编译成功`, fields...)

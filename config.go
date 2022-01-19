@@ -2,15 +2,15 @@ package main
 
 import (
 	`fmt`
-	`strconv`
-	`time`
 
+	`github.com/dronestock/drone`
 	`github.com/storezhang/gox`
 	`github.com/storezhang/gox/field`
-	`github.com/storezhang/mengpo`
 )
 
 type config struct {
+	drone.Config
+
 	// 输入文件
 	Input string `default:"${PLUGIN_INPUT=${INPUT=.}}"`
 	// 输出文件
@@ -42,20 +42,9 @@ type config struct {
 	// nolint:lll
 	UpxLevel string `default:"${PLUGIN_UPX_LEVEL=${UPX_LEVEL=ultra-brute}}" validate:"oneof=1 2 3 4 5 6 7 8 9 ultra-brute brute"`
 
-	// 是否启用默认配置
-	Defaults bool `default:"${PLUGIN_DEFAULTS=${DEFAULTS=true}}"`
-	// 是否显示详细信息
-	Verbose bool `default:"${PLUGIN_VERBOSE=${VERBOSE=false}}"`
-	// 是否显示调试信息
-	Debug bool `default:"${PLUGIN_DEBUG=${DEBUG=false}}"`
-
 	defaultEnvs    []string
 	defaultLinters []string
 	defaultFlags   []string
-
-	goExe   string
-	lintExe string
-	upxExe  string
 }
 
 func (c *config) Fields() gox.Fields {
@@ -71,24 +60,6 @@ func (c *config) Fields() gox.Fields {
 		field.String(`revision`, c.Revision),
 		field.String(`branch`, c.Branch),
 	}
-}
-
-func (c *config) load() (err error) {
-	// 处理环境变量为字符串的时候和默认值格式不兼容
-	if err = parseEnvs(`ENVS`, `LINTERS`); nil != err {
-		return
-	}
-	if err = mengpo.Set(c); nil != err {
-		return
-	}
-
-	c.init()
-	// 将时间变换成易读形式
-	if timestamp, parseErr := strconv.ParseInt(c.Timestamp, 10, 64); nil == parseErr {
-		c.Timestamp = time.Unix(timestamp, 0).String()
-	}
-
-	return
 }
 
 func (c *config) linters() (linters []string) {
@@ -129,25 +100,5 @@ func (c *config) flags() (flags []string) {
 }
 
 func (c *config) init() {
-	c.defaultEnvs = []string{
-		`CGO_ENABLED=0`,
-		`GOOS=linux`,
-	}
-	c.defaultLinters = []string{
-		`goerr113`,
-		`nlreturn`,
-		`bodyclose`,
-		`rowserrcheck`,
-		`gosec`,
-		`unconvert`,
-		`misspell`,
-		`lll`,
-	}
-	c.defaultFlags = []string{
-		`-s`,
-	}
 
-	c.goExe = `go`
-	c.lintExe = `golangci-lint`
-	c.upxExe = `upx`
 }
