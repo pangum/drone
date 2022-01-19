@@ -12,7 +12,7 @@ import (
 
 func (p *plugin) tidy(logger simaqian.Logger) (undo bool, err error) {
 	mod := filepath.Join(p.config.Input, `go.mod`)
-	if exist := gfx.Exist(mod); !exist {
+	if undo = !gfx.Exist(mod); undo {
 		return
 	}
 

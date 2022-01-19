@@ -23,6 +23,9 @@ type config struct {
 	// 启用的Linter
 	Linters []string `default:"${PLUGIN_LINTERS=${LINTERS}}"`
 
+	// 是否启用测试
+	Test bool `default:"${PLUGIN_TEST=${TEST=true}}"`
+
 	// 应用名称
 	Name string `default:"${PLUGIN_NAME=${NAME=${DRONE_STAGE_NAME}}}"`
 	// 应用版本
