@@ -98,7 +98,3 @@ func (c *config) flags() (flags []string) {
 
 	return
 }
-
-func (c *config) init() {
-
-}
