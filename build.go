@@ -24,7 +24,7 @@ func (p *plugin) build(logger simaqian.Logger) (undo bool, err error) {
 
 	// 记录日志
 	fields := gox.Fields{
-		field.String(`exe`, p.goExe),
+		field.String(`exe`, goExe),
 		field.String(`output`, p.config.Output),
 	}
 	logger.Info(`开始编译代码`, fields...)
@@ -34,7 +34,7 @@ func (p *plugin) build(logger simaqian.Logger) (undo bool, err error) {
 	if !p.config.Debug {
 		options = append(options, gex.Quiet())
 	}
-	if _, err = gex.Run(p.goExe, options...); nil != err {
+	if _, err = gex.Run(goExe, options...); nil != err {
 		logger.Error(`代码编译出错`, fields.Connect(field.Error(err))...)
 	} else {
 		logger.Info(`开始编译成功`, fields...)
