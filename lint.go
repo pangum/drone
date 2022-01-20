@@ -30,7 +30,7 @@ func (p *plugin) lint(logger simaqian.Logger) (undo bool, err error) {
 
 	// 记录日志
 	fields := gox.Fields{
-		field.String(`exe`, p.lintExe),
+		field.String(`exe`, lintExe),
 		field.Strings(`linters`, p.config.linters()...),
 	}
 	logger.Info(`开始代码检查`, fields...)
@@ -40,7 +40,7 @@ func (p *plugin) lint(logger simaqian.Logger) (undo bool, err error) {
 	if !p.config.Debug {
 		options = append(options, gex.Quiet())
 	}
-	if _, err = gex.Run(p.lintExe, options...); nil != err {
+	if _, err = gex.Run(lintExe, options...); nil != err {
 		logger.Error(`代码检查出错`, fields.Connect(field.Error(err))...)
 	} else {
 		logger.Info(`代码检查成功`, fields...)

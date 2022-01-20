@@ -6,37 +6,11 @@ import (
 
 type plugin struct {
 	config *config
-
-	goExe   string
-	lintExe string
-	upxExe  string
 }
 
 func newPlugin() drone.Plugin {
 	return &plugin{
-		config: &config{
-			defaultEnvs: []string{
-				`CGO_ENABLED=0`,
-				`GOOS=linux`,
-			},
-			defaultLinters: []string{
-				`goerr113`,
-				`nlreturn`,
-				`bodyclose`,
-				`rowserrcheck`,
-				`gosec`,
-				`unconvert`,
-				`misspell`,
-				`lll`,
-			},
-			defaultFlags: []string{
-				`-s`,
-			},
-		},
-
-		goExe:   `go`,
-		lintExe: `golangci-lint`,
-		upxExe:  `upx`,
+		config: &config{},
 	}
 }
 

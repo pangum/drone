@@ -65,6 +65,28 @@ func (c *config) Fields() gox.Fields {
 	}
 }
 
+func (c *config) Setup() (unset bool, err error) {
+	c.defaultEnvs = []string{
+		`CGO_ENABLED=0`,
+		`GOOS=linux`,
+	}
+	c.defaultLinters = []string{
+		`goerr113`,
+		`nlreturn`,
+		`bodyclose`,
+		`rowserrcheck`,
+		`gosec`,
+		`unconvert`,
+		`misspell`,
+		`lll`,
+	}
+	c.defaultFlags = []string{
+		`-s`,
+	}
+
+	return
+}
+
 func (c *config) linters() (linters []string) {
 	linters = make([]string, 0)
 	if c.Defaults {

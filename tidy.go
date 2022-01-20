@@ -28,7 +28,7 @@ func (p *plugin) tidy(logger simaqian.Logger) (undo bool, err error) {
 	if !p.config.Debug {
 		options = append(options, gex.Quiet())
 	}
-	if _, err = gex.Run(p.goExe, options...); nil != err {
+	if _, err = gex.Run(goExe, options...); nil != err {
 		logger.Error(`清理依赖出错`, fields.Connect(field.Error(err))...)
 	} else {
 		logger.Info(`清理依赖成功`, fields...)

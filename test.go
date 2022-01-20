@@ -14,7 +14,7 @@ func (p *plugin) test(logger simaqian.Logger) (undo bool, err error) {
 
 	// 记录日志
 	fields := gox.Fields{
-		field.String(`exe`, p.goExe),
+		field.String(`exe`, goExe),
 		field.String(`input`, p.config.Input),
 	}
 	logger.Info(`开始测试`, fields...)
@@ -24,7 +24,7 @@ func (p *plugin) test(logger simaqian.Logger) (undo bool, err error) {
 	if !p.config.Debug {
 		options = append(options, gex.Quiet())
 	}
-	if _, err = gex.Run(p.goExe, options...); nil != err {
+	if _, err = gex.Run(goExe, options...); nil != err {
 		logger.Error(`测试出错`, fields.Connect(field.Error(err))...)
 	} else {
 		logger.Info(`测试完成`, fields...)

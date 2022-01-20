@@ -31,7 +31,7 @@ func (p *plugin) upx(logger simaqian.Logger) (undo bool, err error) {
 
 	// 记录日志
 	fields := gox.Fields{
-		field.String(`exe`, p.upxExe),
+		field.String(`exe`, upxExe),
 		field.String(`output`, p.config.Output),
 		field.Strings(`args`, args...),
 	}
@@ -42,7 +42,7 @@ func (p *plugin) upx(logger simaqian.Logger) (undo bool, err error) {
 	if !p.config.Debug {
 		options = append(options, gex.Quiet())
 	}
-	if _, err = gex.Run(p.upxExe, options...); nil != err {
+	if _, err = gex.Run(upxExe, options...); nil != err {
 		logger.Error(`压缩程序出错`, fields.Connect(field.Error(err))...)
 	} else {
 		logger.Info(`压缩程序成功`, fields...)
