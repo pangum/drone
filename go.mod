@@ -30,4 +30,4 @@ require (
 )
 
 // replace github.com/storezhang/mengpo => ../../storezhang/mengpo
-replace github.com/storezhang/gex => ../../storezhang/gex
+// replace github.com/storezhang/gex => ../../storezhang/gex
