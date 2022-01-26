@@ -4,49 +4,30 @@ import (
 	`fmt`
 	`strconv`
 
-	`github.com/storezhang/gex`
-	`github.com/storezhang/gox`
-	`github.com/storezhang/gox/field`
-	`github.com/storezhang/simaqian`
+	`github.com/dronestock/drone`
 )
 
-func (p *plugin) upx(logger simaqian.Logger) (undo bool, err error) {
+func (p *plugin) upx() (undo bool, err error) {
 	args := []string{
 		`--mono`,
 		`--color`,
 		`-f`,
 	}
-	if p.config.Verbose {
+	if p.Verbose {
 		args = append(args, `-v`)
 	}
 
 	// 压缩等级
-	if _, convErr := strconv.Atoi(p.config.UpxLevel); nil != convErr {
-		args = append(args, fmt.Sprintf(`--%s`, p.config.UpxLevel))
+	if _, convErr := strconv.Atoi(p.UpxLevel); nil != convErr {
+		args = append(args, fmt.Sprintf(`--%s`, p.UpxLevel))
 	} else {
-		args = append(args, fmt.Sprintf(`-%s`, p.config.UpxLevel))
+		args = append(args, fmt.Sprintf(`-%s`, p.UpxLevel))
 	}
+	// 添加输出文件
+	args = append(args, p.Output)
 
-	args = append(args, p.config.Output)
-
-	// 记录日志
-	fields := gox.Fields{
-		field.String(`exe`, upxExe),
-		field.String(`output`, p.config.Output),
-		field.Strings(`args`, args...),
-	}
-	logger.Info(`开始压缩程序`, fields...)
-
-	// 执行命令
-	options := gex.NewOptions(gex.Args(args...), gex.Dir(p.config.Input))
-	if !p.config.Debug {
-		options = append(options, gex.Quiet())
-	}
-	if _, err = gex.Run(upxExe, options...); nil != err {
-		logger.Error(`压缩程序出错`, fields.Connect(field.Error(err))...)
-	} else {
-		logger.Info(`压缩程序成功`, fields...)
-	}
+	// 执行清理依赖命令
+	err = p.Exec(upxExe, drone.Args(args...), drone.Dir(p.Input))
 
 	return
 }

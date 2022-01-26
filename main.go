@@ -5,5 +5,5 @@ import (
 )
 
 func main() {
-	panic(drone.Bootstrap(newPlugin, drone.Configs(`ENVS`, `LINTERS`)))
+	panic(drone.Bootstrap(newPlugin, drone.Configs(`envs`, `linters`)))
 }

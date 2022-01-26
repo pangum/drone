@@ -3,42 +3,24 @@ package main
 import (
 	`strings`
 
-	`github.com/storezhang/gex`
-	`github.com/storezhang/gox`
-	`github.com/storezhang/gox/field`
-	`github.com/storezhang/simaqian`
+	`github.com/dronestock/drone`
 )
 
-func (p *plugin) build(logger simaqian.Logger) (undo bool, err error) {
+func (p *plugin) build() (undo bool, err error) {
 	args := []string{
 		`build`,
 		`-o`,
-		p.config.Output,
+		p.Output,
 	}
-	if p.config.Verbose {
+	if p.Verbose {
 		args = append(args, `-x`)
 	}
 
 	// 写入编译标签
-	args = append(args, `-ldflags`, strings.Join(p.config.flags(), ` `))
+	args = append(args, `-ldflags`, strings.Join(p.flags(), ` `))
 
-	// 记录日志
-	fields := gox.Fields{
-		field.String(`exe`, goExe),
-		field.String(`output`, p.config.Output),
-	}
-	logger.Info(`开始编译代码`, fields...)
-
-	// 执行命令
-	options := gex.NewOptions(gex.Args(args...), gex.Dir(p.config.Input))
-	if !p.config.Debug {
-		options = append(options, gex.Quiet())
-	}
-	if _, err = gex.Run(goExe, options...); nil != err {
-		logger.Error(`代码编译出错`, fields.Connect(field.Error(err))...)
-	} else {
-		logger.Info(`开始编译成功`, fields...)
-	}
+	// 执行编译命令
+	err = p.Exec(goExe, drone.Args(args...), drone.Dir(p.Input))
 
 	return
 }
