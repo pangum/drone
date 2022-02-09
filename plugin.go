@@ -131,12 +131,16 @@ func (p *plugin) linters() (linters []string) {
 	return
 }
 
-func (p *plugin) testFlags() (flags []string) {
-	flags = make([]string, 0)
+func (p *plugin) testFlags() (flags []interface{}) {
+	flags = make([]interface{}, 0)
 	if p.Defaults {
-		flags = append(flags, p.defaultTestFlags...)
+		for _, flag := range p.defaultTestFlags {
+			flags = append(flags, flag)
+		}
 	}
-	flags = append(flags, p.TestFlags...)
+	for _, flag := range p.TestFlags {
+		flags = append(flags, flag)
+	}
 
 	return
 }

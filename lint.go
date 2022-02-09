@@ -9,7 +9,7 @@ func (p *plugin) lint() (undo bool, err error) {
 		return
 	}
 
-	args := []string{
+	args := []interface{}{
 		`run`,
 		`--timeout`,
 		`10m`,

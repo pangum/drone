@@ -9,7 +9,7 @@ func (p *plugin) test() (undo bool, err error) {
 		return
 	}
 
-	args := []string{
+	args := []interface{}{
 		`test`,
 	}
 	// 加入默认测试参数

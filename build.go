@@ -7,7 +7,7 @@ import (
 )
 
 func (p *plugin) build() (undo bool, err error) {
-	args := []string{
+	args := []interface{}{
 		`build`,
 		`-o`,
 		p.Output,

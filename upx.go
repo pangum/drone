@@ -8,7 +8,7 @@ import (
 )
 
 func (p *plugin) upx() (undo bool, err error) {
-	args := []string{
+	args := []interface{}{
 		`--mono`,
 		`--color`,
 		`-f`,

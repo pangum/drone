@@ -22,7 +22,6 @@ steps:
     image: pangum/drone
     pull: always
     settings:
-      debug: true
       output: drone
 
   - name: 推送Docker镜像到中央库
