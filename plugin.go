@@ -27,6 +27,10 @@ type plugin struct {
 
 	// 是否启用测试
 	Test bool `default:"${PLUGIN_TEST=${TEST=true}}"`
+	// 测试参数
+	TestArgs []string `default:"${PLUGIN_TEST_ARGS=${TEST_ARGS}}"`
+	// 测试标志
+	TestFlags []string `default:"${PLUGIN_TEST_FLAGS=${TEST_FLAGS}}"`
 
 	// 应用名称
 	Name string `default:"${PLUGIN_NAME=${NAME=${DRONE_STAGE_NAME}}}"`
@@ -47,9 +51,10 @@ type plugin struct {
 	// nolint:lll
 	UpxLevel string `default:"${PLUGIN_UPX_LEVEL=${UPX_LEVEL=ultra-brute}}" validate:"oneof=1 2 3 4 5 6 7 8 9 ultra-brute brute"`
 
-	defaultEnvs    []string
-	defaultLinters []string
-	defaultFlags   []string
+	defaultEnvs      []string
+	defaultLinters   []string
+	defaultFlags     []string
+	defaultTestFlags []string
 }
 
 func newPlugin() drone.Plugin {
@@ -91,6 +96,12 @@ func (p *plugin) Setup() (unset bool, err error) {
 		// 去掉调试信息，无法使用GDB调试程序
 		`-w`,
 	}
+	p.defaultTestFlags = []string{
+		// 缩短长时间运行的测试的测试时间
+		`-short`,
+		// 随机
+		`-shuffle=on`,
+	}
 
 	return
 }
@@ -116,6 +127,16 @@ func (p *plugin) linters() (linters []string) {
 		linters = append(linters, p.defaultLinters...)
 	}
 	linters = append(linters, p.Linters...)
+
+	return
+}
+
+func (p *plugin) testFlags() (flags []string) {
+	flags = make([]string, 0)
+	if p.Defaults {
+		flags = append(flags, p.defaultTestFlags...)
+	}
+	flags = append(flags, p.TestFlags...)
 
 	return
 }
