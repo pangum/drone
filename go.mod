@@ -3,7 +3,7 @@ module github.com/pangum/drone
 go 1.17
 
 require (
-	github.com/dronestock/drone v0.2.2
+	github.com/dronestock/drone v0.2.3
 	github.com/storezhang/gfx v0.0.2
 	github.com/storezhang/gox v1.8.4
 )
