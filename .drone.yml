@@ -21,6 +21,9 @@ steps:
   - name: 编译
     image: pangum/drone
     pull: always
+    volumes:
+      - name: go
+        path: /go
     settings:
       output: drone
 
@@ -32,7 +35,7 @@ steps:
       event:
         - tag
     volumes:
-      - name: cache
+      - name: docker
         path: /var/lib/docker
     settings:
       repository: pangum/drone
@@ -42,6 +45,9 @@ steps:
 
 
 volumes:
-  - name: cache
+  - name: docker
     host:
       path: /var/lib/cache/docker
+  - name: go
+    host:
+      path: /var/lib/cache/go
