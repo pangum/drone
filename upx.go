@@ -8,6 +8,10 @@ import (
 )
 
 func (p *plugin) upx() (undo bool, err error) {
+	if undo = !p.Upx; undo {
+		return
+	}
+
 	args := []interface{}{
 		`--mono`,
 		`--color`,
