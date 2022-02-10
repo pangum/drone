@@ -49,7 +49,7 @@ type plugin struct {
 	Upx bool `default:"${PLUGIN_UPX=${UPX=true}}"`
 	// 压缩等级
 	// nolint:lll
-	UpxLevel string `default:"${PLUGIN_UPX_LEVEL=${UPX_LEVEL=ultra-brute}}" validate:"oneof=1 2 3 4 5 6 7 8 9 ultra-brute brute"`
+	UpxLevel string `default:"${PLUGIN_UPX_LEVEL=${UPX_LEVEL=lzma}}" validate:"oneof=1 2 3 4 5 6 7 8 9 best lzma brute ultra-brute"`
 
 	defaultEnvs      []string
 	defaultLinters   []string
