@@ -7,8 +7,8 @@ import (
 	`github.com/dronestock/drone`
 )
 
-func (p *plugin) upx() (undo bool, err error) {
-	if undo = !p.Upx; undo {
+func (p *plugin) compress() (undo bool, err error) {
+	if undo = !p.Compress; undo {
 		return
 	}
 
@@ -22,10 +22,10 @@ func (p *plugin) upx() (undo bool, err error) {
 	}
 
 	// 压缩等级
-	if _, convErr := strconv.Atoi(p.UpxLevel); nil != convErr {
-		args = append(args, fmt.Sprintf(`--%s`, p.UpxLevel))
+	if _, convErr := strconv.Atoi(p.CompressLevel); nil != convErr {
+		args = append(args, fmt.Sprintf(`--%s`, p.CompressLevel))
 	} else {
-		args = append(args, fmt.Sprintf(`-%s`, p.UpxLevel))
+		args = append(args, fmt.Sprintf(`-%s`, p.CompressLevel))
 	}
 	// 添加输出文件
 	args = append(args, p.Output)

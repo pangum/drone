@@ -46,10 +46,10 @@ type plugin struct {
 	Branch string `default:"${PLUGIN_BRANCH=${BRANCH=${DRONE_COMMIT_BRANCH}}}"`
 
 	// 启用压缩
-	Upx bool `default:"${PLUGIN_UPX=${UPX=true}}"`
+	Compress bool `default:"${PLUGIN_COMPRESS=${COMPRESS=true}}"`
 	// 压缩等级
 	// nolint:lll
-	UpxLevel string `default:"${PLUGIN_UPX_LEVEL=${UPX_LEVEL=lzma}}" validate:"oneof=1 2 3 4 5 6 7 8 9 best lzma brute ultra-brute"`
+	CompressLevel string `default:"${PLUGIN_COMPRESS_LEVEL=${COMPRESS_LEVEL=lzma}}" validate:"oneof=1 2 3 4 5 6 7 8 9 best lzma brute ultra-brute"`
 
 	defaultEnvs      []string
 	defaultLinters   []string
@@ -71,7 +71,7 @@ func (p *plugin) Steps() []*drone.Step {
 		drone.NewStep(p.lint, drone.Name(`代码静态检查`)),
 		drone.NewStep(p.test, drone.Name(`测试`)),
 		drone.NewStep(p.build, drone.Name(`编译`)),
-		drone.NewStep(p.upx, drone.Name(`压缩`)),
+		drone.NewStep(p.compress, drone.Name(`压缩`)),
 	}
 }
 
