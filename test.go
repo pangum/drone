@@ -24,9 +24,9 @@ func (p *plugin) test() (undo bool, err error) {
 	// 加入默认测试参数
 	args = append(args, p.testFlags()...)
 	// 加入测试文件
-	args = append(args, p.Input)
+	args = append(args, p.Src)
 	// 执行测试命令
-	err = p.Exec(goExe, drone.Args(args...), drone.Dir(p.Input))
+	err = p.Exec(goExe, drone.Args(args...), drone.Dir(p.Src))
 
 	return
 }

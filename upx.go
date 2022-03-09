@@ -27,7 +27,7 @@ func (p *plugin) upx() (err error) {
 	args = append(args, p.Output)
 
 	// 执行清理依赖命令
-	err = p.Exec(upxExe, drone.Args(args...), drone.Dir(p.Input))
+	err = p.Exec(upxExe, drone.Args(args...), drone.Dir(p.Src))
 
 	return
 }

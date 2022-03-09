@@ -11,8 +11,8 @@ import (
 type plugin struct {
 	drone.PluginBase
 
-	// 输入文件
-	Input string `default:"${PLUGIN_INPUT=${INPUT=.}}"`
+	// 源文件目录
+	Src string `default:"${PLUGIN_SR=${SRC=.}}"`
 	// 输出文件
 	Output string `default:"${PLUGIN_OUTPUT=${OUTPUT=${DRONE_STAGE_NAME}}}"`
 	// 编译模式
@@ -97,7 +97,7 @@ func (p *plugin) Setup() (unset bool, err error) {
 
 func (p *plugin) Fields() gox.Fields {
 	return []gox.Field{
-		field.String(`input`, p.Input),
+		field.String(`input`, p.Src),
 		field.String(`output`, p.Output),
 		field.Any(`lint`, p.Lint),
 

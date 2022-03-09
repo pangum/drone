@@ -8,12 +8,12 @@ import (
 )
 
 func (p *plugin) tidy() (undo bool, err error) {
-	if undo = !gfx.Exist(filepath.Join(p.Input, `go.mod`)); undo {
+	if undo = !gfx.Exist(filepath.Join(p.Src, `go.mod`)); undo {
 		return
 	}
 
 	// 执行清理依赖命令
-	err = p.Exec(goExe, drone.Args(`mod`, `tidy`), drone.Dir(p.Input))
+	err = p.Exec(goExe, drone.Args(`mod`, `tidy`), drone.Dir(p.Src))
 
 	return
 }
