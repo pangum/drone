@@ -20,7 +20,7 @@ func (p *plugin) build() (undo bool, err error) {
 	args = append(args, `-ldflags`, strings.Join(p.flags(), ` `))
 
 	// 执行编译命令
-	err = p.Exec(goExe, drone.Args(args...), drone.Dir(p.Src))
+	err = p.Exec(goExe, drone.Args(args...), drone.Dir(p.Source))
 
 	return
 }
