@@ -20,18 +20,6 @@ type plugin struct {
 	// 环境变量
 	Envs []string `default:"${PLUGIN_ENVS=${ENVS}}"`
 
-	// 是否启用Lint插件
-	Lint bool `default:"${PLUGIN_LINT=${LINT=true}}"`
-	// 启用的Linter
-	Linters []string `default:"${PLUGIN_LINTERS=${LINTERS}}"`
-
-	// 是否启用测试
-	Test bool `default:"${PLUGIN_TEST=${TEST=true}}"`
-	// 测试参数
-	TestArgs []string `default:"${PLUGIN_TEST_ARGS=${TEST_ARGS}}"`
-	// 测试标志
-	TestFlags []string `default:"${PLUGIN_TEST_FLAGS=${TEST_FLAGS}}"`
-
 	// 应用名称
 	Name string `default:"${PLUGIN_NAME=${NAME=${DRONE_STAGE_NAME}}}"`
 	// 应用版本
@@ -45,11 +33,12 @@ type plugin struct {
 	// 分支
 	Branch string `default:"${PLUGIN_BRANCH=${BRANCH=${DRONE_COMMIT_BRANCH}}}"`
 
-	// 启用压缩
-	Compress bool `default:"${PLUGIN_COMPRESS=${COMPRESS=true}}"`
-	// 压缩等级
-	// nolint:lll
-	CompressLevel string `default:"${PLUGIN_COMPRESS_LEVEL=${COMPRESS_LEVEL=lzma}}" validate:"oneof=1 2 3 4 5 6 7 8 9 best lzma brute ultra-brute"`
+	// 代码检查
+	Lint lint `default:"${PLUGIN_LINT=${LINT}}"`
+	// 测试
+	Test test `default:"${PLUGIN_TEST=${TEST}}"`
+	// 压缩
+	Compress compress `default:"${PLUGIN_COMPRESS=${COMPRESS}}"`
 
 	defaultEnvs      []string
 	defaultLinters   []string
@@ -67,8 +56,8 @@ func (p *plugin) Config() drone.Config {
 
 func (p *plugin) Steps() []*drone.Step {
 	return []*drone.Step{
-		drone.NewStep(p.tidy, drone.Name(`清理依赖`)),
-		drone.NewStep(p.lint, drone.Name(`代码静态检查`)),
+		drone.NewStep(p.tidy, drone.Name(`清理`)),
+		drone.NewStep(p.lint, drone.Name(`检查`)),
 		drone.NewStep(p.test, drone.Name(`测试`)),
 		drone.NewStep(p.build, drone.Name(`编译`)),
 		drone.NewStep(p.compress, drone.Name(`压缩`)),
@@ -110,7 +99,7 @@ func (p *plugin) Fields() gox.Fields {
 	return []gox.Field{
 		field.String(`input`, p.Input),
 		field.String(`output`, p.Output),
-		field.Bool(`lint`, p.Lint),
+		field.Any(`lint`, p.Lint),
 
 		field.String(`name`, p.Name),
 		field.String(`version`, p.Version),
@@ -126,7 +115,7 @@ func (p *plugin) linters() (linters []string) {
 	if p.Defaults {
 		linters = append(linters, p.defaultLinters...)
 	}
-	linters = append(linters, p.Linters...)
+	linters = append(linters, p.Lint.Linters...)
 
 	return
 }
@@ -138,7 +127,7 @@ func (p *plugin) testFlags() (flags []interface{}) {
 			flags = append(flags, flag)
 		}
 	}
-	for _, flag := range p.TestFlags {
+	for _, flag := range p.Test.Flags {
 		flags = append(flags, flag)
 	}
 

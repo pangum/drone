@@ -4,8 +4,15 @@ import (
 	`github.com/dronestock/drone`
 )
 
+type lint struct {
+	// 是否启用
+	Enabled bool `default:"true"`
+	// 启用的Linter
+	Linters []string
+}
+
 func (p *plugin) lint() (undo bool, err error) {
-	if undo = !p.Lint; undo {
+	if undo = !p.Lint.Enabled; undo {
 		return
 	}
 

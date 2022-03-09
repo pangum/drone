@@ -4,8 +4,17 @@ import (
 	`github.com/dronestock/drone`
 )
 
+type test struct {
+	// 是否启用测试
+	Enabled bool `default:"true"`
+	// 参数
+	Args []string
+	// 标志
+	Flags []string
+}
+
 func (p *plugin) test() (undo bool, err error) {
-	if undo = !p.Test; undo {
+	if undo = !p.Test.Enabled; undo {
 		return
 	}
 

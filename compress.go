@@ -1,37 +1,23 @@
 package main
 
-import (
-	`fmt`
-	`strconv`
-
-	`github.com/dronestock/drone`
-)
+type compress struct {
+	// 启用压缩
+	Enabled bool `default:"true"`
+	// 类型
+	Type string `default:"upx" validate:"oneof=upx"`
+	// 压缩等级
+	Level string `default:"lzma" validate:"oneof=1 2 3 4 5 6 7 8 9 best lzma brute ultra-brute"`
+}
 
 func (p *plugin) compress() (undo bool, err error) {
-	if undo = !p.Compress; undo {
+	if undo = !p.Compress.Enabled; undo {
 		return
 	}
 
-	args := []interface{}{
-		`--mono`,
-		`--color`,
-		`-f`,
+	switch p.Compress.Type {
+	case compressTypeUpx:
+		err = p.upx()
 	}
-	if p.Verbose {
-		args = append(args, `-v`)
-	}
-
-	// 压缩等级
-	if _, convErr := strconv.Atoi(p.CompressLevel); nil != convErr {
-		args = append(args, fmt.Sprintf(`--%s`, p.CompressLevel))
-	} else {
-		args = append(args, fmt.Sprintf(`-%s`, p.CompressLevel))
-	}
-	// 添加输出文件
-	args = append(args, p.Output)
-
-	// 执行清理依赖命令
-	err = p.Exec(upxExe, drone.Args(args...), drone.Dir(p.Input))
 
 	return
 }
