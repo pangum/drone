@@ -6,11 +6,11 @@ import (
 
 type test struct {
 	// 是否启用测试
-	Enabled bool `default:"true"`
+	Enabled bool `default:"true" json:"enabled"`
 	// 参数
-	Args []string
+	Args []string `json:"args"`
 	// 标志
-	Flags []string
+	Flags []string `json:"flags"`
 }
 
 func (p *plugin) test() (undo bool, err error) {

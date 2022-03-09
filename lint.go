@@ -6,9 +6,9 @@ import (
 
 type lint struct {
 	// 是否启用
-	Enabled bool `default:"true"`
+	Enabled bool `default:"true" json:"enabled"`
 	// 启用的Linter
-	Linters []string
+	Linters []string `json:"linters"`
 }
 
 func (p *plugin) lint() (undo bool, err error) {
