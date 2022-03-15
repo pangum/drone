@@ -18,8 +18,8 @@ require (
 	github.com/leodido/go-urn v1.2.1 // indirect
 	github.com/mitchellh/mapstructure v1.4.3 // indirect
 	github.com/sirupsen/logrus v1.8.1 // indirect
-	github.com/storezhang/simaqian v0.1.1 // indirect
-	github.com/storezhang/validatorx v1.0.9 // indirect
+	github.com/goexl/simaqian v0.1.1 // indirect
+	github.com/goexl/xiren v1.0.9 // indirect
 	go.uber.org/atomic v1.9.0 // indirect
 	go.uber.org/multierr v1.8.0 // indirect
 	go.uber.org/zap v1.21.0 // indirect
@@ -28,5 +28,5 @@ require (
 	golang.org/x/text v0.3.7 // indirect
 )
 
-// replace github.com/storezhang/mengpo => ../../storezhang/mengpo
+// replace github.com/goexl/mengpo => ../../storezhang/mengpo
 // replace github.com/storezhang/gex => ../../storezhang/gex
