@@ -6,13 +6,13 @@ import (
 
 type lint struct {
 	// 是否启用
-	Enabled bool `default:"true" json:"enabled"`
+	Enabled *bool `default:"true" json:"enabled"`
 	// 启用的Linter
 	Linters []string `json:"linters"`
 }
 
 func (p *plugin) lint() (undo bool, err error) {
-	if undo = !p.Lint.Enabled; undo {
+	if undo = !*p.Lint.Enabled; undo {
 		return
 	}
 

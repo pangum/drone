@@ -4,11 +4,12 @@ import (
 	`path/filepath`
 
 	`github.com/dronestock/drone`
-	`github.com/storezhang/gfx`
+	`github.com/goexl/gfx`
 )
 
 func (p *plugin) tidy() (undo bool, err error) {
-	if undo = !gfx.Exist(filepath.Join(p.Source, `go.mod`)); undo {
+	_, exists := gfx.Exists(filepath.Join(p.Source, `go.mod`))
+	if undo = !exists; undo {
 		return
 	}
 

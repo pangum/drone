@@ -67,4 +67,4 @@ ENTRYPOINT /bin/drone
 # 配置环境变量
 ENV PATH ${PATH}:/usr/local/go/bin
 ENV GOPATH /var/lib/go
-ENV GOPROXY https://goproxy.io,https://goproxy.cn,https://mirrors.aliyun.com/goproxy,direct
+ENV GOPROXY https://goproxy.cn,https://mirrors.aliyun.com/goproxy,https://proxy.golang.com.cn,direct
