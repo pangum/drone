@@ -1,7 +1,7 @@
-FROM golang:alpine AS lint
+FROM golang:1.18.0-alpine AS lint
 
 
-ENV GOPROXY https://goproxy.io,https://mirrors.aliyun.com/goproxy,https://goproxy.cn,direct
+ENV GOPROXY https://goproxy.cn,https://goproxy.io,https://mirrors.aliyun.com/goproxy,direct
 # 标签修改程序版本
 ENV LINT_VERSION 1.43.0
 
