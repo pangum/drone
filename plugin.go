@@ -1,15 +1,15 @@
 package main
 
 import (
-	`fmt`
+	"fmt"
 
-	`github.com/dronestock/drone`
-	`github.com/goexl/gox`
-	`github.com/goexl/gox/field`
+	"github.com/dronestock/drone"
+	"github.com/goexl/gox"
+	"github.com/goexl/gox/field"
 )
 
 type plugin struct {
-	drone.PluginBase
+	drone.Base
 
 	// 源文件目录
 	Source string `default:"${PLUGIN_SOURCE=${SOURCE=.}}"`
