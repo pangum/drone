@@ -9,7 +9,7 @@ clone:
 
 steps:
   - name: 代码
-    image: dronestock/git
+    image: ccr.ccs.tencentyun.com/dronestock/git
 
   - name: 编译
     image: pangum/drone
@@ -25,11 +25,20 @@ steps:
     volumes:
       - name: docker
         path: /var/lib/docker
+    environment:
+      PASSWORD_DOCKER:
+        from_secret: token_docker_pangum
+      PASSWORD_CCR:
+        from_secret: password_tencentyun_ccr
     settings:
       repository: pangum/drone
-      username: pangum
-      password:
-        from_secret: token_docker_pangum
+      registries:
+        - username: pangum
+          password: $${PASSWORD_DOCKER}
+        - hostname: ccr.ccs.tencentyun.com
+          username: "160290688"
+          password: $${PASSWORD_CCR}
+          required: true
 
 
 volumes:
