@@ -1,9 +1,9 @@
-FROM golang:1.17-alpine AS lint
+FROM golang:1.18-alpine AS lint
 
 
 ENV GOPROXY https://goproxy.cn,https://goproxy.io,https://mirrors.aliyun.com/goproxy,direct
 # 标签修改程序版本
-ENV LINT_VERSION 1.45.0
+ENV LINT_VERSION 1.49.0
 
 
 RUN sed -i "s/dl-cdn\.alpinelinux\.org/mirrors.ustc.edu.cn/" /etc/apk/repositories
