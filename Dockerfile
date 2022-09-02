@@ -20,14 +20,14 @@ RUN go install github.com/golangci/golangci-lint/cmd/golangci-lint@v${LINT_VERSI
 
 
 # 打包真正的镜像
-FROM storezhang/alpine
+FROM storezhang/alpine:3.16.2
 
 
 LABEL author="storezhang<华寅>"
 LABEL email="storezhang@gmail.com"
 LABEL qq="160290688"
 LABEL wechat="storezhang"
-LABEL description="盘古Drone插件，集成Lint和以及打包工具"
+LABEL description="盘古Drone插件，集成Linter和以及打包工具"
 
 
 # 复制文件
