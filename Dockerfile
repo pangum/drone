@@ -1,4 +1,4 @@
-FROM golang:1.19.1-alpine AS lint
+FROM golang:1.19.2-alpine AS lint
 
 
 ENV GOPROXY https://goproxy.cn,https://goproxy.io,https://mirrors.aliyun.com/goproxy,direct
