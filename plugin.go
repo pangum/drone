@@ -12,33 +12,33 @@ type plugin struct {
 	drone.Base
 
 	// 源文件目录
-	Source string `default:"${PLUGIN_SOURCE=${SOURCE=.}}"`
+	Source string `default:"${SOURCE=.}"`
 	// 输出文件
-	Output string `default:"${PLUGIN_OUTPUT=${OUTPUT=${DRONE_STAGE_NAME}}}"`
+	Output string `default:"${OUTPUT=${DRONE_STAGE_NAME}}"`
 	// 编译模式
-	Mode mode `default:"${PLUGIN_MODE=${MODE=release}}" validate:"oneof=release debug"`
+	Mode mode `default:"${MODE=release}" validate:"oneof=release debug"`
 	// 环境变量
-	Envs []string `default:"${PLUGIN_ENVS=${ENVS}}"`
+	Envs []string `default:"${ENVS}"`
 
 	// 应用名称
-	Name string `default:"${PLUGIN_NAME=${NAME=${DRONE_STAGE_NAME}}}"`
+	Name string `default:"${NAME=${DRONE_STAGE_NAME}}"`
 	// 应用版本
-	Version string `default:"${PLUGIN_VERSION=${VERSION=${DRONE_TAG=${DRONE_COMMIT_BRANCH}}}}"`
+	Version string `default:"${VERSION=${DRONE_TAG=${DRONE_COMMIT_BRANCH}}}"`
 	// 编译版本
-	Build string `default:"${PLUGIN_BUILD=${BUILD=${DRONE_BUILD_NUMBER}}}"`
+	Build string `default:"${BUILD=${DRONE_BUILD_NUMBER}}"`
 	// 编译时间
-	Timestamp string `default:"${PLUGIN_TIMESTAMP=${TIMESTAMP=${DRONE_BUILD_STARTED}}}"`
+	Timestamp string `default:"${TIMESTAMP=${DRONE_BUILD_STARTED}}"`
 	// 分支版本
-	Revision string `default:"${PLUGIN_REVISION=${REVISION=${DRONE_COMMIT_SHA}}}"`
+	Revision string `default:"${REVISION=${DRONE_COMMIT_SHA}}"`
 	// 分支
-	Branch string `default:"${PLUGIN_BRANCH=${BRANCH=${DRONE_COMMIT_BRANCH}}}"`
+	Branch string `default:"${BRANCH=${DRONE_COMMIT_BRANCH}}"`
 
 	// 代码检查
-	Lint lint `default:"${PLUGIN_LINT=${LINT}}"`
+	Lint lint `default:"${LINT}"`
 	// 测试
-	Test test `default:"${PLUGIN_TEST=${TEST}}"`
+	Test test `default:"${TEST}"`
 	// 压缩
-	Compress compress `default:"${PLUGIN_COMPRESS=${COMPRESS}}"`
+	Compress compress `default:"${COMPRESS}"`
 
 	defaultEnvs      []string
 	defaultLinters   []string
