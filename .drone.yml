@@ -18,6 +18,8 @@ steps:
         path: /var/lib/go
     settings:
       output: drone
+      lint:
+        enabled: false
 
   - name: 发布
     image: ccr.ccs.tencentyun.com/dronestock/docker
