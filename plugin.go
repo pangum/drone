@@ -54,59 +54,59 @@ func (p *plugin) Config() drone.Config {
 	return p
 }
 
-func (p *plugin) Steps() []*drone.Step {
-	return []*drone.Step{
-		drone.NewStep(p.tidy, drone.Name(`清理`)),
-		drone.NewStep(p.lint, drone.Name(`检查`)),
-		drone.NewStep(p.test, drone.Name(`测试`)),
-		drone.NewStep(p.build, drone.Name(`编译`)),
-		drone.NewStep(p.compress, drone.Name(`压缩`)),
+func (p *plugin) Steps() drone.Steps {
+	return drone.Steps{
+		drone.NewStep(p.tidy, drone.Name("清理")),
+		drone.NewStep(p.lint, drone.Name("检查")),
+		drone.NewStep(p.test, drone.Name("测试")),
+		drone.NewStep(p.build, drone.Name("编译")),
+		drone.NewStep(p.compress, drone.Name("压缩")),
 	}
 }
 
 func (p *plugin) Setup() (unset bool, err error) {
 	p.defaultEnvs = []string{
-		`CGO_ENABLED=0`,
-		`GOOS=linux`,
+		"CGO_ENABLED=0",
+		"GOOS=linux",
 	}
 	p.defaultLinters = []string{
-		`goerr113`,
-		`nlreturn`,
-		`bodyclose`,
-		`rowserrcheck`,
-		`gosec`,
-		`unconvert`,
-		`misspell`,
-		`lll`,
+		"goerr113",
+		"nlreturn",
+		"bodyclose",
+		"rowserrcheck",
+		"gosec",
+		"unconvert",
+		"misspell",
+		"lll",
 	}
 	p.defaultFlags = []string{
 		// 删除掉符号表
-		`-s`,
+		"-s",
 		// 去掉调试信息，无法使用GDB调试程序
-		`-w`,
+		"-w",
 	}
 	p.defaultTestFlags = []string{
 		// 缩短长时间运行的测试的测试时间
-		`-short`,
+		"-short",
 		// 随机
-		`-shuffle=on`,
+		"-shuffle=on",
 	}
 
 	return
 }
 
-func (p *plugin) Fields() gox.Fields {
-	return []gox.Field{
-		field.String(`input`, p.Source),
-		field.String(`output`, p.Output),
-		field.Any(`lint`, p.Lint),
+func (p *plugin) Fields() gox.Fields[any] {
+	return gox.Fields[any]{
+		field.New("input", p.Source),
+		field.New("output", p.Output),
+		field.New("lint", p.Lint),
 
-		field.String(`name`, p.Name),
-		field.String(`version`, p.Version),
-		field.String(`build`, p.Build),
-		field.String(`timestamp`, p.Timestamp),
-		field.String(`revision`, p.Revision),
-		field.String(`branch`, p.Branch),
+		field.New("name", p.Name),
+		field.New("version", p.Version),
+		field.New("build", p.Build),
+		field.New("timestamp", p.Timestamp),
+		field.New("revision", p.Revision),
+		field.New("branch", p.Branch),
 	}
 }
 
@@ -139,23 +139,23 @@ func (p *plugin) flags() (flags []string) {
 	if p.Defaults && modeRelease == p.Mode {
 		flags = append(flags, p.defaultFlags...)
 	}
-	if `` != p.Name {
-		flags = append(flags, fmt.Sprintf(`-X 'github.com/pangum/pangu.Name=%s'`, p.Name))
+	if "" != p.Name {
+		flags = append(flags, fmt.Sprintf("-X 'github.com/pangum/pangu.Name=%s'", p.Name))
 	}
-	if `` != p.Version {
-		flags = append(flags, fmt.Sprintf(`-X 'github.com/pangum/pangu.Version=%s'`, p.Version))
+	if "" != p.Version {
+		flags = append(flags, fmt.Sprintf("-X 'github.com/pangum/pangu.Version=%s'", p.Version))
 	}
-	if `` != p.Build {
-		flags = append(flags, fmt.Sprintf(`-X 'github.com/pangum/pangu.Build=%s'`, p.Build))
+	if "" != p.Build {
+		flags = append(flags, fmt.Sprintf("-X 'github.com/pangum/pangu.Build=%s'", p.Build))
 	}
-	if `` != p.Timestamp {
-		flags = append(flags, fmt.Sprintf(`-X 'github.com/pangum/pangu.Timestamp=%s'`, p.Timestamp))
+	if "" != p.Timestamp {
+		flags = append(flags, fmt.Sprintf("-X 'github.com/pangum/pangu.Timestamp=%s'", p.Timestamp))
 	}
-	if `` != p.Revision {
-		flags = append(flags, fmt.Sprintf(`-X 'github.com/pangum/pangu.Revision=%s'`, p.Revision))
+	if "" != p.Revision {
+		flags = append(flags, fmt.Sprintf("-X 'github.com/pangum/pangu.Revision=%s'", p.Revision))
 	}
-	if `` != p.Branch {
-		flags = append(flags, fmt.Sprintf(`-X 'github.com/pangum/pangu.Branch=%s'`, p.Branch))
+	if "" != p.Branch {
+		flags = append(flags, fmt.Sprintf("-X 'github.com/pangum/pangu.Branch=%s'", p.Branch))
 	}
 
 	return
