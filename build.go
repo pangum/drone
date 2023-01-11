@@ -12,7 +12,7 @@ func (p *plugin) build() (undo bool, err error) {
 		}
 
 		if nil != err {
-			break
+			continue
 		}
 	}
 

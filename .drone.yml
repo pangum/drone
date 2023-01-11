@@ -19,6 +19,8 @@ steps:
     settings:
       output:
         name: drone
+      compress:
+        enabled: false
 
   - name: 发布
     image: ccr.ccs.tencentyun.com/dronestock/docker

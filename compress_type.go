@@ -1,5 +1,7 @@
 package main
 
 const (
-	compressTypeUpx = `upx`
+	compressTypeUpx compressType = "upx"
 )
+
+type compressType string
