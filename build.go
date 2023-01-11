@@ -1,26 +1,20 @@
 package main
 
 import (
-	`strings`
-
-	`github.com/dronestock/drone`
+	"github.com/goexl/gox/field"
 )
 
 func (p *plugin) build() (undo bool, err error) {
-	args := []interface{}{
-		`build`,
-		`-o`,
-		p.Output,
-	}
-	if p.Verbose {
-		args = append(args, `-x`)
-	}
+	for _, _output := range p.Outputs {
+		if be := _output.build(p); nil != be {
+			err = be
+			p.Warn("编译出错", field.New("output", _output))
+		}
 
-	// 写入编译标签
-	args = append(args, `-ldflags`, strings.Join(p.flags(), ` `))
-
-	// 执行编译命令
-	err = p.Exec(goExe, drone.Args(args...), drone.Dir(p.Source))
+		if nil != err {
+			break
+		}
+	}
 
 	return
 }

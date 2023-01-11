@@ -14,9 +14,11 @@ type plugin struct {
 	// 源文件目录
 	Source string `default:"${SOURCE=.}"`
 	// 输出文件
-	Output string `default:"${OUTPUT=${DRONE_STAGE_NAME}}"`
+	Output *output `default:"${OUTPUT}"`
 	// 编译模式
 	Mode mode `default:"${MODE=release}" validate:"oneof=release debug"`
+	// 输出列表
+	Outputs []*output `default:"${OUTPUTS}"`
 	// 环境变量
 	Envs []string `default:"${ENVS}"`
 
@@ -65,6 +67,8 @@ func (p *plugin) Steps() drone.Steps {
 }
 
 func (p *plugin) Setup() (unset bool, err error) {
+	p.Outputs = append(p.Outputs, p.Output)
+
 	p.defaultEnvs = []string{
 		"CGO_ENABLED=0",
 		"GOOS=linux",
