@@ -18,7 +18,7 @@ type output struct {
 }
 
 func (o *output) build(plugin *plugin) (err error) {
-	args := []interface{}{
+	args := []any{
 		`build`,
 		`-o`,
 		o.Name,
