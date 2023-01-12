@@ -67,7 +67,9 @@ func (p *plugin) Steps() drone.Steps {
 }
 
 func (p *plugin) Setup() (unset bool, err error) {
-	p.Outputs = append(p.Outputs, p.Output)
+	if nil!=p.Output{
+		p.Outputs = append(p.Outputs, p.Output)
+	}
 
 	p.defaultEnvs = []string{
 		"CGO_ENABLED=0",
