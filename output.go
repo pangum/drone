@@ -13,6 +13,8 @@ type output struct {
 	Os string `default:"linux" json:"os"`
 	// 架构
 	Arch string `default:"amd64" json:"arch"`
+	// 环境变量
+	Envs []string `json:"envs"`
 }
 
 func (o *output) build(plugin *plugin) (err error) {
@@ -34,6 +36,8 @@ func (o *output) build(plugin *plugin) (err error) {
 		drone.Dir(plugin.Source),
 		drone.Env("GOOS", o.Os), drone.Env("GOARCH", o.Arch),
 	)
+	options = append(options, drone.StringEnvs(plugin.Envs...))
+	options = append(options, drone.StringEnvs(o.Envs...))
 	err = plugin.Exec(goExe, options...)
 
 	return

@@ -27,7 +27,7 @@ func (c *compress) upx(plugin *plugin, output *output) (err error) {
 	args = append(args, output.Name)
 
 	// 执行清理依赖命令
-	err = plugin.Exec(upxExe, drone.Args(args...), drone.Dir(plugin.Source))
+	err = plugin.Exec(upxExe, drone.Args(args...), drone.Dir(plugin.Source), drone.StringEnvs(plugin.Envs...))
 
 	return
 }
