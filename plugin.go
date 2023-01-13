@@ -73,7 +73,6 @@ func (p *plugin) Setup() (unset bool, err error) {
 
 	p.defaultEnvs = []string{
 		"CGO_ENABLED=0",
-		"GOOS=linux",
 	}
 	p.defaultLinters = []string{
 		"goerr113",
