@@ -36,7 +36,7 @@ func (o *output) build(plugin *plugin) (err error) {
 		drone.Dir(plugin.Source),
 		drone.Env("GOOS", o.Os), drone.Env("GOARCH", o.Arch),
 	)
-	options = append(options, drone.StringEnvs(plugin.Envs...))
+	options = append(options, drone.StringEnvs(plugin.envs()...))
 	options = append(options, drone.StringEnvs(o.Envs...))
 	err = plugin.Exec(goExe, options...)
 

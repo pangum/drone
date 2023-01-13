@@ -67,7 +67,7 @@ func (p *plugin) Steps() drone.Steps {
 }
 
 func (p *plugin) Setup() (unset bool, err error) {
-	if nil!=p.Output{
+	if nil != p.Output {
 		p.Outputs = append(p.Outputs, p.Output)
 	}
 
@@ -126,8 +126,8 @@ func (p *plugin) linters() (linters []string) {
 	return
 }
 
-func (p *plugin) testFlags() (flags []interface{}) {
-	flags = make([]interface{}, 0)
+func (p *plugin) testFlags() (flags []any) {
+	flags = make([]any, 0)
 	if p.Defaults {
 		for _, flag := range p.defaultTestFlags {
 			flags = append(flags, flag)
@@ -136,6 +136,16 @@ func (p *plugin) testFlags() (flags []interface{}) {
 	for _, flag := range p.Test.Flags {
 		flags = append(flags, flag)
 	}
+
+	return
+}
+
+func (p *plugin) envs() (envs []string) {
+	envs = make([]string, 0, len(p.Envs)+2)
+	if p.Defaults {
+		envs = append(envs, p.defaultEnvs...)
+	}
+	envs = append(envs, p.Envs...)
 
 	return
 }

@@ -14,7 +14,7 @@ func (p *plugin) tidy() (undo bool, err error) {
 	}
 
 	// 执行清理依赖命令
-	err = p.Exec(goExe, drone.Args("mod", "tidy"), drone.Dir(p.Source), drone.StringEnvs(p.Envs...))
+	err = p.Exec(goExe, drone.Args("mod", "tidy"), drone.Dir(p.Source), drone.StringEnvs(p.envs()...))
 
 	return
 }

@@ -33,7 +33,7 @@ func (p *plugin) lint() (undo bool, err error) {
 	}
 
 	// 执行代码检查命令
-	err = p.Exec(lintExe, drone.Args(args...), drone.Dir(p.Source), drone.StringEnvs(p.Envs...))
+	err = p.Exec(lintExe, drone.Args(args...), drone.Dir(p.Source), drone.StringEnvs(p.envs()...))
 
 	return
 }

@@ -26,7 +26,7 @@ func (p *plugin) test() (undo bool, err error) {
 	// 加入测试文件
 	args = append(args, p.Source)
 	// 执行测试命令
-	err = p.Exec(goExe, drone.Args(args...), drone.Dir(p.Source), drone.StringEnvs(p.Envs...))
+	err = p.Exec(goExe, drone.Args(args...), drone.Dir(p.Source), drone.StringEnvs(p.envs()...))
 
 	return
 }
