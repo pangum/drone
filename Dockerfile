@@ -52,6 +52,12 @@ RUN set -ex \
     \
     \
     \
+    # 修复64位程序执行环境 \
+    && mkdir /lib64 \
+    && ln -s /lib/libc.musl-x86_64.so.1 /lib64/ld-linux-x86-64.so.2 \
+    \
+    \
+    \
     # 增加执行权限
     && chmod +x /bin/drone \
     \
