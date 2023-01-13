@@ -15,8 +15,6 @@ type plugin struct {
 	Source string `default:"${SOURCE=.}"`
 	// 输出文件
 	Output *output `default:"${OUTPUT}"`
-	// 编译模式
-	Mode mode `default:"${MODE=release}" validate:"oneof=release debug"`
 	// 输出列表
 	Outputs []*output `default:"${OUTPUTS}"`
 	// 环境变量
@@ -149,9 +147,9 @@ func (p *plugin) envs() (envs []string) {
 	return
 }
 
-func (p *plugin) flags() (flags []string) {
+func (p *plugin) flags(mode mode) (flags []string) {
 	flags = make([]string, 0)
-	if p.Defaults && modeRelease == p.Mode {
+	if p.Defaults && modeRelease == mode {
 		flags = append(flags, p.defaultFlags...)
 	}
 	if "" != p.Name {

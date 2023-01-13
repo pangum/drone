@@ -13,6 +13,8 @@ type output struct {
 	Os string `default:"linux" json:"os"`
 	// 架构
 	Arch string `default:"amd64" json:"arch"`
+	// 编译模式
+	Mode mode `default:"release" json:"mode" validate:"oneof=release debug"`
 	// 环境变量
 	Envs []string `json:"envs"`
 }
@@ -28,7 +30,7 @@ func (o *output) build(plugin *plugin) (err error) {
 	}
 
 	// 写入编译标签
-	args = append(args, `-ldflags`, strings.Join(plugin.flags(), ` `))
+	args = append(args, `-ldflags`, strings.Join(plugin.flags(o.Mode), ` `))
 
 	// 执行编译命令
 	options := drone.NewExecOptions(
