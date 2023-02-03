@@ -56,11 +56,11 @@ func (p *plugin) Config() drone.Config {
 
 func (p *plugin) Steps() drone.Steps {
 	return drone.Steps{
-		drone.NewStep(p.tidy, drone.Name("清理")),
-		drone.NewStep(p.lint, drone.Name("检查")),
-		drone.NewStep(p.test, drone.Name("测试")),
-		drone.NewStep(p.build, drone.Name("编译")),
-		drone.NewStep(p.compress, drone.Name("压缩")),
+		drone.NewStep(newTidyStep(p)).Name("清理").Build(),
+		drone.NewStep(newLintStep(p)).Name("检查").Build(),
+		drone.NewStep(newTestStep(p)).Name("测试").Build(),
+		drone.NewStep(newBuildStep(p)).Name("编译").Build(),
+		drone.NewStep(newCompressStep(p)).Name("压缩").Build(),
 	}
 }
 
@@ -115,7 +115,7 @@ func (p *plugin) Fields() gox.Fields[any] {
 
 func (p *plugin) linters() (linters []string) {
 	linters = make([]string, 0)
-	if p.Defaults {
+	if p.Default() {
 		linters = append(linters, p.defaultLinters...)
 	}
 	linters = append(linters, p.Lint.Linters...)
@@ -125,7 +125,7 @@ func (p *plugin) linters() (linters []string) {
 
 func (p *plugin) testFlags() (flags []any) {
 	flags = make([]any, 0)
-	if p.Defaults {
+	if p.Default() {
 		for _, flag := range p.defaultTestFlags {
 			flags = append(flags, flag)
 		}
@@ -139,7 +139,7 @@ func (p *plugin) testFlags() (flags []any) {
 
 func (p *plugin) envs() (envs []string) {
 	envs = make([]string, 0, len(p.Envs)+2)
-	if p.Defaults {
+	if p.Default() {
 		envs = append(envs, p.defaultEnvs...)
 	}
 	envs = append(envs, p.Envs...)
@@ -149,7 +149,7 @@ func (p *plugin) envs() (envs []string) {
 
 func (p *plugin) flags(mode mode) (flags []string) {
 	flags = make([]string, 0)
-	if p.Defaults && modeRelease == mode {
+	if p.Default() && modeRelease == mode {
 		flags = append(flags, p.defaultFlags...)
 	}
 	if "" != p.Name {
@@ -172,4 +172,16 @@ func (p *plugin) flags(mode mode) (flags []string) {
 	}
 
 	return
+}
+
+func (p *plugin) testEnabled() bool {
+	return nil != p.Test.Enabled && *p.Test.Enabled
+}
+
+func (p *plugin) lintEnabled() bool {
+	return nil != p.Lint.Enabled && *p.Lint.Enabled
+}
+
+func (p *plugin) compressEnabled() bool {
+	return nil != p.Compress.Enabled && *p.Compress.Enabled
 }

@@ -2,8 +2,6 @@ package main
 
 import (
 	"strings"
-
-	"github.com/dronestock/drone"
 )
 
 type output struct {
@@ -21,26 +19,23 @@ type output struct {
 
 func (o *output) build(plugin *plugin) (err error) {
 	args := []any{
-		`build`,
-		`-o`,
+		"build",
+		"-o",
 		o.Name,
 	}
 	if plugin.Verbose {
-		args = append(args, `-x`)
+		args = append(args, "-x")
 	}
 
 	// 写入编译标签
-	args = append(args, `-ldflags`, strings.Join(plugin.flags(o.Mode), ` `))
+	args = append(args, "-ldflags", strings.Join(plugin.flags(o.Mode), ` `))
 
 	// 执行编译命令
-	options := drone.NewExecOptions(
-		drone.Args(args...),
-		drone.Dir(plugin.Source),
-		drone.Env("GOOS", o.Os), drone.Env("GOARCH", o.Arch),
-	)
-	options = append(options, drone.StringEnvs(plugin.envs()...))
-	options = append(options, drone.StringEnvs(o.Envs...))
-	err = plugin.Exec(goExe, options...)
+	command := plugin.Command(goExe).Args(args...).Dir(plugin.Source)
+	command.Env("GOOS", o.Os).Env("GOARCH", o.Arch)
+	command.StringEnvs(plugin.envs()...)
+	command.StringEnvs(o.Envs...)
+	err = command.Exec()
 
 	return
 }
