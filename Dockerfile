@@ -1,19 +1,5 @@
-FROM golang:1.20.0-alpine AS lint
-
-
-ENV GOPROXY https://goproxy.cn,https://goproxy.io,https://mirrors.aliyun.com/goproxy,direct
-# 标签修改程序版本
-ENV LINT_VERSION 1.49.0
-
-
-RUN sed -i "s/dl-cdn\.alpinelinux\.org/mirrors.ustc.edu.cn/" /etc/apk/repositories
-RUN apk update
-RUN mkdir /lib64
-RUN ln -s /lib/libc.musl-x86_64.so.1 /lib64/ld-linux-x86-64.so.2
-
-# 安装标签处理程序
-RUN apk add gcc musl-dev
-RUN go install github.com/golangci/golangci-lint/cmd/golangci-lint@v${LINT_VERSION}
+FROM golang:1.20.0-alpine AS golang
+FROM golangci/golangci-lint:v1.51.0 AS lint
 
 
 
@@ -31,9 +17,9 @@ LABEL description="盘古Drone插件，集成Linter和以及打包工具"
 
 
 # 复制文件
-COPY --from=lint /usr/local/go/bin/go /usr/local/go/bin/go
-COPY --from=lint /usr/local/go/pkg /usr/local/go/pkg
-COPY --from=lint /usr/local/go/src /usr/local/go/src
+COPY --from=golang /usr/local/go/bin/go /usr/local/go/bin/go
+COPY --from=golang /usr/local/go/pkg /usr/local/go/pkg
+COPY --from=golang /usr/local/go/src /usr/local/go/src
 COPY --from=lint /go/bin/golangci-lint /usr/bin/golangci-lint
 COPY drone /bin
 
