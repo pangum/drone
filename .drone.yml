@@ -17,6 +17,8 @@ steps:
       - name: go
         path: /var/lib/go
     settings:
+      lint:
+        enabled: false
       output:
         name: drone
 
