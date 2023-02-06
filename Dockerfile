@@ -1,5 +1,5 @@
 FROM golang:1.20.0-alpine AS golang
-FROM golangci/golangci-lint:v1.51.0 AS lint
+FROM golangci/golangci-lint:v1.51.1 AS lint
 
 
 
