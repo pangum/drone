@@ -52,5 +52,7 @@ ENTRYPOINT /bin/drone
 
 # 配置环境变量
 ENV PATH ${PATH}:/usr/local/go/bin
-ENV GOPATH /var/lib/go
+ENV GOPATH /var/lib/gopath
+ENV GOCACHE /var/lib/gocache
+ENV GOLANGCI_LINT_CACHE /var/lib/linter
 ENV GOPROXY https://goproxy.cn,https://mirrors.aliyun.com/goproxy,https://proxy.golang.com.cn,direct
