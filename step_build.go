@@ -25,7 +25,7 @@ func (b *stepBuild) Run(ctx context.Context) (err error) {
 	wg := new(sync.WaitGroup)
 	wg.Add(len(b.Outputs))
 	for _, out := range b.Outputs {
-		go b.build(ctx, out, &err)
+		go b.build(ctx, out, wg, &err)
 	}
 
 	// 等待所有任务执行完成
@@ -34,7 +34,9 @@ func (b *stepBuild) Run(ctx context.Context) (err error) {
 	return
 }
 
-func (b *stepBuild) build(_ context.Context, output *output, err *error) {
+func (b *stepBuild) build(_ context.Context, output *output, wg *sync.WaitGroup, err *error) {
+	defer wg.Done()
+
 	if be := output.build(b.plugin); nil != be {
 		*err = be
 		b.Warn("编译出错", field.New("output", output))
