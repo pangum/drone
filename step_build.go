@@ -35,6 +35,7 @@ func (b *stepBuild) Run(ctx context.Context) (err error) {
 }
 
 func (b *stepBuild) build(_ context.Context, output *output, wg *sync.WaitGroup, err *error) {
+	// 任何情况下，都必须调用完成方法
 	defer wg.Done()
 
 	if be := output.build(b.plugin); nil != be {
