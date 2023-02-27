@@ -6,7 +6,7 @@ FROM golangci/golangci-lint:v1.51.2 AS lint
 
 
 # 打包真正的镜像
-FROM storezhang/alpine:3.16.2
+FROM storezhang/alpine:3.17.2
 
 
 LABEL author="storezhang<华寅>"
