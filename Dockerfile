@@ -1,4 +1,4 @@
-FROM golang:1.20.1-alpine AS golang
+FROM golang:1.20.2-alpine AS golang
 FROM golangci/golangci-lint:v1.51.2 AS lint
 
 
