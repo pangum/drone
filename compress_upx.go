@@ -25,8 +25,8 @@ func (c *compress) upx(plugin *plugin, output *output) (err error) {
 	// 执行清理依赖命令
 	command := plugin.Command(upxExe).
 		Args(upxArgs.Build()).
-		Dir(plugin.Source).
-		StringEnvironment(plugin.envs()...)
+		Dir(plugin.Source)
+	command = command.Environment().String(plugin.envs()...).Build()
 	_, err = command.Build().Exec()
 
 	return

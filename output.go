@@ -30,10 +30,12 @@ func (o *output) build(plugin *plugin) (err error) {
 
 	// 执行编译命令
 	command := plugin.Command(goExe).Args(buildArgs.Build()).Dir(plugin.Source)
-	command.Environment(goos, o.Os)
-	command.Environment(goarch, o.Arch)
-	command.StringEnvironment(plugin.envs()...)
-	command.StringEnvironment(o.Envs...)
+	environment := command.Environment()
+	environment.Kv(goos, o.Os)
+	environment.Kv(goarch, o.Arch)
+	environment.String(plugin.envs()...)
+	environment.String(o.Envs...)
+	command = environment.Build()
 	_, err = command.Build().Exec()
 
 	return

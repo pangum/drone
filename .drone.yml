@@ -20,7 +20,7 @@ steps:
     image: ccr.ccs.tencentyun.com/dronestock/git
 
   - name: 编译
-    image: ccr.ccs.tencentyun.com/pangum/drone
+    image: ccr.ccs.tencentyun.com/pangum/drone:0.0.338
     volumes:
       - name: go
         path: /var/lib/go

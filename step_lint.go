@@ -32,7 +32,11 @@ func (l *stepLint) Run(_ context.Context) (err error) {
 	}
 
 	// 执行代码检查命令
-	_, err = l.Command(lintExe).Args(lintArgs.Build()).Dir(l.Source).StringEnvironment(l.envs()...).Build().Exec()
+	command := l.Command(lintExe).Args(lintArgs.Build()).Dir(l.Source)
+	environment := command.Environment()
+	environment.String(l.envs()...)
+	command = environment.Build()
+	_, err = command.Build().Exec()
 
 	return
 }

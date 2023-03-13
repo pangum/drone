@@ -27,7 +27,11 @@ func (t *stepTest) Run(_ context.Context) (err error) {
 	// 加入测试文件
 	testArgs.Add(t.Source)
 	// 执行测试命令
-	_, err = t.Command(goExe).Args(testArgs.Build()).Dir(t.Source).StringEnvironment(t.envs()...).Build().Exec()
+	command := t.Command(goExe).Args(testArgs.Build()).Dir(t.Source)
+	environment := command.Environment()
+	environment.String(t.envs()...)
+	command = environment.Build()
+	_, err = command.Build().Exec()
 
 	return
 }

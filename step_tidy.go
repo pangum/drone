@@ -28,7 +28,9 @@ func (t *stepTidy) Run(_ context.Context) (err error) {
 	command := t.Command(goExe)
 	command.Args(args.New().Build().Subcommand("mod", "tidy").Build())
 	command.Dir(t.Source)
-	command.StringEnvironment(t.envs()...)
+	environment := command.Environment()
+	environment.String(t.envs()...)
+	command = environment.Build()
 	_, err = command.Build().Exec()
 
 	return
