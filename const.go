@@ -6,6 +6,9 @@ const (
 	lintExe       = "golangci-lint"
 	upxExe        = "upx"
 	strike        = "-"
+	equal         = "="
+	goPrivate     = "GOPRIVATE"
+	goNoProxy="GONOPROXY"
 	goos          = "GOOS"
 	goarch        = "GOARCH"
 )

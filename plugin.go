@@ -17,6 +17,8 @@ type plugin struct {
 	Output *output `default:"${OUTPUT}"`
 	// 输出列表
 	Outputs []*output `default:"${OUTPUTS}"`
+	// 私有库
+	Privates []string `default:"${PRIVATES}"`
 	// 环境变量
 	Envs []string `default:"${ENVS}"`
 
@@ -141,6 +143,11 @@ func (p *plugin) envs() (envs []string) {
 	envs = make([]string, 0, len(p.Envs)+2)
 	if p.Default() {
 		envs = append(envs, p.defaultEnvs...)
+	}
+	for _, private := range p.Privates {
+		_goPrivate := gox.StringBuilder(goPrivate, equal, private).String()
+		_goNoProxy := gox.StringBuilder(goNoProxy, equal, private).String()
+		envs = append(envs, _goPrivate, _goNoProxy)
 	}
 	envs = append(envs, p.Envs...)
 
