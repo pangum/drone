@@ -13,6 +13,8 @@ type plugin struct {
 
 	// 源文件目录
 	Source string `default:"${SOURCE=.}"`
+	// 输出目录
+	Dir string  `default:"${SOURCE=.}"`
 	// 输出文件
 	Output *output `default:"${OUTPUT}"`
 	// 输出列表

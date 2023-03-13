@@ -1,6 +1,7 @@
 package main
 
 import (
+	"path/filepath"
 	"strings"
 
 	"github.com/goexl/gox/args"
@@ -20,13 +21,13 @@ type output struct {
 }
 
 func (o *output) build(plugin *plugin) (err error) {
-	buildArgs := args.New().Long(strike).Build().Subcommand("build").Flag("o").Add(o.Name)
+	buildArgs := args.New().Long(strike).Build().Subcommand("build").Flag("o").Add(o.name(plugin))
 	if plugin.Verbose {
 		buildArgs.Flag("x")
 	}
 
 	// 写入编译标签
-	buildArgs.Arg("ldflags", strings.Join(plugin.flags(o.Mode), ` `))
+	buildArgs.Arg("ldflags", strings.Join(plugin.flags(o.Mode), space))
 
 	// 执行编译命令
 	command := plugin.Command(goExe).Args(buildArgs.Build()).Dir(plugin.Source)
@@ -39,4 +40,8 @@ func (o *output) build(plugin *plugin) (err error) {
 	_, err = command.Build().Exec()
 
 	return
+}
+
+func (o *output) name(plugin *plugin) string {
+	return filepath.Join(plugin.Dir, o.Name)
 }

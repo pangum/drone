@@ -20,7 +20,7 @@ func (c *compress) upx(plugin *plugin, output *output) (err error) {
 		upxArgs.Add(fmt.Sprintf("-%s", c.Level))
 	}
 	// 添加输出文件
-	upxArgs.Add(output.Name)
+	upxArgs.Add(output.name(plugin))
 
 	// 执行清理依赖命令
 	command := plugin.Command(upxExe).
