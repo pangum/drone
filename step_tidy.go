@@ -5,6 +5,7 @@ import (
 	"path/filepath"
 
 	"github.com/goexl/gfx"
+	"github.com/goexl/gox/args"
 )
 
 type stepTidy struct {
@@ -24,5 +25,11 @@ func (t *stepTidy) Runnable() bool {
 }
 
 func (t *stepTidy) Run(_ context.Context) (err error) {
-	return t.Command(goExe).Args("mod", "tidy").Dir(t.Source).StringEnvs(t.envs()...).Exec()
+	command := t.Command(goExe)
+	command.Args(args.New().Build().Subcommand("mod", "tidy").Build())
+	command.Dir(t.Source)
+	command.StringEnvironment(t.envs()...)
+	_, err = command.Build().Exec()
+
+	return
 }

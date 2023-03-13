@@ -2,6 +2,8 @@ package main
 
 import (
 	"strings"
+
+	"github.com/goexl/gox/args"
 )
 
 type output struct {
@@ -18,24 +20,21 @@ type output struct {
 }
 
 func (o *output) build(plugin *plugin) (err error) {
-	args := []any{
-		"build",
-		"-o",
-		o.Name,
-	}
+	buildArgs := args.New().Long(strike).Build().Subcommand("build").Flag("o").Add(o.Name)
 	if plugin.Verbose {
-		args = append(args, "-x")
+		buildArgs.Flag("x")
 	}
 
 	// 写入编译标签
-	args = append(args, "-ldflags", strings.Join(plugin.flags(o.Mode), ` `))
+	buildArgs.Arg("ldflags", strings.Join(plugin.flags(o.Mode), ` `))
 
 	// 执行编译命令
-	command := plugin.Command(goExe).Args(args...).Dir(plugin.Source)
-	command.Env("GOOS", o.Os).Env("GOARCH", o.Arch)
-	command.StringEnvs(plugin.envs()...)
-	command.StringEnvs(o.Envs...)
-	err = command.Exec()
+	command := plugin.Command(goExe).Args(buildArgs.Build()).Dir(plugin.Source)
+	command.Environment(goos, o.Os)
+	command.Environment(goarch, o.Arch)
+	command.StringEnvironment(plugin.envs()...)
+	command.StringEnvironment(o.Envs...)
+	_, err = command.Build().Exec()
 
 	return
 }

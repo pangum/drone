@@ -3,29 +3,31 @@ package main
 import (
 	"fmt"
 	"strconv"
+
+	"github.com/goexl/gox/args"
 )
 
 func (c *compress) upx(plugin *plugin, output *output) (err error) {
-	args := []any{
-		"--mono",
-		"--color",
-		"-f",
-	}
+	upxArgs := args.New().Build().Flag("mono").Flag("color").Flag("f")
 	if plugin.Verbose {
-		args = append(args, `-v`)
+		upxArgs.Flag("v")
 	}
 
 	// 压缩等级
-	if _, convErr := strconv.Atoi(c.Level); nil != convErr {
-		args = append(args, fmt.Sprintf("--%s", c.Level))
+	if _, ce := strconv.Atoi(c.Level); nil != ce {
+		upxArgs.Add(fmt.Sprintf("--%s", c.Level))
 	} else {
-		args = append(args, fmt.Sprintf("-%s", c.Level))
+		upxArgs.Add(fmt.Sprintf("-%s", c.Level))
 	}
 	// 添加输出文件
-	args = append(args, output.Name)
+	upxArgs.Add(output.Name)
 
 	// 执行清理依赖命令
-	err = plugin.Command(upxExe).Args(args...).Dir(plugin.Source).StringEnvs(plugin.envs()...).Exec()
+	command := plugin.Command(upxExe).
+		Args(upxArgs.Build()).
+		Dir(plugin.Source).
+		StringEnvironment(plugin.envs()...)
+	_, err = command.Build().Exec()
 
 	return
 }

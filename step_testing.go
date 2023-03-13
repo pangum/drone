@@ -2,6 +2,8 @@ package main
 
 import (
 	"context"
+
+	"github.com/goexl/gox/args"
 )
 
 type stepTest struct {
@@ -19,15 +21,13 @@ func (t *stepTest) Runnable() bool {
 }
 
 func (t *stepTest) Run(_ context.Context) (err error) {
-	args := []any{
-		"test",
-	}
+	testArgs := args.New().Build().Subcommand("test")
 	// 加入默认测试参数
-	args = append(args, t.testFlags()...)
+	testArgs.Add(t.testFlags()...)
 	// 加入测试文件
-	args = append(args, t.Source)
+	testArgs.Add(t.Source)
 	// 执行测试命令
-	err = t.Command(goExe).Args(args...).Dir(t.Source).StringEnvs(t.envs()...).Exec()
+	_, err = t.Command(goExe).Args(testArgs.Build()).Dir(t.Source).StringEnvironment(t.envs()...).Build().Exec()
 
 	return
 }
