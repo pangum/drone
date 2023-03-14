@@ -8,7 +8,7 @@ clone:
 
 
 environment:
-  OUTPUT_NAME: drone
+  NAME: drone
   OUTPUT_LINUX: drone.amd64.lin
   OUTPUT_WINDOWS: drone.amd64.exe
   OUTPUT_MAC: drone.amd64.mac
@@ -25,9 +25,10 @@ steps:
       - name: go
         path: /var/lib/go
     settings:
-      verbose: true
+      commands:
+        - ls -al
       outputs:
-        - name: $${OUTPUT_NAME}
+        - name: $${NAME}
           os: linux
           arch: amd64
         - name: $${OUTPUT_LINUX}
@@ -85,11 +86,11 @@ steps:
         token: $${TOKEN}
         body: file('$${CHANGELOG_TAG_OUTPUT}')
         assets:
-          - name: $${OUTPUT_NAME}-$${VERSION}-linux-amd64
+          - name: $${NAME}-$${VERSION}-linux-amd64
             file: $${OUTPUT_LINUX}
-          - name: $${OUTPUT_NAME}-$${VERSION}-windows-amd64.exe
+          - name: $${NAME}-$${VERSION}-windows-amd64.exe
             file: $${OUTPUT_WINDOWS}
-          - name: $${OUTPUT_NAME}-$${VERSION}-darwin-amd64
+          - name: $${NAME}-$${VERSION}-darwin-amd64
             file: $${OUTPUT_MAC}
 
 

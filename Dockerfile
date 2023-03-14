@@ -1,19 +1,19 @@
-FROM golang:1.20.2-alpine AS golang
-FROM golangci/golangci-lint:v1.51.2 AS lint
+FROM dockerproxy.com/library/golang:1.20.2-alpine AS golang
+FROM dockerproxy.com/golangci/golangci-lint:v1.51.2 AS lint
 
 
 
 
 
 # 打包真正的镜像
-FROM storezhang/alpine:3.17.2
+FROM ccr.ccs.tencentyun.com/storezhang/alpine:3.17.2
 
 
-LABEL author="storezhang<华寅>"
-LABEL email="storezhang@gmail.com"
-LABEL qq="160290688"
-LABEL wechat="storezhang"
-LABEL description="盘古Drone插件，集成Linter和以及打包工具"
+LABEL author="storezhang<华寅>" \
+    email="storezhang@gmail.com" \
+    qq="160290688" \
+    wechat="storezhang" \
+    description="盘古Drone插件，集成Linter和以及打包工具"
 
 
 # 复制文件

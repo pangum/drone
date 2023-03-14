@@ -106,7 +106,7 @@ func (p *plugin) Setup() (unset bool, err error) {
 
 func (p *plugin) Fields() gox.Fields[any] {
 	return gox.Fields[any]{
-		field.New("input", p.Source),
+		field.New("source", p.Source),
 		field.New("output", p.Output),
 		field.New("lint", p.Lint),
 
