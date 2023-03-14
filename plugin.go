@@ -11,38 +11,40 @@ import (
 type plugin struct {
 	drone.Base
 
+	// 控制程序
+	Binary string `default:"${LINT_BINARY=go}" json:"binary"`
 	// 源文件目录
-	Source string `default:"${SOURCE=.}"`
+	Source string `default:"${SOURCE=.}" json:"source"`
 	// 输出目录
-	Dir string  `default:"${SOURCE=.}"`
+	Dir string `default:"${SOURCE=.}" json:"dir"`
 	// 输出文件
-	Output *output `default:"${OUTPUT}"`
+	Output *output `default:"${OUTPUT}" json:"output"`
 	// 输出列表
-	Outputs []*output `default:"${OUTPUTS}"`
+	Outputs []*output `default:"${OUTPUTS}" json:"outputs"`
 	// 私有库
-	Privates []string `default:"${PRIVATES}"`
+	Privates []string `default:"${PRIVATES}" json:"privates"`
 	// 环境变量
-	Envs []string `default:"${ENVS}"`
+	Envs []string `default:"${ENVS}" json:"envs"`
 
 	// 应用名称
-	Name string `default:"${NAME=${DRONE_STAGE_NAME}}"`
+	Name string `default:"${NAME=${DRONE_STAGE_NAME}}" json:"name"`
 	// 应用版本
-	Version string `default:"${VERSION=${DRONE_TAG=${DRONE_COMMIT_BRANCH}}}"`
+	Version string `default:"${VERSION=${DRONE_TAG=${DRONE_COMMIT_BRANCH}}}" json:"version"`
 	// 编译版本
-	Build string `default:"${BUILD=${DRONE_BUILD_NUMBER}}"`
+	Build string `default:"${BUILD=${DRONE_BUILD_NUMBER}}" json:"build"`
 	// 编译时间
-	Timestamp string `default:"${TIMESTAMP=${DRONE_BUILD_STARTED}}"`
+	Timestamp string `default:"${TIMESTAMP=${DRONE_BUILD_STARTED}}" json:"timestamp"`
 	// 分支版本
-	Revision string `default:"${REVISION=${DRONE_COMMIT_SHA}}"`
+	Revision string `default:"${REVISION=${DRONE_COMMIT_SHA}}" json:"revision"`
 	// 分支
-	Branch string `default:"${BRANCH=${DRONE_COMMIT_BRANCH}}"`
+	Branch string `default:"${BRANCH=${DRONE_COMMIT_BRANCH}}" json:"branch"`
 
 	// 代码检查
-	Lint lint `default:"${LINT}"`
+	Lint lint `default:"${LINT}" json:"lint"`
 	// 测试
-	Test test `default:"${TEST}"`
+	Test test `default:"${TEST}" json:"test"`
 	// 压缩
-	Compress compress `default:"${COMPRESS}"`
+	Compress compress `default:"${COMPRESS}" json:"compress"`
 
 	defaultEnvs      []string
 	defaultLinters   []string

@@ -30,7 +30,7 @@ func (o *output) build(plugin *plugin) (err error) {
 	buildArgs.Arg("ldflags", strings.Join(plugin.flags(o.Mode), space))
 
 	// 执行编译命令
-	command := plugin.Command(goExe).Args(buildArgs.Build()).Dir(plugin.Source)
+	command := plugin.Command(plugin.Binary).Args(buildArgs.Build()).Dir(plugin.Source)
 	environment := command.Environment()
 	environment.Kv(goos, o.Os)
 	environment.Kv(goarch, o.Arch)

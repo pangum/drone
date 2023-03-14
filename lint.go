@@ -1,6 +1,8 @@
 package main
 
 type lint struct {
+	// 控制程序
+	Binary string `default:"${LINT_BINARY=golangci-lint}" json:"binary"`
 	// 是否启用
 	Enabled *bool `default:"true" json:"enabled"`
 	// 超时时间

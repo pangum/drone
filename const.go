@@ -1,15 +1,13 @@
 package main
 
 const (
-	goExe         = "go"
 	goModFilename = "go.mod"
-	lintExe       = "golangci-lint"
 	upxExe        = "upx"
 	strike        = "-"
 	equal         = "="
-	space=" "
+	space         = " "
 	goPrivate     = "GOPRIVATE"
-	goNoProxy="GONOPROXY"
+	goNoProxy     = "GONOPROXY"
 	goos          = "GOOS"
 	goarch        = "GOARCH"
 )
