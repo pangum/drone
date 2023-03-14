@@ -16,7 +16,7 @@ type plugin struct {
 	// 源文件目录
 	Source string `default:"${SOURCE=.}" json:"source"`
 	// 输出目录
-	Dir string `default:"${SOURCE=.}" json:"dir"`
+	Dir string `default:"${DIR=.}" json:"dir"`
 	// 输出文件
 	Output *output `default:"${OUTPUT}" json:"output"`
 	// 输出列表
@@ -70,7 +70,7 @@ func (p *plugin) Steps() drone.Steps {
 	}
 }
 
-func (p *plugin) Setup() (unset bool, err error) {
+func (p *plugin) Setup() (err error) {
 	if nil != p.Output {
 		p.Outputs = append(p.Outputs, p.Output)
 	}
