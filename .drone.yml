@@ -25,6 +25,7 @@ steps:
       - name: go
         path: /var/lib/go
     settings:
+      verbose: true
       outputs:
         - name: $${OUTPUT_NAME}
           os: linux
