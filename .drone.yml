@@ -24,8 +24,9 @@ steps:
     volumes:
       - name: go
         path: /var/lib/go
+    commands:
+      - env
     settings:
-      verbose: true
       outputs:
         - name: $${NAME}
           os: linux
