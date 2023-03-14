@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/goexl/gox/args"
 )
@@ -37,6 +38,8 @@ func (l *stepLint) Run(_ context.Context) (err error) {
 	environment.String(l.envs()...)
 	command = environment.Build()
 	_, err = command.Build().Exec()
+	fmt.Println("===================")
+	fmt.Println(l.Source)
 
 	return
 }
