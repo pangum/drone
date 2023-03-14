@@ -57,7 +57,3 @@ ENV GOPATH ${GO}/path
 ENV GOCACHE ${GO}/cache
 ENV GOLANGCI_LINT_CACHE ${GO}/linter
 ENV GOPROXY https://goproxy.cn,https://mirrors.aliyun.com/goproxy,https://proxy.golang.com.cn,direct
-
-
-# 强制将工作目录转变到Drone工作区
-WORKDIR /drone/src
