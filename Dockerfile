@@ -1,5 +1,5 @@
 FROM dockerproxy.com/library/golang:1.20.2-alpine AS golang
-FROM dockerproxy.com/golangci/golangci-lint:v1.52.0 AS lint
+FROM dockerproxy.com/golangci/golangci-lint:v1.52.1 AS lint
 
 
 
