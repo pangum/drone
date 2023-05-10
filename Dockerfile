@@ -6,7 +6,7 @@ FROM dockerproxy.com/golangci/golangci-lint:v1.52.2 AS lint
 
 
 # 打包真正的镜像
-FROM ccr.ccs.tencentyun.com/storezhang/alpine:3.17.2
+FROM ccr.ccs.tencentyun.com/storezhang/alpine:3.18.0
 
 
 LABEL author="storezhang<华寅>" \
