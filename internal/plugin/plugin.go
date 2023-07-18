@@ -2,24 +2,20 @@ package plugin
 
 import (
 	"fmt"
+	"github.com/pangum/drone/internal/plugin/internal"
+	"github.com/pangum/drone/internal/plugin/internal/step"
 
 	"github.com/dronestock/drone"
 	"github.com/goexl/gox"
 	"github.com/goexl/gox/field"
 	"github.com/pangum/drone/internal/config"
 	"github.com/pangum/drone/internal/core"
-	"github.com/pangum/drone/internal/plugin/internal"
 )
 
 type Plugin struct {
 	drone.Base
+	internal.Core
 
-	// 控制程序
-	Binary config.Binary `default:"${BINARY}" json:"binary,omitempty"`
-	// 源文件目录
-	Source string `default:"${SOURCE=.}" json:"source"`
-	// 输出目录
-	Dir string `default:"${DIR=.}" json:"dir"`
 	// 输出文件
 	Output *config.Output `default:"${OUTPUT}" json:"output"`
 	// 输出列表
@@ -43,11 +39,11 @@ type Plugin struct {
 	Branch string `default:"${BRANCH=${DRONE_COMMIT_BRANCH}}" json:"branch"`
 
 	// 代码检查
-	Lint config.Lint `default:"${LINT}" json:"lint"`
+	Lint *config.Lint `default:"${LINT}" json:"lint"`
 	// 测试
-	Test config.Test `default:"${TEST}" json:"test"`
+	Test *config.Test `default:"${TEST}" json:"test"`
 	// 压缩
-	Compress config.Compress `default:"${COMPRESS}" json:"compress"`
+	Compress *config.Compress `default:"${COMPRESS}" json:"compress"`
 
 	defaultEnvs      []string
 	defaultLinters   []string
@@ -65,12 +61,12 @@ func (p *Plugin) Config() drone.Config {
 
 func (p *Plugin) Steps() drone.Steps {
 	return drone.Steps{
-		drone.NewStep(internal.NewTidy(p)).Name("清理").Build(),
-		drone.NewStep(internal.NewAlignment(p)).Name("对齐").Build(),
-		drone.NewStep(internal.NewLint(p)).Name("检查").Build(),
-		drone.NewStep(internal.NewTest(p)).Name("测试").Build(),
-		drone.NewStep(internal.NewBuild(p)).Name("编译").Build(),
-		drone.NewStep(internal.NewCompress(p)).Name("压缩").Build(),
+		drone.NewStep(step.NewTidy(p.Base, p.Core, p.Environments())).Name("清理").Build(),
+		drone.NewStep(step.NewAlignment(p.Base, p.Core, p.Environments())).Name("对齐").Build(),
+		drone.NewStep(step.NewLint(p.Base, p.Core, p.Linters(), p.Environments())).Name("检查").Build(),
+		drone.NewStep(step.NewTest(p.Base, p.Core, p.Test, p.Outputs, p.TestFlags(), p.Environments())).Name("测试").Build(),
+		drone.NewStep(step.NewBuild(p.Base, p.Core, p.Flags, p.Environments())).Name("编译").Build(),
+		drone.NewStep(step.NewCompress(p.Base, p.Core, p.Compress, p.Outputs, p.Environments())).Name("压缩").Build(),
 	}
 }
 
@@ -187,16 +183,4 @@ func (p *Plugin) Flags(mode core.Mode) (flags []string) {
 	}
 
 	return
-}
-
-func (p *Plugin) TestEnabled() bool {
-	return nil != p.Test.Enabled && *p.Test.Enabled
-}
-
-func (p *Plugin) LintEnabled() bool {
-	return nil != p.Lint.Enabled && *p.Lint.Enabled
-}
-
-func (p *Plugin) CompressEnabled() bool {
-	return nil != p.Compress.Enabled && *p.Compress.Enabled
 }

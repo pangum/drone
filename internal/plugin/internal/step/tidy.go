@@ -1,22 +1,29 @@
-package internal
+package step
 
 import (
 	"context"
+	"github.com/dronestock/drone"
+	"github.com/pangum/drone/internal/plugin/internal"
 	"path/filepath"
 
 	"github.com/goexl/gfx"
 	"github.com/goexl/gox/args"
 	"github.com/pangum/drone/internal/core"
-	"github.com/pangum/drone/internal/plugin"
 )
 
 type Tidy struct {
-	*plugin.Plugin
+	drone.Base
+	internal.Core
+
+	envs []string
 }
 
-func NewTidy(plugin *plugin.Plugin) *Tidy {
+func NewTidy(base drone.Base, core internal.Core, envs []string) *Tidy {
 	return &Tidy{
-		Plugin: plugin,
+		Base: base,
+		Core: core,
+
+		envs: envs,
 	}
 }
 
@@ -31,7 +38,7 @@ func (t *Tidy) Run(_ context.Context) (err error) {
 	command.Args(args.New().Build().Subcommand("mod", "tidy").Build())
 	command.Dir(t.Source)
 	environment := command.Environment()
-	environment.String(t.Environments()...)
+	environment.String(t.envs...)
 	command = environment.Build()
 	_, err = command.Build().Exec()
 

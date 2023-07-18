@@ -1,23 +1,30 @@
-package internal
+package step
 
 import (
 	"context"
+	"github.com/dronestock/drone"
+	"github.com/pangum/drone/internal/plugin/internal"
 	"sync"
 
 	"github.com/goexl/gfx"
 	"github.com/goexl/gox/args"
 	"github.com/goexl/gox/field"
 	"github.com/pangum/drone/internal/core"
-	"github.com/pangum/drone/internal/plugin"
 )
 
 type Alignment struct {
-	*plugin.Plugin
+	drone.Base
+	internal.Core
+
+	envs []string
 }
 
-func NewAlignment(plugin *plugin.Plugin) *Alignment {
+func NewAlignment(base drone.Base, core internal.Core, envs []string) *Alignment {
 	return &Alignment{
-		Plugin: plugin,
+		Base: base,
+		Core: core,
+
+		envs: envs,
 	}
 }
 
@@ -48,7 +55,7 @@ func (a *Alignment) run(_ context.Context, wg *sync.WaitGroup, filename string) 
 	command.Args(args.New().Long(core.Strike).Build().Option("fix", filename).Build())
 	command.Dir(a.Source)
 	environment := command.Environment()
-	environment.String(a.Environments()...)
+	environment.String(a.envs...)
 	command = environment.Build()
 	if _, ee := command.Build().Exec(); nil != ee {
 		a.Warn("内存对齐出错", field.New("filename", filename), field.Error(ee))
