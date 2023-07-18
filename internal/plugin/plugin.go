@@ -1,4 +1,4 @@
-package main
+package plugin
 
 import (
 	"fmt"
@@ -7,9 +7,11 @@ import (
 	"github.com/goexl/gox"
 	"github.com/goexl/gox/field"
 	"github.com/pangum/drone/internal/config"
+	"github.com/pangum/drone/internal/core"
+	"github.com/pangum/drone/internal/step"
 )
 
-type plugin struct {
+type Plugin struct {
 	drone.Base
 
 	// 控制程序
@@ -19,9 +21,9 @@ type plugin struct {
 	// 输出目录
 	Dir string `default:"${DIR=.}" json:"dir"`
 	// 输出文件
-	Output *output `default:"${OUTPUT}" json:"output"`
+	Output *config.Output `default:"${OUTPUT}" json:"output"`
 	// 输出列表
-	Outputs []*output `default:"${OUTPUTS}" json:"outputs"`
+	Outputs []*config.Output `default:"${OUTPUTS}" json:"outputs"`
 	// 私有库
 	Privates []string `default:"${PRIVATES}" json:"privates"`
 	// 环境变量
@@ -41,11 +43,11 @@ type plugin struct {
 	Branch string `default:"${BRANCH=${DRONE_COMMIT_BRANCH}}" json:"branch"`
 
 	// 代码检查
-	Lint lint `default:"${LINT}" json:"lint"`
+	Lint config.Lint `default:"${LINT}" json:"lint"`
 	// 测试
-	Test test `default:"${TEST}" json:"test"`
+	Test config.Test `default:"${TEST}" json:"test"`
 	// 压缩
-	Compress compress `default:"${COMPRESS}" json:"compress"`
+	Compress config.Compress `default:"${COMPRESS}" json:"compress"`
 
 	defaultEnvs      []string
 	defaultLinters   []string
@@ -53,26 +55,26 @@ type plugin struct {
 	defaultTestFlags []string
 }
 
-func newPlugin() drone.Plugin {
-	return new(plugin)
+func NewPlugin() drone.Plugin {
+	return new(Plugin)
 }
 
-func (p *plugin) Config() drone.Config {
+func (p *Plugin) Config() drone.Config {
 	return p
 }
 
-func (p *plugin) Steps() drone.Steps {
+func (p *Plugin) Steps() drone.Steps {
 	return drone.Steps{
-		drone.NewStep(newTidyStep(p)).Name("清理").Build(),
-		drone.NewStep(newAlignmentStep(p)).Name("对齐").Build(),
-		drone.NewStep(newLintStep(p)).Name("检查").Build(),
-		drone.NewStep(newTestStep(p)).Name("测试").Build(),
-		drone.NewStep(newBuildStep(p)).Name("编译").Build(),
-		drone.NewStep(newCompressStep(p)).Name("压缩").Build(),
+		drone.NewStep(step.NewTidy(p)).Name("清理").Build(),
+		drone.NewStep(step.NewAlignment(p)).Name("对齐").Build(),
+		drone.NewStep(step.NewLint(p)).Name("检查").Build(),
+		drone.NewStep(step.NewTest(p)).Name("测试").Build(),
+		drone.NewStep(step.NewBuild(p)).Name("编译").Build(),
+		drone.NewStep(step.NewCompress(p)).Name("压缩").Build(),
 	}
 }
 
-func (p *plugin) Setup() (err error) {
+func (p *Plugin) Setup() (err error) {
 	if nil != p.Output {
 		p.Outputs = append(p.Outputs, p.Output)
 	}
@@ -106,7 +108,7 @@ func (p *plugin) Setup() (err error) {
 	return
 }
 
-func (p *plugin) Fields() gox.Fields[any] {
+func (p *Plugin) Fields() gox.Fields[any] {
 	return gox.Fields[any]{
 		field.New("source", p.Source),
 		field.New("output", p.Output),
@@ -121,7 +123,7 @@ func (p *plugin) Fields() gox.Fields[any] {
 	}
 }
 
-func (p *plugin) linters() (linters []string) {
+func (p *Plugin) Linters() (linters []string) {
 	linters = make([]string, 0)
 	if p.Default() {
 		linters = append(linters, p.defaultLinters...)
@@ -131,7 +133,7 @@ func (p *plugin) linters() (linters []string) {
 	return
 }
 
-func (p *plugin) testFlags() (flags []any) {
+func (p *Plugin) TestFlags() (flags []any) {
 	flags = make([]any, 0)
 	if p.Default() {
 		for _, flag := range p.defaultTestFlags {
@@ -145,14 +147,14 @@ func (p *plugin) testFlags() (flags []any) {
 	return
 }
 
-func (p *plugin) envs() (envs []string) {
+func (p *Plugin) Environments() (envs []string) {
 	envs = make([]string, 0, len(p.Envs)+2)
 	if p.Default() {
 		envs = append(envs, p.defaultEnvs...)
 	}
 	for _, private := range p.Privates {
-		_goPrivate := gox.StringBuilder(goPrivate, equal, private).String()
-		_goNoProxy := gox.StringBuilder(goNoProxy, equal, private).String()
+		_goPrivate := gox.StringBuilder(core.GoPrivate, core.Equal, private).String()
+		_goNoProxy := gox.StringBuilder(core.GoNoProxy, core.Equal, private).String()
 		envs = append(envs, _goPrivate, _goNoProxy)
 	}
 	envs = append(envs, p.Envs...)
@@ -160,9 +162,9 @@ func (p *plugin) envs() (envs []string) {
 	return
 }
 
-func (p *plugin) flags(mode mode) (flags []string) {
+func (p *Plugin) Flags(mode core.Mode) (flags []string) {
 	flags = make([]string, 0)
-	if p.Default() && modeRelease == mode {
+	if p.Default() && core.ModeRelease == mode {
 		flags = append(flags, p.defaultFlags...)
 	}
 	if "" != p.Name {
@@ -187,14 +189,14 @@ func (p *plugin) flags(mode mode) (flags []string) {
 	return
 }
 
-func (p *plugin) testEnabled() bool {
+func (p *Plugin) TestEnabled() bool {
 	return nil != p.Test.Enabled && *p.Test.Enabled
 }
 
-func (p *plugin) lintEnabled() bool {
+func (p *Plugin) LintEnabled() bool {
 	return nil != p.Lint.Enabled && *p.Lint.Enabled
 }
 
-func (p *plugin) compressEnabled() bool {
+func (p *Plugin) CompressEnabled() bool {
 	return nil != p.Compress.Enabled && *p.Compress.Enabled
 }

@@ -1,4 +1,4 @@
-package main
+package step
 
 import (
 	"context"
@@ -7,25 +7,27 @@ import (
 	"github.com/goexl/gfx"
 	"github.com/goexl/gox/args"
 	"github.com/goexl/gox/field"
+	"github.com/pangum/drone/internal/core"
+	"github.com/pangum/drone/internal/plugin"
 )
 
-type stepAlignment struct {
-	*plugin
+type Alignment struct {
+	*plugin.Plugin
 }
 
-func newAlignmentStep(plugin *plugin) *stepAlignment {
-	return &stepAlignment{
-		plugin: plugin,
+func NewAlignment(plugin *plugin.Plugin) *Alignment {
+	return &Alignment{
+		Plugin: plugin,
 	}
 }
 
-func (a *stepAlignment) Runnable() bool {
+func (a *Alignment) Runnable() bool {
 	return true
 }
 
-func (a *stepAlignment) Run(ctx context.Context) (err error) {
+func (a *Alignment) Run(ctx context.Context) (err error) {
 	filenames := make([]string, 0, 1)
-	if filenames, err = gfx.All(a.Source, gfx.Suffix(goFileSuffix)); nil != err {
+	if filenames, err = gfx.All(a.Source, gfx.Suffix(core.GoFileSuffix)); nil != err {
 		return
 	}
 
@@ -39,14 +41,14 @@ func (a *stepAlignment) Run(ctx context.Context) (err error) {
 	return
 }
 
-func (a *stepAlignment) run(_ context.Context, wg *sync.WaitGroup, filename string) {
+func (a *Alignment) run(_ context.Context, wg *sync.WaitGroup, filename string) {
 	defer wg.Done()
 
 	command := a.Command(a.Binary.Alignment)
-	command.Args(args.New().Long(strike).Build().Option("fix", filename).Build())
+	command.Args(args.New().Long(core.Strike).Build().Option("fix", filename).Build())
 	command.Dir(a.Source)
 	environment := command.Environment()
-	environment.String(a.envs()...)
+	environment.String(a.Environments()...)
 	command = environment.Build()
 	if _, ee := command.Build().Exec(); nil != ee {
 		a.Warn("内存对齐出错", field.New("filename", filename), field.Error(ee))

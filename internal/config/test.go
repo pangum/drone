@@ -1,6 +1,6 @@
-package main
+package config
 
-type test struct {
+type Test struct {
 	// 是否启用测试
 	Enabled *bool `default:"true" json:"enabled"`
 	// 参数
