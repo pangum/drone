@@ -37,7 +37,7 @@ func (b *Build) Run(ctx context.Context) (err error) {
 	wg := new(sync.WaitGroup)
 	wg.Add(len(b.outputs))
 	for _, out := range b.outputs {
-		go b.build(ctx, out, wg, &err)
+		go b.run(ctx, out, wg, &err)
 	}
 
 	// 等待所有任务执行完成
@@ -46,7 +46,7 @@ func (b *Build) Run(ctx context.Context) (err error) {
 	return
 }
 
-func (b *Build) build(_ context.Context, output *config.Output, wg *sync.WaitGroup, err *error) {
+func (b *Build) run(_ context.Context, output *config.Output, wg *sync.WaitGroup, err *error) {
 	// 任何情况下，都必须调用完成方法
 	defer wg.Done()
 
