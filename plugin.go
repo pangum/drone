@@ -6,13 +6,14 @@ import (
 	"github.com/dronestock/drone"
 	"github.com/goexl/gox"
 	"github.com/goexl/gox/field"
+	"github.com/pangum/drone/internal/config"
 )
 
 type plugin struct {
 	drone.Base
 
 	// 控制程序
-	Binary string `default:"${LINT_BINARY=go}" json:"binary"`
+	Binary config.Binary `default:"${BINARY}" json:"binary,omitempty"`
 	// 源文件目录
 	Source string `default:"${SOURCE=.}" json:"source"`
 	// 输出目录
@@ -63,6 +64,7 @@ func (p *plugin) Config() drone.Config {
 func (p *plugin) Steps() drone.Steps {
 	return drone.Steps{
 		drone.NewStep(newTidyStep(p)).Name("清理").Build(),
+		drone.NewStep(newAlignmentStep(p)).Name("对齐").Build(),
 		drone.NewStep(newLintStep(p)).Name("检查").Build(),
 		drone.NewStep(newTestStep(p)).Name("测试").Build(),
 		drone.NewStep(newBuildStep(p)).Name("编译").Build(),

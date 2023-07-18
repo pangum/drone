@@ -2,6 +2,7 @@ package main
 
 const (
 	goModFilename = "go.mod"
+	goFileSuffix  = "go"
 	upxExe        = "upx"
 	strike        = "-"
 	equal         = "="

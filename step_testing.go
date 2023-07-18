@@ -27,7 +27,7 @@ func (t *stepTest) Run(_ context.Context) (err error) {
 	// 加入测试文件
 	testArgs.Add(t.Source)
 	// 执行测试命令
-	command := t.Command(t.Binary).Args(testArgs.Build()).Dir(t.Source)
+	command := t.Command(t.Binary.Go).Args(testArgs.Build()).Dir(t.Source)
 	environment := command.Environment()
 	environment.String(t.envs()...)
 	command = environment.Build()

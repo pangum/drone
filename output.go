@@ -9,15 +9,15 @@ import (
 
 type output struct {
 	// 文件名
-	Name string `default:"${DRONE_STAGE_NAME}" json:"name"`
+	Name string `default:"${OUTPUT_NAME=${DRONE_STAGE_NAME}}" json:"name"`
 	// 操作系统
-	Os string `default:"linux" json:"os"`
+	Os string `default:"${OUTPUT_OS=linux}" json:"os"`
 	// 架构
-	Arch string `default:"amd64" json:"arch"`
+	Arch string `default:"${OUTPUT_ARCH=amd64}" json:"arch"`
 	// 编译模式
-	Mode mode `default:"release" json:"mode" validate:"oneof=release debug"`
+	Mode mode `default:"${OUTPUT_MODE=release}" json:"mode" validate:"oneof=release debug"`
 	// 环境变量
-	Envs []string `json:"envs"`
+	Envs []string `default:"${OUTPUT_ENVS}" json:"envs"`
 }
 
 func (o *output) build(plugin *plugin) (err error) {
@@ -30,7 +30,7 @@ func (o *output) build(plugin *plugin) (err error) {
 	buildArgs.Arg("ldflags", strings.Join(plugin.flags(o.Mode), space))
 
 	// 执行编译命令
-	command := plugin.Command(plugin.Binary).Args(buildArgs.Build()).Dir(plugin.Source)
+	command := plugin.Command(plugin.Binary.Go).Args(buildArgs.Build()).Dir(plugin.Source)
 	environment := command.Environment()
 	environment.Kv(goos, o.Os)
 	environment.Kv(goarch, o.Arch)

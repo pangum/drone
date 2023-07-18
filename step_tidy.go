@@ -25,7 +25,7 @@ func (t *stepTidy) Runnable() bool {
 }
 
 func (t *stepTidy) Run(_ context.Context) (err error) {
-	command := t.Command(t.Binary)
+	command := t.Command(t.Binary.Go)
 	command.Args(args.New().Build().Subcommand("mod", "tidy").Build())
 	command.Dir(t.Source)
 	environment := command.Environment()
