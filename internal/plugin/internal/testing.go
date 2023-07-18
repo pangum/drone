@@ -1,4 +1,4 @@
-package step
+package internal
 
 import (
 	"context"

@@ -1,4 +1,4 @@
-package step
+package internal
 
 import (
 	"context"
@@ -25,7 +25,7 @@ func (c *Compress) Run(_ context.Context) (err error) {
 	for _, output := range c.Outputs {
 		switch c.Compress.Type {
 		case core.CompressTypeUpx:
-			err = c.Compress.Do(c.Plugin, output)
+			err = c.Compress.Do(&c.Base, &c.Binary, c.Source, c.Dir, c.Verbose, output, c.Environments())
 		}
 
 		if nil != err {

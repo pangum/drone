@@ -8,7 +8,7 @@ import (
 	"github.com/goexl/gox/field"
 	"github.com/pangum/drone/internal/config"
 	"github.com/pangum/drone/internal/core"
-	"github.com/pangum/drone/internal/step"
+	"github.com/pangum/drone/internal/plugin/internal"
 )
 
 type Plugin struct {
@@ -55,7 +55,7 @@ type Plugin struct {
 	defaultTestFlags []string
 }
 
-func NewPlugin() drone.Plugin {
+func New() drone.Plugin {
 	return new(Plugin)
 }
 
@@ -65,12 +65,12 @@ func (p *Plugin) Config() drone.Config {
 
 func (p *Plugin) Steps() drone.Steps {
 	return drone.Steps{
-		drone.NewStep(step.NewTidy(p)).Name("清理").Build(),
-		drone.NewStep(step.NewAlignment(p)).Name("对齐").Build(),
-		drone.NewStep(step.NewLint(p)).Name("检查").Build(),
-		drone.NewStep(step.NewTest(p)).Name("测试").Build(),
-		drone.NewStep(step.NewBuild(p)).Name("编译").Build(),
-		drone.NewStep(step.NewCompress(p)).Name("压缩").Build(),
+		drone.NewStep(internal.NewTidy(p)).Name("清理").Build(),
+		drone.NewStep(internal.NewAlignment(p)).Name("对齐").Build(),
+		drone.NewStep(internal.NewLint(p)).Name("检查").Build(),
+		drone.NewStep(internal.NewTest(p)).Name("测试").Build(),
+		drone.NewStep(internal.NewBuild(p)).Name("编译").Build(),
+		drone.NewStep(internal.NewCompress(p)).Name("压缩").Build(),
 	}
 }
 

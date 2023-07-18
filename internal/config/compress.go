@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"strconv"
 
+	"github.com/dronestock/drone"
 	"github.com/goexl/gox/args"
 	"github.com/pangum/drone/internal/core"
-	"github.com/pangum/drone/internal/plugin"
 )
 
 type Compress struct {
@@ -18,18 +18,28 @@ type Compress struct {
 	Level string `default:"lzma" json:"level" validate:"oneof=1 2 3 4 5 6 7 8 9 best lzma brute ultra-brute"`
 }
 
-func (c *Compress) Do(plugin *plugin.Plugin, output *Output) (err error) {
+func (c *Compress) Do(
+	base *drone.Base,
+	binary *Binary,
+	source string, dir string, verbose bool,
+	output *Output, envs []string,
+) (err error) {
 	switch c.Type {
 	case core.CompressTypeUpx:
-		err = c.upx(plugin, output)
+		err = c.upx(base, binary, source, dir, verbose, output, envs)
 	}
 
 	return
 }
 
-func (c *Compress) upx(plugin *plugin.Plugin, output *Output) (err error) {
+func (c *Compress) upx(
+	base *drone.Base,
+	binary *Binary,
+	source string, dir string, verbose bool,
+	output *Output, envs []string,
+) (err error) {
 	upxArgs := args.New().Build().Flag("mono").Flag("color").Flag("f")
-	if plugin.Verbose {
+	if verbose {
 		upxArgs.Flag("v")
 	}
 
@@ -40,11 +50,11 @@ func (c *Compress) upx(plugin *plugin.Plugin, output *Output) (err error) {
 		upxArgs.Add(fmt.Sprintf("-%s", c.Level))
 	}
 	// 添加输出文件
-	upxArgs.Add(output.name(plugin))
+	upxArgs.Add(output.name(dir))
 
 	// 执行清理依赖命令
-	command := plugin.Command(plugin.Binary.Upx).Args(upxArgs.Build()).Dir(plugin.Source)
-	command = command.Environment().String(plugin.Environments()...).Build()
+	command := base.Command(binary.Upx).Args(upxArgs.Build()).Dir(source)
+	command = command.Environment().String(envs...).Build()
 	_, err = command.Build().Exec()
 
 	return

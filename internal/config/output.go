@@ -4,9 +4,9 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/dronestock/drone"
 	"github.com/goexl/gox/args"
 	"github.com/pangum/drone/internal/core"
-	"github.com/pangum/drone/internal/plugin"
 )
 
 type Output struct {
@@ -22,21 +22,26 @@ type Output struct {
 	Envs []string `default:"${OUTPUT_ENVS}" json:"envs"`
 }
 
-func (o *Output) Build(plugin *plugin.Plugin) (err error) {
-	buildArgs := args.New().Long(core.Strike).Build().Subcommand("Build").Flag("o").Add(o.name(plugin))
+func (o *Output) Build(
+	plugin *drone.Base,
+	binary *Binary,
+	source string, dir string,
+	flags []string, envs []string,
+) (err error) {
+	buildArgs := args.New().Long(core.Strike).Build().Subcommand("Build").Flag("o").Add(o.name(dir))
 	if plugin.Verbose {
 		buildArgs.Flag("x")
 	}
 
 	// 写入编译标签
-	buildArgs.Arg("ldflags", strings.Join(plugin.Flags(o.Mode), core.Space))
+	buildArgs.Arg("ldflags", strings.Join(flags, core.Space))
 
 	// 执行编译命令
-	command := plugin.Command(plugin.Binary.Go).Args(buildArgs.Build()).Dir(plugin.Source)
+	command := plugin.Command(binary.Go).Args(buildArgs.Build()).Dir(source)
 	environment := command.Environment()
 	environment.Kv(core.Goos, o.Os)
 	environment.Kv(core.Goarch, o.Arch)
-	environment.String(plugin.Environments()...)
+	environment.String(envs...)
 	environment.String(o.Envs...)
 	command = environment.Build()
 	_, err = command.Build().Exec()
@@ -44,6 +49,6 @@ func (o *Output) Build(plugin *plugin.Plugin) (err error) {
 	return
 }
 
-func (o *Output) name(plugin *plugin.Plugin) string {
-	return filepath.Join(plugin.Dir, o.Name)
+func (o *Output) name(dir string) string {
+	return filepath.Join(dir, o.Name)
 }

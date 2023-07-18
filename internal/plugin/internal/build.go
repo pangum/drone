@@ -1,4 +1,4 @@
-package step
+package internal
 
 import (
 	"context"
@@ -40,7 +40,7 @@ func (b *Build) build(_ context.Context, output *config.Output, wg *sync.WaitGro
 	// 任何情况下，都必须调用完成方法
 	defer wg.Done()
 
-	if be := output.Build(b.Plugin); nil != be {
+	if be := output.Build(&b.Plugin.Base, &b.Binary, b.Source, b.Dir, b.Flags(output.Mode), b.Environments()); nil != be {
 		*err = be
 		b.Warn("编译出错", field.New("output", output))
 	}
