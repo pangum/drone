@@ -2,7 +2,7 @@ package step
 
 import (
 	"context"
-	"github.com/dronestock/drone"
+
 	"github.com/pangum/drone/internal/config"
 	"github.com/pangum/drone/internal/plugin/internal"
 
@@ -10,8 +10,7 @@ import (
 )
 
 type Test struct {
-	drone.Base
-	internal.Core
+	*internal.Core
 
 	config  *config.Test
 	outputs []*config.Output
@@ -20,11 +19,10 @@ type Test struct {
 }
 
 func NewTest(
-	base drone.Base, core internal.Core,
+	core *internal.Core,
 	config *config.Test, outputs []*config.Output, flags []any, envs []string,
 ) *Test {
 	return &Test{
-		Base: base,
 		Core: core,
 
 		config:  config,

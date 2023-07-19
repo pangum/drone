@@ -1,5 +1,13 @@
 FROM dockerproxy.com/library/golang:1.20.6-alpine AS golang
-FROM dockerproxy.com/golangci/golangci-lint:v1.53.3 AS lint
+FROM dockerproxy.com/golangci/golangci-lint:v1.53.2 AS lint
+
+FROM dockerproxy.com/library/golang:1.20.6-alpine AS alignment
+
+ENV GOPROXY https://mirrors.aliyun.com/goproxy,direct
+RUN go install golang.org/x/tools/go/analysis/passes/fieldalignment/cmd/fieldalignment@latest
+
+
+
 
 
 
@@ -21,6 +29,7 @@ COPY --from=golang /usr/local/go/bin/go /usr/local/go/bin/go
 COPY --from=golang /usr/local/go/pkg /usr/local/go/pkg
 COPY --from=golang /usr/local/go/src /usr/local/go/src
 COPY --from=lint /usr/bin/golangci-lint /usr/bin/golangci-lint
+COPY --from=alignment /go/bin/fieldalignment /usr/local/go/bin/fieldalignment
 COPY drone /bin
 
 

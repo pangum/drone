@@ -2,7 +2,7 @@ package step
 
 import (
 	"context"
-	"github.com/dronestock/drone"
+
 	"github.com/pangum/drone/internal/config"
 	"github.com/pangum/drone/internal/plugin/internal"
 
@@ -10,19 +10,18 @@ import (
 )
 
 type Lint struct {
-	drone.Base
-	internal.Core
+	*internal.Core
 
 	config  *config.Lint
 	envs    []string
 	linters []string
 }
 
-func NewLint(base drone.Base, core internal.Core, linters []string, envs []string) *Lint {
+func NewLint(core *internal.Core, config *config.Lint, linters []string, envs []string) *Lint {
 	return &Lint{
-		Base: base,
 		Core: core,
 
+		config:  config,
 		linters: linters,
 		envs:    envs,
 	}
@@ -44,7 +43,7 @@ func (l *Lint) Run(_ context.Context) (err error) {
 	}
 
 	// 执行代码检查命令
-	command := l.Command(l.Binary.Go).Args(lintArgs.Build()).Dir(l.Source)
+	command := l.Command(l.Binary.Lint).Args(lintArgs.Build()).Dir(l.Source)
 	environment := command.Environment()
 	environment.String(l.envs...)
 	command = environment.Build()

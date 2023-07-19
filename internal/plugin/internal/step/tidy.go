@@ -2,9 +2,9 @@ package step
 
 import (
 	"context"
-	"github.com/dronestock/drone"
-	"github.com/pangum/drone/internal/plugin/internal"
 	"path/filepath"
+
+	"github.com/pangum/drone/internal/plugin/internal"
 
 	"github.com/goexl/gfx"
 	"github.com/goexl/gox/args"
@@ -12,15 +12,13 @@ import (
 )
 
 type Tidy struct {
-	drone.Base
-	internal.Core
+	*internal.Core
 
 	envs []string
 }
 
-func NewTidy(base drone.Base, core internal.Core, envs []string) *Tidy {
+func NewTidy(core *internal.Core, envs []string) *Tidy {
 	return &Tidy{
-		Base: base,
 		Core: core,
 
 		envs: envs,

@@ -2,9 +2,9 @@ package step
 
 import (
 	"context"
-	"github.com/dronestock/drone"
-	"github.com/pangum/drone/internal/plugin/internal"
 	"sync"
+
+	"github.com/pangum/drone/internal/plugin/internal"
 
 	"github.com/goexl/gfx"
 	"github.com/goexl/gox/args"
@@ -13,15 +13,13 @@ import (
 )
 
 type Alignment struct {
-	drone.Base
-	internal.Core
+	*internal.Core
 
 	envs []string
 }
 
-func NewAlignment(base drone.Base, core internal.Core, envs []string) *Alignment {
+func NewAlignment(core *internal.Core, envs []string) *Alignment {
 	return &Alignment{
-		Base: base,
 		Core: core,
 
 		envs: envs,
@@ -58,7 +56,7 @@ func (a *Alignment) run(_ context.Context, wg *sync.WaitGroup, filename string) 
 	environment.String(a.envs...)
 	command = environment.Build()
 	if _, ee := command.Build().Exec(); nil != ee {
-		a.Warn("内存对齐出错", field.New("filename", filename), field.Error(ee))
+		a.Info("内存对齐出错", field.New("filename", filename))
 	} else {
 		a.Debug("内存对齐完成", field.New("filename", filename))
 	}
