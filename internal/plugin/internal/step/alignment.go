@@ -31,22 +31,25 @@ func (a *Alignment) Runnable() bool {
 }
 
 func (a *Alignment) Run(ctx context.Context) (err error) {
-	filenames := make([]string, 0, 1)
-	if filenames, err = gfx.All(a.Source, gfx.Suffix(core.GoFileSuffix)); nil != err {
-		return
+	if filenames, ae := gfx.All(a.Source, gfx.Suffix(core.GoFileSuffix)); nil != err {
+		err = ae
+	} else {
+		a.run(ctx, filenames)
 	}
-
-	wg := new(sync.WaitGroup)
-	wg.Add(len(filenames))
-	for _, filename := range filenames {
-		go a.run(ctx, wg, filename)
-	}
-	wg.Wait()
 
 	return
 }
 
-func (a *Alignment) run(_ context.Context, wg *sync.WaitGroup, filename string) {
+func (a *Alignment) run(ctx context.Context, filenames []string) {
+	wg := new(sync.WaitGroup)
+	wg.Add(len(filenames))
+	for _, filename := range filenames {
+		go a.fix(ctx, wg, filename)
+	}
+	wg.Wait()
+}
+
+func (a *Alignment) fix(_ context.Context, wg *sync.WaitGroup, filename string) {
 	defer wg.Done()
 
 	command := a.Command(a.Binary.Alignment)
