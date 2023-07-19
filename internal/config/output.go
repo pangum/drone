@@ -28,7 +28,7 @@ func (o *Output) Build(
 	source string, dir string,
 	flags []string, envs []string,
 ) (err error) {
-	buildArgs := args.New().Long(core.Strike).Build().Subcommand("Build").Flag("o").Add(o.name(dir))
+	buildArgs := args.New().Long(core.Strike).Build().Subcommand("build").Flag("o").Add(o.name(dir))
 	if plugin.Verbose {
 		buildArgs.Flag("x")
 	}

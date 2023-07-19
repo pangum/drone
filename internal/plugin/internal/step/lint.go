@@ -32,7 +32,7 @@ func (l *Lint) Runnable() bool {
 }
 
 func (l *Lint) Run(_ context.Context) (err error) {
-	lintArgs := args.New().Build().Subcommand("fix").Arg("timeout", l.config.Timeout).Arg("color", "always")
+	lintArgs := args.New().Build().Subcommand("run").Arg("timeout", l.config.Timeout).Arg("color", "always")
 	// 显示详细信息
 	if l.Verbose {
 		lintArgs.Flag("verbose")

@@ -4,6 +4,7 @@ import (
 	"context"
 	"sync"
 
+	"github.com/pangum/drone/internal/config"
 	"github.com/pangum/drone/internal/plugin/internal"
 
 	"github.com/goexl/gfx"
@@ -15,23 +16,25 @@ import (
 type Alignment struct {
 	*internal.Core
 
-	envs []string
+	config *config.Alignment
+	envs   []string
 }
 
-func NewAlignment(core *internal.Core, envs []string) *Alignment {
+func NewAlignment(core *internal.Core, config *config.Alignment, envs []string) *Alignment {
 	return &Alignment{
 		Core: core,
 
-		envs: envs,
+		config: config,
+		envs:   envs,
 	}
 }
 
 func (a *Alignment) Runnable() bool {
-	return true
+	return nil != a.config.Enabled && *a.config.Enabled
 }
 
 func (a *Alignment) Run(ctx context.Context) (err error) {
-	if filenames, ae := gfx.All(a.Source, gfx.Suffix(core.GoFileSuffix)); nil != err {
+	if filenames, ae := gfx.All(a.Source, gfx.Pattern(a.config.Pattern)); nil != err {
 		err = ae
 	} else {
 		a.run(ctx, filenames)

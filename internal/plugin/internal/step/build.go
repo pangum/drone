@@ -18,12 +18,13 @@ type Build struct {
 	envs    []string
 }
 
-func NewBuild(core *internal.Core, flags internal.Flag, envs []string) *Build {
+func NewBuild(core *internal.Core, outputs []*config.Output, flags internal.Flag, envs []string) *Build {
 	return &Build{
 		Core: core,
 
-		flags: flags,
-		envs:  envs,
+		outputs: outputs,
+		flags:   flags,
+		envs:    envs,
 	}
 }
 
@@ -37,15 +38,12 @@ func (b *Build) Run(ctx context.Context) (err error) {
 	for _, out := range b.outputs {
 		go b.run(ctx, out, wg, &err)
 	}
-
-	// 等待所有任务执行完成
 	wg.Wait()
 
 	return
 }
 
 func (b *Build) run(_ context.Context, output *config.Output, wg *sync.WaitGroup, err *error) {
-	// 任何情况下，都必须调用完成方法
 	defer wg.Done()
 
 	if be := output.Build(&b.Core.Base, &b.Binary, b.Source, b.Dir, b.flags(output.Mode), b.envs); nil != be {

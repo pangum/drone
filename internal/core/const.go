@@ -2,7 +2,6 @@ package core
 
 const (
 	GoModFilename = "go.mod"
-	GoFileSuffix  = "go"
 	Strike        = "-"
 	Equal         = "="
 	Space         = " "
