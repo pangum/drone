@@ -63,12 +63,12 @@ func (p *Plugin) Config() drone.Config {
 
 func (p *Plugin) Steps() drone.Steps {
 	return drone.Steps{
-		drone.NewStep(step.NewTidy(&p.Core, p.Environments())).Name("清理").Build(),
-		drone.NewStep(step.NewAlignment(&p.Core, &p.Alignment, p.Environments())).Name("对齐").Build(),
-		drone.NewStep(step.NewLint(&p.Core, &p.Lint, p.Linters(), p.Environments())).Name("检查").Build(),
-		drone.NewStep(step.NewTest(&p.Core, &p.Test, p.Outputs, p.TestFlags(), p.Environments())).Name("测试").Build(),
-		drone.NewStep(step.NewBuild(&p.Core, p.Outputs, p.Flags, p.Environments())).Name("编译").Build(),
-		drone.NewStep(step.NewCompress(&p.Core, &p.Compress, p.Outputs, p.Environments())).Name("压缩").Build(),
+		drone.NewStep(step.NewTidy(&p.Core, p.Environments())).Name("依赖清理").Build(),
+		drone.NewStep(step.NewAlignment(&p.Core, &p.Alignment, p.Environments())).Name("内存对齐").Build(),
+		drone.NewStep(step.NewLint(&p.Core, &p.Lint, p.Linters(), p.Environments())).Name("静态检查").Build(),
+		drone.NewStep(step.NewTest(&p.Core, &p.Test, p.Outputs, p.TestFlags(), p.Environments())).Name("单元测试").Build(),
+		drone.NewStep(step.NewBuild(&p.Core, p.Outputs, p.Flags, p.Environments())).Name("编译打包").Build(),
+		drone.NewStep(step.NewCompress(&p.Core, &p.Compress, p.Outputs, p.Environments())).Name("程序压缩").Build(),
 	}
 }
 
