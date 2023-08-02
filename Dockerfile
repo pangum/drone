@@ -1,7 +1,7 @@
-FROM dockerproxy.com/library/golang:1.20.6-alpine AS golang
+FROM dockerproxy.com/library/golang:1.20.7-alpine AS golang
 FROM dockerproxy.com/golangci/golangci-lint:v1.53.3 AS lint
 
-FROM dockerproxy.com/library/golang:1.20.6-alpine AS alignment
+FROM dockerproxy.com/library/golang:1.20.7-alpine AS alignment
 
 ENV GOPROXY https://mirrors.aliyun.com/goproxy,direct
 RUN go install golang.org/x/tools/go/analysis/passes/fieldalignment/cmd/fieldalignment@latest
