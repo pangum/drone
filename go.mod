@@ -1,6 +1,6 @@
 module github.com/pangum/drone
 
-go 1.19
+go 1.21
 
 require (
 	github.com/dronestock/drone v1.0.2
