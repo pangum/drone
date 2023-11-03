@@ -67,7 +67,7 @@ func (p *Plugin) Steps() drone.Steps {
 		drone.NewStep(step.NewAlignment(&p.Core, &p.Alignment, p.Environments())).Name("内存对齐").Build(),
 		drone.NewStep(step.NewLint(&p.Core, &p.Lint, p.Linters(), p.Environments())).Name("静态检查").Build(),
 		drone.NewStep(step.NewTest(&p.Core, &p.Test, p.Outputs, p.TestFlags(), p.Environments())).Name("单元测试").Build(),
-		drone.NewStep(step.NewBuild(&p.Core, p.Outputs, p.Flags, p.Environments())).Name("编译打包").Build(),
+		drone.NewStep(step.NewBuild(&p.Core, p.Outputs, p.Flags, p.Environments())).Name("编译打包").Break().Build(),
 		drone.NewStep(step.NewCompress(&p.Core, &p.Compress, p.Outputs, p.Environments())).Name("程序压缩").Build(),
 	}
 }
