@@ -166,22 +166,22 @@ func (p *Plugin) Flags(mode core.Mode) (flags []string) {
 		flags = append(flags, p.defaultFlags...)
 	}
 	if "" != p.Name {
-		flags = append(flags, fmt.Sprintf("-X 'github.com/pangum/pangu.Name=%s'", p.Name))
+		flags = append(flags, fmt.Sprintf("-X 'github.com/pangum/pangu/internal.Name=%s'", p.Name))
 	}
 	if "" != p.Version {
-		flags = append(flags, fmt.Sprintf("-X 'github.com/pangum/pangu.Version=%s'", p.Version))
+		flags = append(flags, fmt.Sprintf("-X 'github.com/pangum/pangu/internal.Version=%s'", p.Version))
 	}
 	if "" != p.Build {
-		flags = append(flags, fmt.Sprintf("-X 'github.com/pangum/pangu.Build=%s'", p.Build))
+		flags = append(flags, fmt.Sprintf("-X 'github.com/pangum/pangu/internal.Build=%s'", p.Build))
 	}
 	if "" != p.Timestamp {
-		flags = append(flags, fmt.Sprintf("-X 'github.com/pangum/pangu.Timestamp=%s'", p.Timestamp))
+		flags = append(flags, fmt.Sprintf("-X 'github.com/pangum/pangu/internal.Timestamp=%s'", p.Timestamp))
 	}
 	if "" != p.Revision {
-		flags = append(flags, fmt.Sprintf("-X 'github.com/pangum/pangu.Revision=%s'", p.Revision))
+		flags = append(flags, fmt.Sprintf("-X 'github.com/pangum/pangu/internal.Revision=%s'", p.Revision))
 	}
 	if "" != p.Branch {
-		flags = append(flags, fmt.Sprintf("-X 'github.com/pangum/pangu.Branch=%s'", p.Branch))
+		flags = append(flags, fmt.Sprintf("-X 'github.com/pangum/pangu/internal.Branch=%s'", p.Branch))
 	}
 
 	return
