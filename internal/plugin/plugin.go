@@ -32,7 +32,7 @@ type Plugin struct {
 	// 编译版本
 	Build string `default:"${BUILD=${DRONE_BUILD_NUMBER}}" json:"build"`
 	// 编译时间
-	Complied string `default:"${TIMESTAMP=${DRONE_BUILD_STARTED}}" json:"timestamp"`
+	Complied string `default:"${TIMESTAMP=${DRONE_BUILD_STARTED}}" json:"complied"`
 	// 分支版本
 	Revision string `default:"${REVISION=${DRONE_COMMIT_SHA}}" json:"revision"`
 	// 分支
