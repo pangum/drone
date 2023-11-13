@@ -32,7 +32,7 @@ type Plugin struct {
 	// 编译版本
 	Build string `default:"${BUILD=${DRONE_BUILD_NUMBER}}" json:"build"`
 	// 编译时间
-	Timestamp string `default:"${TIMESTAMP=${DRONE_BUILD_STARTED}}" json:"timestamp"`
+	Complied string `default:"${TIMESTAMP=${DRONE_BUILD_STARTED}}" json:"timestamp"`
 	// 分支版本
 	Revision string `default:"${REVISION=${DRONE_COMMIT_SHA}}" json:"revision"`
 	// 分支
@@ -115,7 +115,7 @@ func (p *Plugin) Fields() gox.Fields[any] {
 		field.New("name", p.Name),
 		field.New("version", p.Version),
 		field.New("build", p.Build),
-		field.New("timestamp", p.Timestamp),
+		field.New("complied", p.Complied),
 		field.New("revision", p.Revision),
 		field.New("branch", p.Branch),
 	}
@@ -174,8 +174,8 @@ func (p *Plugin) Flags(mode core.Mode) (flags []string) {
 	if "" != p.Build {
 		flags = append(flags, fmt.Sprintf("-X 'github.com/pangum/pangu/internal.Build=%s'", p.Build))
 	}
-	if "" != p.Timestamp {
-		flags = append(flags, fmt.Sprintf("-X 'github.com/pangum/pangu/internal.Timestamp=%s'", p.Timestamp))
+	if "" != p.Complied {
+		flags = append(flags, fmt.Sprintf("-X 'github.com/pangum/pangu/internal.Complied=%s'", p.Complied))
 	}
 	if "" != p.Revision {
 		flags = append(flags, fmt.Sprintf("-X 'github.com/pangum/pangu/internal.Revision=%s'", p.Revision))
