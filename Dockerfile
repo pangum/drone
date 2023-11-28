@@ -60,5 +60,5 @@ ENV GO /var/lib/go
 ENV GOPATH ${GO}/path
 ENV GOCACHE ${GO}/cache
 ENV GOLANGCI_LINT_CACHE ${GO}/linter
-ENV GOPROXY https://goproxy.cn,https://mirrors.aliyun.com/goproxy,https://proxy.golang.com.cn,direct
+ENV GOPROXY https://goproxy.io,https://goproxy.cn,https://mirrors.aliyun.com/goproxy,https://proxy.golang.com.cn,direct
 ENV GOSUMDB off
