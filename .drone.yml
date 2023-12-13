@@ -25,6 +25,8 @@ steps:
       - name: go
         path: /var/lib/go
     settings:
+      compress:
+        enabled: false
       outputs:
         - name: $${NAME}
           os: linux

@@ -38,7 +38,7 @@ func (c *Compress) upx(
 	source string, dir string, verbose bool,
 	output *Output, envs []string,
 ) (err error) {
-	upxArgs := args.New().Build().Flag("mono").Flag("color").Flag("f")
+	upxArgs := args.New().Build().Flag("mono").Flag("color").Flag("f").Flag("force-macos")
 	if verbose {
 		upxArgs.Flag("v")
 	}
