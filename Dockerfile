@@ -9,7 +9,7 @@ RUN go install golang.org/x/tools/go/analysis/passes/fieldalignment/cmd/fieldali
 
 
 # 打包真正的镜像
-FROM ccr.ccs.tencentyun.com/storezhang/alpine:3.19.0
+FROM ccr.ccs.tencentyun.com/storezhang/alpine:3.19.1
 
 
 LABEL author="storezhang<华寅>" \
