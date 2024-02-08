@@ -1,7 +1,7 @@
-FROM golang:1.21.6-alpine AS golang
+FROM golang:1.22.0-alpine AS golang
 FROM golangci/golangci-lint:v1.55.2 AS lint
 
-FROM golang:1.21.6-alpine AS alignment
+FROM golang:1.22.0-alpine AS alignment
 
 ENV GOPROXY https://mirrors.aliyun.com/goproxy,direct
 RUN go install golang.org/x/tools/go/analysis/passes/fieldalignment/cmd/fieldalignment@latest
