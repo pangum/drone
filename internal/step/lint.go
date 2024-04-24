@@ -3,7 +3,7 @@ package step
 import (
 	"context"
 
-	"github.com/pangum/drone/internal/config"
+	"github.com/pangum/drone/internal/internal/config"
 	"github.com/pangum/drone/internal/plugin/internal"
 
 	"github.com/goexl/gox/args"

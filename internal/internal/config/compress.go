@@ -6,7 +6,7 @@ import (
 
 	"github.com/dronestock/drone"
 	"github.com/goexl/gox/args"
-	"github.com/pangum/drone/internal/core"
+	"github.com/pangum/drone/internal/internal/core"
 )
 
 type Compress struct {

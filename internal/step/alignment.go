@@ -4,13 +4,13 @@ import (
 	"context"
 	"sync"
 
-	"github.com/pangum/drone/internal/config"
+	"github.com/pangum/drone/internal/internal/config"
+	"github.com/pangum/drone/internal/internal/core"
 	"github.com/pangum/drone/internal/plugin/internal"
 
 	"github.com/goexl/gfx"
 	"github.com/goexl/gox/args"
 	"github.com/goexl/gox/field"
-	"github.com/pangum/drone/internal/core"
 )
 
 type Alignment struct {
@@ -33,8 +33,8 @@ func (a *Alignment) Runnable() bool {
 	return nil != a.config.Enabled && *a.config.Enabled
 }
 
-func (a *Alignment) Run(ctx context.Context) (err error) {
-	if filenames, ae := gfx.All(a.Source, gfx.Pattern(a.config.Pattern)); nil != err {
+func (a *Alignment) Run(ctx *context.Context) (err error) {
+	if filenames, ae := gfx.All(a.Source, gfx.Pattern(a.config.Pattern)); nil != ae {
 		err = ae
 	} else {
 		a.run(ctx, filenames)
@@ -43,7 +43,7 @@ func (a *Alignment) Run(ctx context.Context) (err error) {
 	return
 }
 
-func (a *Alignment) run(ctx context.Context, filenames []string) {
+func (a *Alignment) run(ctx *context.Context, filenames []string) {
 	wg := new(sync.WaitGroup)
 	wg.Add(len(filenames))
 	for _, filename := range filenames {
@@ -52,7 +52,7 @@ func (a *Alignment) run(ctx context.Context, filenames []string) {
 	wg.Wait()
 }
 
-func (a *Alignment) fix(_ context.Context, wg *sync.WaitGroup, filename string) {
+func (a *Alignment) fix(_ *context.Context, wg *sync.WaitGroup, filename string) {
 	defer wg.Done()
 
 	command := a.Command(a.Binary.Alignment)

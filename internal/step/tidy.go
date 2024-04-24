@@ -4,11 +4,11 @@ import (
 	"context"
 	"path/filepath"
 
+	"github.com/pangum/drone/internal/internal/core"
 	"github.com/pangum/drone/internal/plugin/internal"
 
 	"github.com/goexl/gfx"
 	"github.com/goexl/gox/args"
-	"github.com/pangum/drone/internal/core"
 )
 
 type Tidy struct {

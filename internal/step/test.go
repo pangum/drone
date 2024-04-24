@@ -3,7 +3,7 @@ package step
 import (
 	"context"
 
-	"github.com/pangum/drone/internal/config"
+	config2 "github.com/pangum/drone/internal/internal/config"
 	"github.com/pangum/drone/internal/plugin/internal"
 
 	"github.com/goexl/gox/args"
@@ -12,15 +12,15 @@ import (
 type Test struct {
 	*internal.Core
 
-	config  *config.Test
-	outputs []*config.Output
+	config  *config2.Test
+	outputs []*config2.Output
 	flags   []any
 	envs    []string
 }
 
 func NewTest(
 	core *internal.Core,
-	config *config.Test, outputs []*config.Output, flags []any, envs []string,
+	config *config2.Test, outputs []*config2.Output, flags []any, envs []string,
 ) *Test {
 	return &Test{
 		Core: core,

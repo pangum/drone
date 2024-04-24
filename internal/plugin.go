@@ -1,20 +1,20 @@
-package plugin
+package internal
 
 import (
 	"fmt"
 
-	"github.com/pangum/drone/internal/plugin/internal"
-	"github.com/pangum/drone/internal/plugin/internal/step"
+	"github.com/pangum/drone/internal/internal/config"
+	"github.com/pangum/drone/internal/internal/core"
+	"github.com/pangum/drone/internal/step"
 
 	"github.com/dronestock/drone"
 	"github.com/goexl/gox"
 	"github.com/goexl/gox/field"
-	"github.com/pangum/drone/internal/config"
-	"github.com/pangum/drone/internal/core"
 )
 
-type Plugin struct {
-	internal.Core
+type plugin struct {
+	drone.Base
+	config.Core
 
 	// 输出文件
 	Output *config.Output `default:"${OUTPUT}" json:"output"`
@@ -54,14 +54,14 @@ type Plugin struct {
 }
 
 func New() drone.Plugin {
-	return new(Plugin)
+	return new(plugin)
 }
 
-func (p *Plugin) Config() drone.Config {
+func (p *plugin) Config() drone.Config {
 	return p
 }
 
-func (p *Plugin) Steps() drone.Steps {
+func (p *plugin) Steps() drone.Steps {
 	return drone.Steps{
 		drone.NewStep(step.NewTidy(&p.Core, p.Environments())).Name("依赖清理").Build(),
 		drone.NewStep(step.NewAlignment(&p.Core, &p.Alignment, p.Environments())).Name("内存对齐").Build(),
@@ -72,7 +72,7 @@ func (p *Plugin) Steps() drone.Steps {
 	}
 }
 
-func (p *Plugin) Setup() (err error) {
+func (p *plugin) Setup() (err error) {
 	if nil != p.Output {
 		p.Outputs = append(p.Outputs, p.Output)
 	}
@@ -106,7 +106,7 @@ func (p *Plugin) Setup() (err error) {
 	return
 }
 
-func (p *Plugin) Fields() gox.Fields[any] {
+func (p *plugin) Fields() gox.Fields[any] {
 	return gox.Fields[any]{
 		field.New("source", p.Source),
 		field.New("output", p.Output),
@@ -121,7 +121,7 @@ func (p *Plugin) Fields() gox.Fields[any] {
 	}
 }
 
-func (p *Plugin) Linters() (linters []string) {
+func (p *plugin) Linters() (linters []string) {
 	linters = make([]string, 0)
 	if p.Default() {
 		linters = append(linters, p.defaultLinters...)
@@ -131,7 +131,7 @@ func (p *Plugin) Linters() (linters []string) {
 	return
 }
 
-func (p *Plugin) TestFlags() (flags []any) {
+func (p *plugin) TestFlags() (flags []any) {
 	flags = make([]any, 0)
 	if p.Default() {
 		for _, flag := range p.defaultTestFlags {
@@ -145,7 +145,7 @@ func (p *Plugin) TestFlags() (flags []any) {
 	return
 }
 
-func (p *Plugin) Environments() (envs []string) {
+func (p *plugin) Environments() (envs []string) {
 	envs = make([]string, 0, len(p.Envs)+2)
 	if p.Default() {
 		envs = append(envs, p.defaultEnvs...)
@@ -160,7 +160,7 @@ func (p *Plugin) Environments() (envs []string) {
 	return
 }
 
-func (p *Plugin) Flags(mode core.Mode) (flags []string) {
+func (p *plugin) Flags(mode core.Mode) (flags []string) {
 	flags = make([]string, 0)
 	if p.Default() && core.ModeRelease == mode {
 		flags = append(flags, p.defaultFlags...)

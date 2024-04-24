@@ -3,10 +3,9 @@ package step
 import (
 	"context"
 
-	"github.com/pangum/drone/internal/config"
+	"github.com/pangum/drone/internal/internal/config"
+	"github.com/pangum/drone/internal/internal/core"
 	"github.com/pangum/drone/internal/plugin/internal"
-
-	"github.com/pangum/drone/internal/core"
 )
 
 type Compress struct {

@@ -2,9 +2,9 @@ package main
 
 import (
 	"github.com/dronestock/drone"
-	"github.com/pangum/drone/internal/plugin"
+	"github.com/pangum/drone/internal"
 )
 
 func main() {
-	drone.New(plugin.New).Boot()
+	drone.New(internal.New).Boot()
 }
