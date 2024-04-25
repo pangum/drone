@@ -68,6 +68,4 @@ func (a *Alignment) fix(ctx *context.Context, wg *guc.WaitGroup, filename string
 	} else {
 		a.base.Debug("内存对齐完成", field.New("filename", filename))
 	}
-
-	return
 }
