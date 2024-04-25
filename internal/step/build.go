@@ -60,7 +60,7 @@ func (b *Build) Run(ctx *context.Context) (err error) {
 func (b *Build) run(ctx *context.Context, output *config.Output, wg *guc.WaitGroup, err *error) {
 	defer wg.Done()
 
-	arguments := args.New().Long(constant.Strike).Build().Subcommand("build").Flag("b").Add(output.Filename(b.project))
+	arguments := args.New().Long(constant.Strike).Build().Subcommand("build").Flag("o").Add(output.Filename(b.project))
 	// 写入编译标签
 	arguments.Argument("ldflags", strings.Join(b.flags(output.Mode), constant.Space))
 	// 执行编译命令
