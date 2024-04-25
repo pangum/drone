@@ -49,8 +49,9 @@ func (b *Build) Runnable() bool {
 func (b *Build) Run(ctx *context.Context) (err error) {
 	wg := new(guc.WaitGroup)
 	wg.Add(len(b.outputs))
-	for _, out := range b.outputs {
-		go b.run(ctx, out, wg, &err)
+	for _, output := range b.outputs {
+		cloned := output
+		go b.run(ctx, cloned, wg, &err)
 	}
 	wg.Wait()
 

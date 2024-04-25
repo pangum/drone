@@ -51,7 +51,8 @@ func (a *Alignment) run(ctx *context.Context, filenames []string, err *error) {
 	wg := new(guc.WaitGroup)
 	wg.Add(len(filenames))
 	for _, filename := range filenames {
-		go a.fix(ctx, wg, filename, err)
+		cloned := filename
+		go a.fix(ctx, wg, cloned, err)
 	}
 	wg.Wait()
 }

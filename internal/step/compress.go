@@ -41,8 +41,9 @@ func (c *Compress) Runnable() bool {
 func (c *Compress) Run(ctx *context.Context) (err error) {
 	wg := new(guc.WaitGroup)
 	wg.Add(len(c.outputs))
-	for _, out := range c.outputs {
-		go c.run(ctx, out, wg, &err)
+	for _, output := range c.outputs {
+		cloned := output
+		go c.run(ctx, cloned, wg, &err)
 	}
 	wg.Wait()
 
