@@ -20,7 +20,10 @@ type Alignment struct {
 	project   *config.Project
 }
 
-func NewAlignment(base *drone.Base, binary *config.Binary, alignment *config.Alignment, project *config.Project) *Alignment {
+func NewAlignment(
+	base *drone.Base, binary *config.Binary,
+	alignment *config.Alignment, project *config.Project,
+) *Alignment {
 	return &Alignment{
 		base:   base,
 		binary: binary,
