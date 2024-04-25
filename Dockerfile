@@ -6,6 +6,15 @@ FROM golang:1.22.2-alpine AS alignment
 ENV GOPROXY https://mirrors.aliyun.com/goproxy,direct
 RUN go install golang.org/x/tools/go/analysis/passes/fieldalignment/cmd/fieldalignment@latest
 
+FROM ccr.ccs.tencentyun.com/storezhang/alpine:3.19.1 AS builder
+
+COPY --from=golang /usr/local/go/bin/go /docker/usr/local/go/bin/go
+COPY --from=golang /usr/local/go/pkg /docker/usr/local/go/pkg
+COPY --from=golang /usr/local/go/src /docker/usr/local/go/src
+COPY --from=lint /usr/bin/golangci-lint /docker/usr/bin/golangci-lint
+COPY --from=alignment /go/bin/fieldalignment /docker/usr/local/go/bin/fieldalignment
+COPY drone /docker/usr/local/bin/drone
+
 
 
 # 打包真正的镜像
@@ -20,12 +29,7 @@ LABEL author="storezhang<华寅>" \
 
 
 # 复制文件
-COPY --from=golang /usr/local/go/bin/go /usr/local/go/bin/go
-COPY --from=golang /usr/local/go/pkg /usr/local/go/pkg
-COPY --from=golang /usr/local/go/src /usr/local/go/src
-COPY --from=lint /usr/bin/golangci-lint /usr/bin/golangci-lint
-COPY --from=alignment /go/bin/fieldalignment /usr/local/go/bin/fieldalignment
-COPY drone /bin
+COPY --from=builder /docker /
 
 
 # 增加执行权限
@@ -43,7 +47,7 @@ RUN set -ex \
     \
     \
     # 增加执行权限
-    && chmod +x /bin/drone \
+    && chmod +x /usr/local/bin/drone \
     \
     \
     \
@@ -51,7 +55,7 @@ RUN set -ex \
 
 
 # 执行命令
-ENTRYPOINT /bin/drone
+ENTRYPOINT /usr/local/bin/drone
 
 
 # 配置环境变量
