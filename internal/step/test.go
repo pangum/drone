@@ -3,51 +3,60 @@ package step
 import (
 	"context"
 
-	config2 "github.com/pangum/drone/internal/internal/config"
-	"github.com/pangum/drone/internal/plugin/internal"
-
-	"github.com/goexl/gox/args"
+	"github.com/goexl/args"
+	"github.com/pangum/drone/internal/internal/command"
+	"github.com/pangum/drone/internal/internal/config"
 )
 
 type Test struct {
-	*internal.Core
+	golang  *command.Golang
+	test    *config.Test
+	project *config.Project
 
-	config  *config2.Test
-	outputs []*config2.Output
-	flags   []any
-	envs    []string
+	defaultFlags []string
 }
 
-func NewTest(
-	core *internal.Core,
-	config *config2.Test, outputs []*config2.Output, flags []any, envs []string,
-) *Test {
+func NewTest(golang *command.Golang, test *config.Test, project *config.Project) *Test {
 	return &Test{
-		Core: core,
+		golang:  golang,
+		test:    test,
+		project: project,
 
-		config:  config,
-		outputs: outputs,
-		flags:   flags,
-		envs:    envs,
+		defaultFlags: []string{
+			// 缩短长时间运行的测试的测试时间
+			"-short",
+			// 随机
+			"-shuffle=on",
+		},
 	}
 }
 
 func (t *Test) Runnable() bool {
-	return nil != t.config.Enabled && *t.config.Enabled
+	return nil != t.test.Enabled && *t.test.Enabled
 }
 
-func (t *Test) Run(_ context.Context) (err error) {
-	testArgs := args.New().Build().Subcommand("test")
+func (t *Test) Run(ctx *context.Context) (err error) {
+	arguments := args.New().Build().Subcommand("test")
 	// 加入默认测试参数
-	testArgs.Add(t.flags...)
+	arguments.Add(t.flags()...)
 	// 加入测试文件
-	testArgs.Add(t.Source)
+	arguments.Add(t.project.Source)
 	// 执行测试命令
-	command := t.Command(t.Binary.Go).Args(testArgs.Build()).Dir(t.Source)
-	environment := command.Environment()
-	environment.String(t.envs...)
-	command = environment.Build()
-	_, err = command.Build().Exec()
+	err = t.golang.Exec(ctx, arguments.Build())
+
+	return
+}
+
+func (t *Test) flags() (flags []any) {
+	flags = make([]any, 0)
+	if t.golang.Default() {
+		for _, flag := range t.defaultFlags {
+			flags = append(flags, flag)
+		}
+	}
+	for _, flag := range t.test.Flags {
+		flags = append(flags, flag)
+	}
 
 	return
 }

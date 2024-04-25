@@ -4,41 +4,36 @@ import (
 	"context"
 	"path/filepath"
 
-	"github.com/pangum/drone/internal/internal/core"
-	"github.com/pangum/drone/internal/plugin/internal"
+	"github.com/goexl/args"
+	"github.com/pangum/drone/internal/internal/command"
+	"github.com/pangum/drone/internal/internal/config"
+	"github.com/pangum/drone/internal/internal/constant"
 
 	"github.com/goexl/gfx"
-	"github.com/goexl/gox/args"
 )
 
 type Tidy struct {
-	*internal.Core
-
-	envs []string
+	golang  *command.Golang
+	project *config.Project
 }
 
-func NewTidy(core *internal.Core, envs []string) *Tidy {
+func NewTidy(golang *command.Golang, project *config.Project) *Tidy {
 	return &Tidy{
-		Core: core,
-
-		envs: envs,
+		golang:  golang,
+		project: project,
 	}
 }
 
-func (t *Tidy) Runnable() bool {
-	_, exists := gfx.Exists(filepath.Join(t.Source, core.GoModFilename))
+func (t *Tidy) Runnable() (runnable bool) {
+	_, exists := gfx.Exists(filepath.Join(t.project.Source, constant.GoModFilename))
+	runnable = exists
 
-	return exists
+	return
 }
 
-func (t *Tidy) Run(_ context.Context) (err error) {
-	command := t.Command(t.Binary.Go)
-	command.Args(args.New().Build().Subcommand("mod", "tidy").Build())
-	command.Dir(t.Source)
-	environment := command.Environment()
-	environment.String(t.envs...)
-	command = environment.Build()
-	_, err = command.Build().Exec()
+func (t *Tidy) Run(ctx *context.Context) (err error) {
+	arguments := args.New().Build().Subcommand("mod", "tidy").Build()
+	err = t.golang.Exec(ctx, arguments)
 
 	return
 }
