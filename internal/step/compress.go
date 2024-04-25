@@ -71,6 +71,4 @@ func (c *Compress) run(ctx *context.Context, output *config.Output, wg *guc.Wait
 	if _, ce := command.Build().Exec(); nil != ce {
 		*err = ce
 	}
-
-	return
 }
