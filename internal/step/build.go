@@ -71,8 +71,6 @@ func (b *Build) run(ctx *context.Context, output *config.Output, wg *guc.WaitGro
 		*err = be
 		b.golang.Warn("编译出错", field.New("output", output))
 	}
-
-	return
 }
 
 func (b *Build) flags(mode core.Mode) (flags []string) {
