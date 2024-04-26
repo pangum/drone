@@ -67,6 +67,7 @@ func (c *Compress) run(ctx *context.Context, output *config.Output) (err error) 
 	arguments.Add(output.Filename(c.project))
 
 	// 执行清理依赖命令
+	c.base.Info("压缩程序开始", field.New("output", output))
 	command := c.base.Command(c.binary.Upx).Context(*ctx).Args(arguments.Build()).Dir(c.project.Source)
 	_, err = command.Build().Exec()
 
