@@ -7,7 +7,7 @@ import (
 
 	"github.com/dronestock/drone"
 	"github.com/goexl/args"
-	"github.com/goexl/guc"
+	"github.com/goexl/gox/field"
 	"github.com/pangum/drone/internal/internal/config"
 )
 
@@ -39,20 +39,19 @@ func (c *Compress) Runnable() bool {
 }
 
 func (c *Compress) Run(ctx *context.Context) (err error) {
-	wg := new(guc.WaitGroup)
-	wg.Add(len(c.outputs))
 	for _, output := range c.outputs {
-		cloned := output
-		go c.run(ctx, cloned, wg, &err)
+		if re := c.run(ctx, output); nil != re {
+			err = re
+			c.base.Warn("压缩程序出错", field.New("output", output), field.Error(err))
+		} else {
+			c.base.Info("压缩程序成功", field.New("output", output))
+		}
 	}
-	wg.Wait()
 
 	return
 }
 
-func (c *Compress) run(ctx *context.Context, output *config.Output, wg *guc.WaitGroup, err *error) {
-	defer wg.Done()
-
+func (c *Compress) run(ctx *context.Context, output *config.Output) (err error) {
 	arguments := args.New().Build().Flag("mono").Flag("color").Flag("f").Flag("force-macos")
 	if c.base.Verbose {
 		arguments.Flag("v")
@@ -69,7 +68,7 @@ func (c *Compress) run(ctx *context.Context, output *config.Output, wg *guc.Wait
 
 	// 执行清理依赖命令
 	command := c.base.Command(c.binary.Upx).Context(*ctx).Args(arguments.Build()).Dir(c.project.Source)
-	if _, ce := command.Build().Exec(); nil != ce {
-		*err = ce
-	}
+	_, err = command.Build().Exec()
+
+	return
 }
