@@ -13,6 +13,8 @@ type Output struct {
 	Os string `default:"linux" json:"os,omitempty"`
 	// 架构
 	Arch string `default:"amd64" json:"arch,omitempty"`
+	// 版本
+	Arm int `default:"7" json:"arm,omitempty"`
 	// 编译模式
 	Mode core.Mode `default:"release" json:"mode,omitempty" validate:"oneof=release debug"`
 	// 环境变量

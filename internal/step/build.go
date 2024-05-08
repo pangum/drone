@@ -64,11 +64,18 @@ func (b *Build) run(ctx *context.Context, output *config.Output, wg *guc.WaitGro
 	arguments := args.New().Long(constant.Strike).Build().Subcommand("build").Flag("o").Add(output.Filename(b.project))
 	// 写入编译标签
 	arguments.Argument("ldflags", strings.Join(b.flags(output.Mode), constant.Space))
+
+	// 准备编译环境变量
+	environments := []*core.Environment{
+		core.NewEnvironment(constant.GoOS, output.Os),
+		core.NewEnvironment(constant.GoArch, output.Arch),
+	}
+	if 0 != output.Arm {
+		environments = append(environments, core.NewEnvironment(constant.GoArm, output.Arm))
+	}
+
 	// 执行编译命令
-	if be := b.golang.Exec(
-		ctx, arguments.Build(),
-		core.NewEnvironment(constant.Goos, output.Os), core.NewEnvironment(constant.Goarch, output.Arch),
-	); nil != be {
+	if be := b.golang.Exec(ctx, arguments.Build(), environments...); nil != be {
 		*err = be
 		b.golang.Warn("编译出错", field.New("output", output))
 	}

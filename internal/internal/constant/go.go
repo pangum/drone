@@ -4,6 +4,7 @@ const (
 	GoModFilename = "go.mod"
 	GoPrivate     = "GOPRIVATE"
 	GoNoProxy     = "GONOPROXY"
-	Goos          = "GOOS"
-	Goarch        = "GOARCH"
+	GoOS          = "GOOS"
+	GoArch        = "GOARCH"
+	GoArm         = "GOARM"
 )
