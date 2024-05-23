@@ -86,7 +86,7 @@ steps:
       PASSWORD_CCR:
         from_secret: password_ccr
     settings:
-      repository: pangum/drone
+      repository: pangum/$${NAME}
       platforms:
         - arch: amd64
         - arch: arm64
