@@ -3,7 +3,7 @@ FROM golangci/golangci-lint:v1.58.2 AS lint
 
 FROM golang:1.22.3-alpine AS alignment
 
-ENV GOPROXY https://mirrors.aliyun.com/goproxy,direct
+ENV GOPROXY https://goproxy.io,direct
 RUN go install golang.org/x/tools/go/analysis/passes/fieldalignment/cmd/fieldalignment@latest
 
 FROM ccr.ccs.tencentyun.com/storezhang/alpine:3.20.0 AS builder
