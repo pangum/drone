@@ -6,7 +6,7 @@ FROM golang:1.22.3-alpine AS alignment
 ENV GOPROXY https://mirrors.aliyun.com/goproxy,direct
 RUN go install golang.org/x/tools/go/analysis/passes/fieldalignment/cmd/fieldalignment@latest
 
-FROM ccr.ccs.tencentyun.com/storezhang/alpine:3.19.1 AS builder
+FROM ccr.ccs.tencentyun.com/storezhang/alpine:3.20.0 AS builder
 
 COPY --from=golang /usr/local/go/bin/go /docker/usr/local/go/bin/go
 COPY --from=golang /usr/local/go/pkg /docker/usr/local/go/pkg
@@ -18,7 +18,7 @@ COPY drone /docker/usr/local/bin/drone
 
 
 # 打包真正的镜像
-FROM ccr.ccs.tencentyun.com/storezhang/alpine:3.19.1
+FROM ccr.ccs.tencentyun.com/storezhang/alpine:3.20.0
 
 
 LABEL author="storezhang<华寅>" \
