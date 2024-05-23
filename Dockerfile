@@ -13,7 +13,9 @@ COPY --from=golang /usr/local/go/pkg /docker/usr/local/go/pkg
 COPY --from=golang /usr/local/go/src /docker/usr/local/go/src
 COPY --from=lint /usr/bin/golangci-lint /docker/usr/bin/golangci-lint
 COPY --from=alignment /go/bin/fieldalignment /docker/usr/local/go/bin/fieldalignment
-COPY drone /docker/usr/local/bin/drone
+
+ARG TARGETPLATFORM
+COPY dist/${TARGETPLATFORM}/drone /docker/usr/local/bin/drone
 
 
 
