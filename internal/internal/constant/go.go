@@ -7,4 +7,5 @@ const (
 	GoOS          = "GOOS"
 	GoArch        = "GOARCH"
 	GoArm         = "GOARM"
+	Cgo           = "CGO_ENABLED"
 )

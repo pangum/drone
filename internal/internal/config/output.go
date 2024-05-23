@@ -15,10 +15,12 @@ type Output struct {
 	Arch string `default:"amd64" json:"arch,omitempty"`
 	// 版本
 	Arm int `default:"7" json:"arm,omitempty"`
+	// 是否开启
+	Cgo bool `default:"${CGO}" json:"cgo,omitempty"`
 	// 编译模式
 	Mode core.Mode `default:"release" json:"mode,omitempty" validate:"oneof=release debug"`
 	// 环境变量
-	Environments []string `json:"environments,omitempty"`
+	Environments map[string]string `default:"${ENVIRONMENTS}" json:"environments,omitempty"`
 }
 
 func (o *Output) Filename(project *Project) string {

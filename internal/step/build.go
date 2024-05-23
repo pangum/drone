@@ -73,6 +73,12 @@ func (b *Build) run(ctx *context.Context, output *config.Output, wg *guc.WaitGro
 	if 0 != output.Arm {
 		environments = append(environments, core.NewEnvironment(constant.GoArm, output.Arm))
 	}
+	if output.Cgo {
+		environments = append(environments, core.NewEnvironment(constant.Cgo, 1))
+	}
+	for key, value := range output.Environments {
+		environments = append(environments, core.NewEnvironment(key, value))
+	}
 
 	// 执行编译命令
 	if be := b.golang.Exec(ctx, arguments.Build(), environments...); nil != be {
