@@ -90,8 +90,6 @@ steps:
       platforms:
         - arch: amd64
         - arch: arm64
-        - arch: arm
-          variant: v7
       registries:
         - username: pangum
           password: $${PASSWORD_DOCKER}
