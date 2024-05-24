@@ -8,4 +8,5 @@ const (
 	GoArch        = "GOARCH"
 	GoArm         = "GOARM"
 	Cgo           = "CGO_ENABLED"
+	CC            = "CC"
 )

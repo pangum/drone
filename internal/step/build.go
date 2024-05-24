@@ -34,10 +34,8 @@ func NewBuild(golang *command.Golang, outputs []*config.Output, project *config.
 		debug:   debug,
 
 		defaultFlags: []string{
-			// 删除掉符号表
-			"-s",
-			// 去掉调试信息，无法使用GDB调试程序
-			"-w",
+			"-s", // 删除掉符号表
+			"-w", // 去掉调试信息，无法使用GDB调试程序
 		},
 	}
 }
@@ -61,7 +59,8 @@ func (b *Build) Run(ctx *context.Context) (err error) {
 func (b *Build) run(ctx *context.Context, output *config.Output, wg *guc.WaitGroup, err *error) {
 	defer wg.Done()
 
-	arguments := args.New().Long(constant.Strike).Build().Subcommand("build").Flag("o").Add(output.Filename(b.project))
+	arguments := args.New().Long(constant.Strike).Build().Subcommand("build")
+	arguments = arguments.Flag("o").Add(output.Filename(b.project))
 	// 写入编译标签
 	arguments.Argument("ldflags", strings.Join(b.flags(output.Mode), constant.Space))
 
@@ -73,8 +72,8 @@ func (b *Build) run(ctx *context.Context, output *config.Output, wg *guc.WaitGro
 	if 0 != output.Arm {
 		environments = append(environments, core.NewEnvironment(constant.GoArm, output.Arm))
 	}
-	if output.Cgo {
-		environments = append(environments, core.NewEnvironment(constant.Cgo, 1))
+	if *output.Cgo {
+		b.cgo(output, &environments)
 	}
 	for key, value := range output.Environments {
 		environments = append(environments, core.NewEnvironment(key, value))
@@ -84,6 +83,13 @@ func (b *Build) run(ctx *context.Context, output *config.Output, wg *guc.WaitGro
 	if be := b.golang.Exec(ctx, arguments.Build(), environments...); nil != be {
 		*err = be
 		b.golang.Warn("编译出错", field.New("output", output))
+	}
+}
+
+func (b *Build) cgo(output *config.Output, environments *[]*core.Environment) {
+	*environments = append(*environments, core.NewEnvironment(constant.Cgo, 1))
+	if 7 == output.Arm {
+		*environments = append(*environments, core.NewEnvironment(constant.CC, "arm-linux-gnueabihf-gcc"))
 	}
 }
 

@@ -41,7 +41,9 @@ RUN set -ex \
     \
     && apk update \
     # 安装依赖包
-    && apk --no-cache add gcc musl-dev git \
+    && apk --no-cache add gcc musl-dev git build-base \
+    # 防止因各种配置问题导致的代码仓库相关问题
+    && git config --global --add safe.directory * \
     \
     # 安装应用程序压缩工具
     && apk --no-cache add upx \
@@ -50,6 +52,7 @@ RUN set -ex \
     \
     # 增加执行权限
     && chmod +x /usr/local/bin/drone \
+    && mkdir /tmp \
     \
     \
     \

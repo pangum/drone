@@ -16,7 +16,7 @@ type Output struct {
 	// 版本
 	Arm int `default:"7" json:"arm,omitempty"`
 	// 是否开启
-	Cgo bool `default:"${CGO}" json:"cgo,omitempty"`
+	Cgo *bool `default:"${CGO=false}" json:"cgo,omitempty"`
 	// 编译模式
 	Mode core.Mode `default:"release" json:"mode,omitempty" validate:"oneof=release debug"`
 	// 环境变量

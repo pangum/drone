@@ -26,7 +26,7 @@ func NewLint(base *drone.Base, binary *config.Binary, lint *config.Lint, project
 		project: project,
 
 		defaultLinters: []string{
-			"goerr113",
+			"err113",
 			"nlreturn",
 			"bodyclose",
 			"rowserrcheck",
