@@ -41,7 +41,7 @@ RUN set -ex \
     \
     && apk update \
     # 安装依赖包
-    && apk --no-cache add gcc musl-dev git build-base \
+    && apk --no-cache add gcc musl-dev git \
     # 防止因各种配置问题导致的代码仓库相关问题
     && git config --global --add safe.directory * \
     \
