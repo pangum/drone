@@ -5,9 +5,8 @@ import (
 
 	"github.com/dronestock/drone"
 	"github.com/goexl/args"
-	"github.com/goexl/gfx"
+	"github.com/goexl/gox"
 	"github.com/goexl/gox/field"
-	"github.com/goexl/guc"
 	"github.com/pangum/drone/internal/internal/config"
 	"github.com/pangum/drone/internal/internal/constant"
 )
@@ -38,35 +37,20 @@ func (a *Alignment) Runnable() bool {
 }
 
 func (a *Alignment) Run(ctx *context.Context) (err error) {
-	if filenames, ae := gfx.All(a.project.Source, gfx.Pattern(a.alignment.Pattern)); nil != ae {
+	command := a.base.Command(a.binary.Alignment).Context(*ctx)
+	command.Args(args.New().Long(constant.Strike).Build().Flag("apply").Subcommand("./...").Build())
+	command.Dir(a.project.Source)
+
+	fields := gox.Fields[any]{
+		field.New("dir", a.project.Source),
+		field.New("binary", a.binary.Alignment),
+	}
+	if _, ae := command.Build().Exec(); nil != ae {
 		err = ae
+		a.base.Info("内存对齐出错", fields.Add(field.Error(ae))...)
 	} else {
-		a.run(ctx, filenames, &err)
+		a.base.Debug("内存对齐完成", fields...)
 	}
 
 	return
-}
-
-func (a *Alignment) run(ctx *context.Context, filenames []string, err *error) {
-	wg := new(guc.WaitGroup)
-	wg.Add(len(filenames))
-	for _, filename := range filenames {
-		cloned := filename
-		go a.fix(ctx, wg, cloned, err)
-	}
-	wg.Wait()
-}
-
-func (a *Alignment) fix(ctx *context.Context, wg *guc.WaitGroup, filename string, err *error) {
-	defer wg.Done()
-
-	command := a.base.Command(a.binary.Alignment).Context(*ctx)
-	command.Args(args.New().Long(constant.Strike).Build().Option("fix", filename).Build())
-	command.Dir(a.project.Source)
-	if _, ae := command.Build().Exec(); nil != ae {
-		*err = ae
-		a.base.Info("内存对齐出错", field.New("filename", filename))
-	} else {
-		a.base.Debug("内存对齐完成", field.New("filename", filename))
-	}
 }

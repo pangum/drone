@@ -4,7 +4,7 @@ FROM golangci/golangci-lint:v1.60.1 AS lint
 FROM golang:1.23-alpine AS alignment
 
 ENV GOPROXY https://goproxy.io,direct
-RUN go install golang.org/x/tools/go/analysis/passes/fieldalignment/cmd/fieldalignment@latest
+RUN go install github.com/dkorunic/betteralign/cmd/betteralign@latest
 
 FROM ccr.ccs.tencentyun.com/storezhang/alpine:3.20.0 AS builder
 
@@ -12,7 +12,7 @@ COPY --from=golang /usr/local/go/bin/go /docker/usr/local/go/bin/go
 COPY --from=golang /usr/local/go/pkg /docker/usr/local/go/pkg
 COPY --from=golang /usr/local/go/src /docker/usr/local/go/src
 COPY --from=lint /usr/bin/golangci-lint /docker/usr/bin/golangci-lint
-COPY --from=alignment /go/bin/fieldalignment /docker/usr/local/go/bin/fieldalignment
+COPY --from=alignment /go/bin/betteralign /docker/usr/local/go/bin/betteralign
 
 ARG TARGETPLATFORM
 COPY dist/${TARGETPLATFORM}/drone /docker/usr/local/bin/drone
