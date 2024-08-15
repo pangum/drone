@@ -38,7 +38,7 @@ func (a *Alignment) Runnable() bool {
 
 func (a *Alignment) Run(ctx *context.Context) (err error) {
 	command := a.base.Command(a.binary.Alignment).Context(*ctx)
-	command.Args(args.New().Long(constant.Strike).Build().Flag("apply").Subcommand("./...").Build())
+	command.Arguments(args.New().Long(constant.Strike).Build().Flag("apply").Subcommand("./...").Build())
 	command.Dir(a.project.Source)
 
 	fields := gox.Fields[any]{

@@ -58,7 +58,7 @@ func (l *Lint) Run(ctx *context.Context) (err error) {
 	}
 
 	// 执行代码检查命令
-	command := l.base.Command(l.binary.Lint).Context(*ctx).Args(arguments.Build()).Dir(l.project.Source)
+	command := l.base.Command(l.binary.Lint).Context(*ctx).Arguments(arguments.Build()).Dir(l.project.Source)
 	_, err = command.Build().Exec()
 
 	return

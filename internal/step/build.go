@@ -45,19 +45,18 @@ func (b *Build) Runnable() bool {
 }
 
 func (b *Build) Run(ctx *context.Context) (err error) {
-	wg := new(guc.WaitGroup)
-	wg.Add(len(b.outputs))
+	waiter := guc.New().Wait().Group(len(b.outputs))
 	for _, output := range b.outputs {
 		cloned := output
-		go b.run(ctx, cloned, wg, &err)
+		go b.run(ctx, cloned, waiter, &err)
 	}
-	wg.Wait()
+	waiter.Wait()
 
 	return
 }
 
-func (b *Build) run(ctx *context.Context, output *config.Output, wg *guc.WaitGroup, err *error) {
-	defer wg.Done()
+func (b *Build) run(ctx *context.Context, output *config.Output, waiter guc.Waiter, err *error) {
+	defer waiter.Done()
 
 	arguments := args.New().Long(constant.Strike).Build().Subcommand("build")
 	arguments = arguments.Flag("o").Add(output.Filename(b.project))

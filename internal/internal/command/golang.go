@@ -39,7 +39,7 @@ func (g *Golang) Exec(ctx *context.Context, arguments *args.Arguments, environme
 	}
 
 	command := g.Command(g.binary.Go).Context(*ctx)
-	command.Args(arguments)
+	command.Arguments(arguments)
 	command.Dir(g.project.Source)
 	environment := command.Environment()
 	environment.String(g.environments()...)
