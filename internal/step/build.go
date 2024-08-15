@@ -105,10 +105,10 @@ func (b *Build) flags(mode core.Mode) (flags []string) {
 		flags = append(flags, fmt.Sprintf("-X 'github.com/pangum/pangu/internal.Version=%s'", b.debug.Version))
 	}
 	if "" != b.debug.Build {
-		flags = append(flags, fmt.Sprintf("-X 'github.com/pangum/pangu/internal.build=%s'", b.debug.Build))
+		flags = append(flags, fmt.Sprintf("-X 'github.com/pangum/pangu/internal.Build=%s'", b.debug.Build))
 	}
 	if "" != b.debug.Complied {
-		flags = append(flags, fmt.Sprintf("-X 'github.com/pangum/pangu/internal.Complied=%s'", b.debug.Complied))
+		flags = append(flags, fmt.Sprintf("-X 'github.com/pangum/pangu/internal.Compiled=%s'", b.debug.Complied))
 	}
 	if "" != b.debug.Revision {
 		flags = append(flags, fmt.Sprintf("-X 'github.com/pangum/pangu/internal.Revision=%s'", b.debug.Revision))
