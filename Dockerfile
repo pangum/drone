@@ -42,6 +42,8 @@ RUN set -ex \
     && apk update \
     # 安装依赖包
     && apk --no-cache add gcc musl-dev git \
+    # 安装ARM编译依赖包
+    && apk --no-cache add gcc-arm-linux-gnueabihf libc6-dev-armhf-cross \
     # 防止因各种配置问题导致的代码仓库相关问题
     && git config --global --add safe.directory * \
     \
