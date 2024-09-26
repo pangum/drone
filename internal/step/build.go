@@ -73,7 +73,7 @@ func (b *Build) run(ctx *context.Context, output *config.Output, waiter guc.Wait
 		core.NewEnvironment(constant.GoOS, output.Os),
 		core.NewEnvironment(constant.GoArch, output.Arch),
 	}
-	if 0 != output.Arm {
+	if 0 != output.Arm && strings.Contains(output.Arch, "arm") {
 		environments = append(environments, core.NewEnvironment(constant.GoArm, output.Arm))
 	}
 	if *output.Cgo {
