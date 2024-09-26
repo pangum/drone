@@ -7,6 +7,7 @@ import (
 
 	"github.com/dronestock/drone"
 	"github.com/goexl/args"
+	"github.com/goexl/gox"
 	"github.com/goexl/gox/field"
 	"github.com/pangum/drone/internal/internal/config"
 )
@@ -22,7 +23,7 @@ type Compress struct {
 func NewCompress(
 	base *drone.Base, binary *config.Binary,
 	compress *config.Compress,
-	outputs []*config.Output, project *config.Project,
+	outputs gox.Slice[*config.Output], project *config.Project,
 ) *Compress {
 	return &Compress{
 		base:   base,

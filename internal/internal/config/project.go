@@ -8,5 +8,5 @@ type Project struct {
 	// 私有库
 	Privates []string `default:"${PRIVATES}" json:"privates,omitempty"`
 	// 环境变量
-	Environments []string `default:"${ENVIRONMENTS=${ENVS}}" json:"environments,omitempty"`
+	Environments map[string]string `default:"${ENVIRONMENTS=${ENVS}}" json:"environments,omitempty"`
 }

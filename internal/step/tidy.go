@@ -2,7 +2,6 @@ package step
 
 import (
 	"context"
-	"path/filepath"
 
 	"github.com/goexl/args"
 	"github.com/pangum/drone/internal/internal/command"
@@ -25,7 +24,7 @@ func NewTidy(golang *command.Golang, project *config.Project) *Tidy {
 }
 
 func (t *Tidy) Runnable() (runnable bool) {
-	_, exists := gfx.Exists(filepath.Join(t.project.Source, constant.GoModFilename))
+	_, exists := gfx.Exists().Dir(t.project.Source).Filename(constant.GoModFilename).Build().Check()
 	runnable = exists
 
 	return

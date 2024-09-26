@@ -6,6 +6,7 @@ import (
 	"strings"
 
 	"github.com/goexl/args"
+	"github.com/goexl/gox"
 	"github.com/goexl/guc"
 	"github.com/pangum/drone/internal/internal/command"
 	"github.com/pangum/drone/internal/internal/config"
@@ -25,7 +26,11 @@ type Build struct {
 	defaultFlags []string
 }
 
-func NewBuild(golang *command.Golang, outputs []*config.Output, project *config.Project, debug *config.Debug) *Build {
+func NewBuild(
+	golang *command.Golang,
+	outputs gox.Slice[*config.Output], project *config.Project,
+	debug *config.Debug,
+) *Build {
 	return &Build{
 		golang: golang,
 

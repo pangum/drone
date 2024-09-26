@@ -62,7 +62,9 @@ func (g *Golang) environments() (environments []string) {
 		goNoProxy := gox.StringBuilder(constant.GoNoProxy, constant.Equal, private).String()
 		environments = append(environments, goPrivate, goNoProxy)
 	}
-	environments = append(environments, g.project.Environments...)
+	for key, value := range g.project.Environments {
+		environments = append(environments, gox.StringBuilder(key, constant.Equal, value).String())
+	}
 
 	return
 }
