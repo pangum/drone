@@ -2,13 +2,13 @@ package step
 
 import (
 	"context"
+	"os"
+	"path/filepath"
 
 	"github.com/goexl/args"
 	"github.com/pangum/drone/internal/internal/command"
 	"github.com/pangum/drone/internal/internal/config"
 	"github.com/pangum/drone/internal/internal/constant"
-
-	"github.com/goexl/gfx"
 )
 
 type Tidy struct {
@@ -24,8 +24,9 @@ func NewTidy(golang *command.Golang, project *config.Project) *Tidy {
 }
 
 func (t *Tidy) Runnable() (runnable bool) {
-	_, exists := gfx.Exists().Dir(t.project.Source).Filename(constant.GoModFilename).Build().Check()
-	runnable = exists
+	if _, se := os.Stat(filepath.Join(t.project.Source, constant.GoModFilename)); nil == se {
+		runnable = true
+	}
 
 	return
 }
