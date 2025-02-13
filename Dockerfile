@@ -1,7 +1,7 @@
-FROM golang:1.23-alpine AS golang
+FROM golang:1.24-alpine AS golang
 FROM golangci/golangci-lint:v1.64.2 AS lint
 
-FROM golang:1.23-alpine AS alignment
+FROM golang:1.24-alpine AS alignment
 
 ENV GOPROXY https://goproxy.io,direct
 RUN go install github.com/dkorunic/betteralign/cmd/betteralign@latest
