@@ -1,5 +1,5 @@
 FROM golang:1.25-alpine AS golang
-FROM golangci/golangci-lint:v2.6.1 AS lint
+FROM golangci/golangci-lint:v2.6.2 AS lint
 
 FROM golang:1.25-alpine AS alignment
 
