@@ -73,7 +73,7 @@ func (b *Build) run(ctx *context.Context, output *config.Output, waiter guc.Wait
 		core.NewEnvironment(constant.GoOS, output.Os),
 		core.NewEnvironment(constant.GoArch, output.Arch),
 	}
-	if 0 != output.Arm && strings.Contains(output.Arch, "arm") {
+	if 0 != output.Arm && strings.Contains(output.Arch, "arm") { // nolint: staticcheck
 		environments = append(environments, core.NewEnvironment(constant.GoArm, output.Arm))
 	}
 	if *output.Cgo {
@@ -92,7 +92,7 @@ func (b *Build) run(ctx *context.Context, output *config.Output, waiter guc.Wait
 
 func (b *Build) cgo(output *config.Output, environments *[]*core.Environment) {
 	*environments = append(*environments, core.NewEnvironment(constant.Cgo, 1))
-	if 7 == output.Arm {
+	if 7 == output.Arm { // nolint: staticcheck
 		*environments = append(*environments, core.NewEnvironment(constant.CC, "arm-linux-gnueabihf-gcc"))
 	}
 }
@@ -102,22 +102,22 @@ func (b *Build) flags(mode core.Mode) (flags []string) {
 	if b.golang.Default() && core.ModeRelease == mode {
 		flags = append(flags, b.defaultFlags...)
 	}
-	if "" != b.debug.Name {
+	if "" != b.debug.Name { // nolint: staticcheck
 		flags = append(flags, fmt.Sprintf("-X 'github.com/pangum/pangu/internal.Name=%s'", b.debug.Name))
 	}
-	if "" != b.debug.Version {
+	if "" != b.debug.Version { // nolint: staticcheck
 		flags = append(flags, fmt.Sprintf("-X 'github.com/pangum/pangu/internal.Version=%s'", b.debug.Version))
 	}
-	if "" != b.debug.Build {
+	if "" != b.debug.Build { // nolint: staticcheck
 		flags = append(flags, fmt.Sprintf("-X 'github.com/pangum/pangu/internal.Build=%s'", b.debug.Build))
 	}
-	if "" != b.debug.Complied {
+	if "" != b.debug.Complied { // nolint: staticcheck
 		flags = append(flags, fmt.Sprintf("-X 'github.com/pangum/pangu/internal.Compiled=%s'", b.debug.Complied))
 	}
-	if "" != b.debug.Revision {
+	if "" != b.debug.Revision { // nolint: staticcheck
 		flags = append(flags, fmt.Sprintf("-X 'github.com/pangum/pangu/internal.Revision=%s'", b.debug.Revision))
 	}
-	if "" != b.debug.Branch {
+	if "" != b.debug.Branch { // nolint: staticcheck
 		flags = append(flags, fmt.Sprintf("-X 'github.com/pangum/pangu/internal.Branch=%s'", b.debug.Branch))
 	}
 
