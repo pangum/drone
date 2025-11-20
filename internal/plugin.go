@@ -59,10 +59,10 @@ func (p *Plugin) Steps() drone.Steps {
 }
 
 func (p *Plugin) Setup() (err error) {
-	if 0 != len(p.Output) {
+	if 0 != len(p.Output) { // nolint: staticcheck
 		p.outputs = append(p.outputs, p.Output...)
 	}
-	if 0 != len(p.Outputs) {
+	if 0 != len(p.Outputs) { // nolint: staticcheck
 		p.outputs = append(p.outputs, p.Outputs...)
 	}
 	p.golang = command.NewGolang(&p.Base, &p.Binary, &p.Project)
