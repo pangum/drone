@@ -14,7 +14,7 @@ COPY --from=golang /usr/local/go/src /docker/usr/local/go/src
 COPY --from=lint /usr/bin/golangci-lint /docker/usr/bin/golangci-lint
 COPY --from=alignment /go/bin/betteralign /docker/usr/local/go/bin/betteralign
 
-ARG TARGETPLATFORM
+ARG TARGETPLATFORM=linux/amd64
 COPY dist/${TARGETPLATFORM}/drone /docker/usr/local/bin/drone
 
 
@@ -60,7 +60,7 @@ RUN set -ex \
 
 
 # 执行命令
-ENTRYPOINT /usr/local/bin/drone
+ENTRYPOINT ["/usr/local/bin/drone"]
 
 
 # 配置环境变量
