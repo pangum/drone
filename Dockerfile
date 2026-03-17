@@ -1,5 +1,5 @@
 FROM swr.cn-north-4.myhuaweicloud.com/ddn-k8s/docker.io/golang:1.25.6-alpine AS golang
-FROM swr.cn-north-4.myhuaweicloud.com/ddn-k8s/docker.io/golangci/golangci-lint:v2.7.2 AS lint
+FROM swr.cn-north-4.myhuaweicloud.com/ddn-k8s/docker.io/golangci/golangci-lint:v2.9.0 AS lint
 
 FROM swr.cn-north-4.myhuaweicloud.com/ddn-k8s/docker.io/golang:1.25.6-alpine AS alignment
 
