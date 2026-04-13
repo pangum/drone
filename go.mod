@@ -1,11 +1,10 @@
 module github.com/pangum/drone
 
-go 1.23
+go 1.24
 
 require (
 	github.com/dronestock/drone v1.2.6
 	github.com/goexl/args v0.0.3
-	github.com/goexl/gfx v0.2.5
 	github.com/goexl/gox v1.9.2
 	github.com/goexl/guc v0.1.5
 )
@@ -13,7 +12,6 @@ require (
 require (
 	github.com/drone/envsubst v1.0.3 // indirect
 	github.com/expr-lang/expr v1.16.9 // indirect
-	github.com/fsnotify/fsnotify v1.8.0 // indirect
 	github.com/gabriel-vasile/mimetype v1.4.7 // indirect
 	github.com/go-playground/locales v0.14.1 // indirect
 	github.com/go-playground/universal-translator v0.18.1 // indirect
@@ -33,6 +31,6 @@ require (
 	github.com/rs/xid v1.6.0 // indirect
 	golang.org/x/crypto v0.31.0 // indirect
 	golang.org/x/net v0.32.0 // indirect
-	golang.org/x/sys v0.28.0 // indirect
-	golang.org/x/text v0.21.0 // indirect
+	golang.org/x/sys v0.32.0 // indirect
+	golang.org/x/text v0.24.0 // indirect
 )
