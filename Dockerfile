@@ -3,7 +3,7 @@ FROM swr.cn-north-4.myhuaweicloud.com/ddn-k8s/docker.io/golangci/golangci-lint:v
 
 FROM swr.cn-north-4.myhuaweicloud.com/ddn-k8s/docker.io/golang:1.25.6-alpine AS alignment
 
-ENV GOPROXY https://goproxy.cn,direct
+ENV GOPROXY https://mirrors.aliyun.com/goproxy,direct
 RUN go install github.com/dkorunic/betteralign/cmd/betteralign@latest
 
 FROM ccr.ccs.tencentyun.com/storezhang/alpine:3.20.0 AS builder
