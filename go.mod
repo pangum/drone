@@ -1,11 +1,11 @@
 module github.com/pangum/drone
 
-go 1.24
+go 1.27
 
 require (
 	github.com/dronestock/drone v1.2.6
 	github.com/goexl/args v0.0.3
-	github.com/goexl/gox v1.9.2
+	github.com/goexl/gox v1.9.3
 	github.com/goexl/guc v0.1.5
 )
 
