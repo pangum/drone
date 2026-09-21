@@ -1,7 +1,7 @@
-FROM swr.cn-north-4.myhuaweicloud.com/ddn-k8s/docker.io/library/golang:1.27.0-alpine AS golang
+FROM swr.cn-north-4.myhuaweicloud.com/ddn-k8s/docker.io/library/golang:1.27.1-alpine AS golang
 FROM swr.cn-north-4.myhuaweicloud.com/ddn-k8s/docker.io/golangci/golangci-lint:v2.13.1 AS lint
 
-FROM swr.cn-north-4.myhuaweicloud.com/ddn-k8s/docker.io/library/golang:1.27.0-alpine AS alignment
+FROM swr.cn-north-4.myhuaweicloud.com/ddn-k8s/docker.io/library/golang:1.27.1-alpine AS alignment
 
 ENV GOPROXY https://goproxy.cn,direct
 RUN go install github.com/dkorunic/betteralign/cmd/betteralign@latest
